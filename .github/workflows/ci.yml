@@ -1,0 +1,19 @@
+# name: Continuous Integration
+
+# on:
+#   pull_request:
+#     branches:
+#       - main
+#   push:
+#     branches:
+#       - main
+#   workflow_dispatch:
+
+# jobs:
+#   test:
+#     strategy:
+#       matrix:
+#         os: [windows-latest]
+#     runs-on: ${{ matrix.os }}
+#     steps:
+#       - uses: actions/checkout@v4
