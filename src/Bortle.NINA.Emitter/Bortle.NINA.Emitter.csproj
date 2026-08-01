@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <OutputType>Library</OutputType>
     <RootNamespace>Bortle.NINA.Emitter</RootNamespace>
     <AssemblyName>Emitter</AssemblyName>
