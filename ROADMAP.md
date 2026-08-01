@@ -4,13 +4,15 @@
 
 * [x] Update contributing
 * [x] docs / adr directory
+* [x] gitops CI / CD
+* [x] create skeleton nina plugin
+* [ ] build and deploy documentation and plugin/manifests file to github pages + logo
+* [ ] decide on directory layout
 * [ ] Update readme
 * [ ] decide on linting and formatting
-* [ ] gitops CI / CD
-* [ ] create skeleton nina plugin
+* [ ] gitops release & CD automation
 * [ ] create schema directory
 * [ ] update CLAUDE.md with conventions
-* [ ] decide on directory layout
 * [ ] setup deploy to rustfs for custom manifests
 * [ ] makefile or scripts directory for processes
 * [ ] setup release process
@@ -22,7 +24,7 @@
 * [ ] implement kafka backend
 * [ ] setup NINAPlugin.targets file for msbuild step
 * [ ] setup .env file for secret storage (deploy steps)
-* [ ] 
+* [ ]
 
 ### Bugs
 
