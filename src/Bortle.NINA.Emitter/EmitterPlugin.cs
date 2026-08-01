@@ -36,7 +36,7 @@ namespace Bortle.NINA.Emitter {
         private readonly ImagePattern exampleImagePattern = new ImagePattern("$$EXAMPLEPATTERN$$", "An example of an image pattern implementation", "Emitter");
 
         [ImportingConstructor]
-        public Emitter(IProfileService profileService, IOptionsVM options, IImageSaveMediator imageSaveMediator) {
+        public EmitterPlugin(IProfileService profileService, IOptionsVM options, IImageSaveMediator imageSaveMediator) {
             if (Settings.Default.UpdateSettings) {
                 Settings.Default.Upgrade();
                 Settings.Default.UpdateSettings = false;
