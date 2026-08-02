@@ -73,3 +73,6 @@ nunit-*.xml
 
 # JetBrains
 .idea
+
+# Build Directory for artifacts
+build/

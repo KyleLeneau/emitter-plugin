@@ -1,0 +1,118 @@
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
+    <NinaPluginsDirectory>$(AppDataLocalDir)\NINA\Plugins\3.0.0\</NinaPluginsDirectory>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VersionNumber Condition="'$(VersionNumber)' == ''">9999.0.0.0</VersionNumber>
+  </PropertyGroup>
+
+  <!-- Support setting the build number at build and release time.
+    Named uniquely and hooked in via BeforeTargets rather than named "BeforeBuild":
+    the SDK's Microsoft.Common.CurrentVersion.targets (imported after this file via
+    the implicit Sdk.targets) defines its own empty "BeforeBuild" stub, and since the
+    last-parsed definition of a target wins in MSBuild, naming this target "BeforeBuild"
+    would silently get overridden and never run. -->
+  <Target Name="SetPluginVersion" BeforeTargets="BeforeBuild">
+    <Message Text="Version $(VersionNumber)" Importance="High" />
+    <ItemGroup>
+      <AssemblyAttributes Include="AssemblyVersion">
+        <_Parameter1>$(VersionNumber)</_Parameter1>
+      </AssemblyAttributes>
+      <AssemblyAttributes Include="AssemblyFileVersion">
+        <_Parameter1>$(VersionNumber)</_Parameter1>
+      </AssemblyAttributes>
+    </ItemGroup>
+    <MakeDir Directories="$(IntermediateOutputPath)" />
+    <WriteCodeFragment 
+      Language="C#"
+      OutputFile="$(IntermediateOutputPath)Version.cs"
+      AssemblyAttributes="@(AssemblyAttributes)" />
+    <ItemGroup>
+      <Compile Include="$(IntermediateOutputPath)Version.cs" />
+    </ItemGroup>
+  </Target>
+  
+  <!-- Assemble the artifact into a NINA Plugin and optionally install it -->
+  <Target Name="Assemble" AfterTargets="Build">
+    <!-- TargetDir/TargetName are defined by the SDK's implicit Sdk.targets import,
+      which is loaded after this file, so ArtifactFolder must be computed here
+      (evaluated at execution time) rather than in a top-level PropertyGroup. -->
+    <PropertyGroup>
+      <ArtifactFolder>$(TargetDir)$(TargetName)</ArtifactFolder>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <!-- Because this ItemGroup is inside the target, this will enumerate
+        all files just before calling Copy. If the ItemGroup were outside
+        the target , it would enumerate the files during evaluation, before
+        the build starts, which may miss files created during the build. -->
+      <Dependencies Include="$(TargetDir)CloudNative.*.dll" />
+      <Dependencies Include="$(TargetDir)NATS.*.dll" />
+      <Dependencies Include="$(TargetDir)Microsoft.Extensions.*.dll" />
+      <Dependencies Include="$(TargetDir)System.IO.Pipelines.dll" />
+      <Dependencies Include="$(TargetDir)System.Text.Json.dll" />
+      <Dependencies Include="$(TargetDir)System.Text.Encodings.Web.dll" />
+    </ItemGroup>
+    
+    <!-- Build up the artifact stage directory -->
+    <Message Text="Packaging Build Artifacts $(ArtifactFolder)" />
+    <RemoveDir Directories="$(ArtifactFolder)" />
+    <MakeDir Directories="$(ArtifactFolder)\dll"/>
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ArtifactFolder)" />
+    <Copy SourceFiles="@(Dependencies)" DestinationFolder="$(ArtifactFolder)\dll" />
+
+    <!-- Get the version from the built assembly -->
+    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
+      <Output TaskParameter="Assemblies" ItemName="PluginAssembly"/>
+    </GetAssemblyIdentity>
+    <PropertyGroup>
+      <AssemblyPluginVersion>%(PluginAssembly.Version)</AssemblyPluginVersion>
+    </PropertyGroup>
+
+    <!-- Format a Artifact zip file name, placed in a /build folder at the repository root -->
+    <PropertyGroup>
+      <RepositoryBuildFolder>$(MSBuildThisFileDirectory)..\..\build\</RepositoryBuildFolder>
+    </PropertyGroup>
+    <MakeDir Directories="$(RepositoryBuildFolder)" />
+    <CreateProperty Value="$(RepositoryBuildFolder)$(AssemblyPluginVersion)-$(TargetName)-$(Configuration).zip">
+      <Output TaskParameter="Value" PropertyName="ArtifactZip" />
+    </CreateProperty>
+
+    <!-- Create the zip from the stage -->
+    <ZipDirectory
+      SourceDirectory="$(ArtifactFolder)"
+      DestinationFile="$(ArtifactZip)"
+      Overwrite="true" />
+
+    <!-- Create an SHA256 Checksum -->
+    <GetFileHash Files="$(ArtifactZip)" Algorithm="SHA256">
+      <Output TaskParameter="Hash" PropertyName="ArtifactZipHash" />
+    </GetFileHash>
+    <WriteLinesToFile
+      File="$(ArtifactZip).sha256"
+      Lines="$(ArtifactZipHash)  $([System.IO.Path]::GetFileName('$(ArtifactZip)'))"
+      Overwrite="true" />
+
+    <!-- Install this to NINA if installed -->
+    <Message 
+      Text="Installing to Nina install $(NinaPluginsDirectory)" 
+      Condition="Exists('$(NinaPluginsDirectory)')" />
+    <Unzip
+      SourceFiles="$(ArtifactZip)"
+      DestinationFolder="$(NinaPluginsDirectory)$(TargetName)"
+      OverwriteReadOnlyFiles="true"
+      Condition="Exists('$(NinaPluginsDirectory)')" />
+  </Target>
+
+  <!-- Clean up any previous stages -->
+  <Target Name="PostCleanScript" AfterTargets="Clean">
+    <PropertyGroup>
+      <ArtifactFolder>$(TargetDir)$(TargetName)</ArtifactFolder>
+    </PropertyGroup>
+
+    <RemoveDir Directories="$(ArtifactFolder)" Condition="Exists('$(ArtifactFolder)')" />
+  </Target>
+</Project>

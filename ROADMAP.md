@@ -8,6 +8,8 @@
 * [x] create skeleton nina plugin
 * [x] decide on linting and formatting
 * [x] update CLAUDE.md with conventions
+* [x] setup NINAPlugin.targets file for msbuild step
+* [x] Pass CI build number into project
 * [ ] build and deploy documentation and plugin/manifests file to github pages + logo
 * [ ] decide on directory layout
 * [ ] Update readme
@@ -22,11 +24,9 @@
 * [ ] implement nats io backend
 * [ ] implement webhook backend
 * [ ] implement kafka backend
-* [ ] setup NINAPlugin.targets file for msbuild step
 * [ ] setup .env file for secret storage (deploy steps)
 * [ ] Global options configuration for 1 or more sinks
 * [ ] Allow nats subject prefix to be specified / changed
-* [ ] Pass CI build number into project
 
 ### Bugs
 

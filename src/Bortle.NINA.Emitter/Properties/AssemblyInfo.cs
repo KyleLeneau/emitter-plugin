@@ -6,9 +6,10 @@ using System.Runtime.InteropServices;
 [assembly: Guid("1bfaec31-f66b-4dc9-a799-51ba124234dd")]
 
 // [MANDATORY] The assembly versioning
-//Should be incremented for each new release build of a plugin
-[assembly: AssemblyVersion("1.0.0.1")]
-[assembly: AssemblyFileVersion("1.0.0.1")]
+// Should be incremented for each new release build of a plugin
+// These get added in a BeforeBuild step from NINAPlugin.targets
+// [assembly: AssemblyVersion("1.0.0.1")]
+// [assembly: AssemblyFileVersion("1.0.0.1")]
 
 // [MANDATORY] The name of your plugin
 [assembly: AssemblyTitle("Emitter")]
