@@ -6,13 +6,13 @@
 * [x] docs / adr directory
 * [x] gitops CI / CD
 * [x] create skeleton nina plugin
+* [x] decide on linting and formatting
+* [x] update CLAUDE.md with conventions
 * [ ] build and deploy documentation and plugin/manifests file to github pages + logo
 * [ ] decide on directory layout
 * [ ] Update readme
-* [ ] decide on linting and formatting
 * [ ] gitops release & CD automation
-* [ ] create schema directory
-* [ ] update CLAUDE.md with conventions
+* [ ] create schema directory, scripts and CLAUDE.md convention
 * [ ] setup deploy to rustfs for custom manifests
 * [ ] makefile or scripts directory for processes
 * [ ] setup release process
@@ -24,7 +24,9 @@
 * [ ] implement kafka backend
 * [ ] setup NINAPlugin.targets file for msbuild step
 * [ ] setup .env file for secret storage (deploy steps)
-* [ ]
+* [ ] Global options configuration for 1 or more sinks
+* [ ] Allow nats subject prefix to be specified / changed
+* [ ] Pass CI build number into project
 
 ### Bugs
 
@@ -32,8 +34,13 @@
 ### Future
 
 * [ ] generate asyncapi website / docs
+* [ ] Sequence item to emit a generic event defined by a user and still wrapped in a cloudevent
+* [ ] Allow for configuring which events / domains to emit
+* [ ] A dockable with current status of queue or connections on emitting
 
 ### Parking Lot
 
 
 ### Housekeeping
+
+* [ ] Bump NINA.Plugin nuget to 3.3.0 to resolve ToastNotification and VVVV.FreeImage warnings, then remove `<NoWarn>$(NoWarn);NU1701</NoWarn>` from csproj.

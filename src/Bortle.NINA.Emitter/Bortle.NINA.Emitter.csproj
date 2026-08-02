@@ -9,11 +9,12 @@
     <UseWPF>true</UseWPF>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <NoWarn>$(NoWarn);NU1701</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="CloudNative.CloudEvents" Version="2.7.1" />
-    <PackageReference Include="CloudNative.CloudEvents.SystemTextJson" Version="2.7.1" />
-    <PackageReference Include="NATS.Net" Version="2.8.2" />
+    <PackageReference Include="CloudNative.CloudEvents" Version="2.9.0" />
+    <PackageReference Include="CloudNative.CloudEvents.SystemTextJson" Version="2.9.0" />
+    <PackageReference Include="NATS.Net" Version="3.1.0" />
     <PackageReference Include="NINA.Plugin" Version="3.2.0.9001" />
   </ItemGroup>
   <PropertyGroup />
