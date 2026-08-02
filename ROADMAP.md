@@ -13,7 +13,8 @@
 * [x] decide on directory layout
 * [x] Update readme
 * [x] create schema directory, scripts and CLAUDE.md convention
-* [ ] build and deploy documentation and plugin/manifests file to github pages + logo
+* [x] build asyncapi documentation html
+* [ ] deploy documentation and plugin/manifests file to github pages + logo
 * [ ] gitops release & CD automation
 * [ ] setup release process
 * [ ] setup example client uses

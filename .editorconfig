@@ -10,7 +10,7 @@ indent_style = space
 indent_size = 4
 max_line_length = 100
 
-[*.md]
+[*.{md,sh}]
 indent_size = 2
 
 [*.{yml,yaml}]

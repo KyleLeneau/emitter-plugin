@@ -1,7 +1,7 @@
 asyncapi: 3.0.0
 
 info:
-  title: NINA Event Bridge
+  title: Emitter Event Models
   version: "0.2.0"
   description: |
     Events published by the NINA astrophotography software plugin over NATS

@@ -15,6 +15,7 @@ SCHEMAS="$SCRIPT_DIR/schemas"
 OUT="$SCRIPT_DIR/generated"
 PLUGIN_DIR="$SCRIPT_DIR/../src/Bortle.NINA.Emitter"
 DEST_DIR="$PLUGIN_DIR/Generated"
+DOCS_OUT="$SCRIPT_DIR/../build/docs"
 
 DATA_SCHEMAS=(
   "$SCHEMAS/camera_data.yaml"
@@ -86,6 +87,29 @@ install() {
   echo "Installed: $DEST_DIR/EmitterModels.cs"
 }
 
+generate_docs() {
+  if ! command -v asyncapi &>/dev/null; then
+    echo "error: asyncapi not found — install with: npm install -g asyncapi"
+    exit 1
+  fi
+
+  echo "Generating docs from: $SCRIPT_DIR/asyncapi.yaml"
+
+  # Run in a subshell so the cd is scoped to this command and the caller's
+  # working directory is left untouched.
+  (
+    cd "$SCRIPT_DIR"
+    asyncapi \
+      generate fromTemplate \
+      asyncapi.yaml \
+      @asyncapi/html-template@3.0.0 \
+      -o "$DOCS_OUT" \
+      --use-new-generator
+  )
+
+  echo "Done. Docs are in $DOCS_OUT/"
+}
+
 usage() {
   echo "Usage: $0 <generate|install|all>"
   echo "  generate  Generate model code for all target languages from schemas"
@@ -100,6 +124,9 @@ case "${1:-}" in
     ;;
   install|i)
     install
+    ;;
+  docs)
+    generate_docs
     ;;
   all|a)
     generate
