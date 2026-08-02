@@ -10,13 +10,11 @@
 * [x] update CLAUDE.md with conventions
 * [x] setup NINAPlugin.targets file for msbuild step
 * [x] Pass CI build number into project
+* [x] decide on directory layout
+* [x] Update readme
+* [x] create schema directory, scripts and CLAUDE.md convention
 * [ ] build and deploy documentation and plugin/manifests file to github pages + logo
-* [ ] decide on directory layout
-* [ ] Update readme
 * [ ] gitops release & CD automation
-* [ ] create schema directory, scripts and CLAUDE.md convention
-* [ ] setup deploy to rustfs for custom manifests
-* [ ] makefile or scripts directory for processes
 * [ ] setup release process
 * [ ] setup example client uses
 * [ ] create images and artifacts for deployment
@@ -24,7 +22,6 @@
 * [ ] implement nats io backend
 * [ ] implement webhook backend
 * [ ] implement kafka backend
-* [ ] setup .env file for secret storage (deploy steps)
 * [ ] Global options configuration for 1 or more sinks
 * [ ] Allow nats subject prefix to be specified / changed
 

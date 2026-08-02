@@ -6,6 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 * Build with `dotnet build`
 * Run tests with `dotnet test -v diagnostic`
 * Run formatting and linting with `dotnet format -v diagnostic`
+* Generate and Install the Models after a schema change with `./schema/build.sh all`
 * Architecture decisions are documented as ADRs in `docs/adr/`. Design documents are in `docs/designs/`.
 
 ## Conventions

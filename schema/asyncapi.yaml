@@ -1,0 +1,364 @@
+asyncapi: 3.0.0
+
+info:
+  title: NINA Event Bridge
+  version: "0.2.0"
+  description: |
+    Events published by the NINA astrophotography software plugin over NATS
+    using the CloudEvents 1.0 structured content mode.
+
+    Subject pattern: `nina.{instanceId}.{domain}.{eventType}`
+
+    The `instanceId` is the lowercased machine hostname of the PC running NINA.
+    Each NATS message body is a complete CloudEvent JSON object. The `data` field
+    contains the domain-specific payload defined in the schemas below.
+
+    CloudEvent field conventions:
+    - `type`:   `io.nina.{domain}.{eventType}`  (e.g. `io.nina.camera.connected`)
+    - `source`: `//nina/{instanceId}`
+    - `id`:     UUID generated per event
+    - `time`:   UTC timestamp of event production
+
+defaultContentType: application/cloudevents+json
+
+# ─── Channels ───────────────────────────────────────────────────────────────
+
+channels:
+
+  # Weather ─────────────────────────────────────────────────────────────────
+  weatherDeviceInfo:
+    address: "nina.{instanceId}.weather.device-info"
+    description: Periodic weather station sensor readings
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      weatherDeviceInfo:
+        $ref: "#/components/messages/WeatherDeviceInfo"
+
+  # Camera ──────────────────────────────────────────────────────────────────
+  cameraConnected:
+    address: "nina.{instanceId}.camera.connected"
+    description: Fired when the camera transitions from disconnected to connected
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      cameraConnected:
+        $ref: "#/components/messages/CameraEvent"
+
+  cameraDisconnected:
+    address: "nina.{instanceId}.camera.disconnected"
+    description: Fired when the camera transitions from connected to disconnected
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      cameraDisconnected:
+        $ref: "#/components/messages/CameraEvent"
+
+  cameraExposureStarted:
+    address: "nina.{instanceId}.camera.exposure-started"
+    description: Fired when the camera begins an exposure
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      cameraExposureStarted:
+        $ref: "#/components/messages/CameraEvent"
+
+  cameraExposureCompleted:
+    address: "nina.{instanceId}.camera.exposure-completed"
+    description: Fired when the camera finishes an exposure
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      cameraExposureCompleted:
+        $ref: "#/components/messages/CameraEvent"
+
+  cameraCoolingStarted:
+    address: "nina.{instanceId}.camera.cooling-started"
+    description: Fired when the TEC cooler is switched on
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      cameraCoolingStarted:
+        $ref: "#/components/messages/CameraEvent"
+
+  cameraCoolingStopped:
+    address: "nina.{instanceId}.camera.cooling-stopped"
+    description: Fired when the TEC cooler is switched off
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      cameraCoolingStopped:
+        $ref: "#/components/messages/CameraEvent"
+
+  # Telescope ───────────────────────────────────────────────────────────────
+  telescopeConnected:
+    address: "nina.{instanceId}.telescope.connected"
+    description: Fired when the mount transitions from disconnected to connected
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      telescopeConnected:
+        $ref: "#/components/messages/TelescopeEvent"
+
+  telescopeDisconnected:
+    address: "nina.{instanceId}.telescope.disconnected"
+    description: Fired when the mount transitions from connected to disconnected
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      telescopeDisconnected:
+        $ref: "#/components/messages/TelescopeEvent"
+
+  telescopeSlewing:
+    address: "nina.{instanceId}.telescope.slewing"
+    description: Fired when the mount begins a slew
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      telescopeSlewing:
+        $ref: "#/components/messages/TelescopeEvent"
+
+  telescopeSlewComplete:
+    address: "nina.{instanceId}.telescope.slew-complete"
+    description: Fired when the mount finishes a slew
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      telescopeSlewComplete:
+        $ref: "#/components/messages/TelescopeEvent"
+
+  telescopeTrackingStarted:
+    address: "nina.{instanceId}.telescope.tracking-started"
+    description: Fired when sidereal tracking is enabled
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      telescopeTrackingStarted:
+        $ref: "#/components/messages/TelescopeEvent"
+
+  telescopeTrackingStopped:
+    address: "nina.{instanceId}.telescope.tracking-stopped"
+    description: Fired when sidereal tracking is disabled
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      telescopeTrackingStopped:
+        $ref: "#/components/messages/TelescopeEvent"
+
+  # Imaging ─────────────────────────────────────────────────────────────────
+  imagingImageSaving:
+    address: "nina.{instanceId}.imaging.image-saving"
+    description: Fired just before an image is written to disk
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      imagingImageSaving:
+        $ref: "#/components/messages/ImagingEvent"
+
+  imagingImageSaved:
+    address: "nina.{instanceId}.imaging.image-saved"
+    description: Fired after an image has been successfully written to disk
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      imagingImageSaved:
+        $ref: "#/components/messages/ImagingEvent"
+
+# ─── Operations ──────────────────────────────────────────────────────────────
+
+operations:
+  publishWeatherDeviceInfo:
+    action: send
+    channel:
+      $ref: "#/channels/weatherDeviceInfo"
+    messages:
+      - $ref: "#/channels/weatherDeviceInfo/messages/weatherDeviceInfo"
+
+  publishCameraConnected:
+    action: send
+    channel:
+      $ref: "#/channels/cameraConnected"
+    messages:
+      - $ref: "#/channels/cameraConnected/messages/cameraConnected"
+
+  publishCameraDisconnected:
+    action: send
+    channel:
+      $ref: "#/channels/cameraDisconnected"
+    messages:
+      - $ref: "#/channels/cameraDisconnected/messages/cameraDisconnected"
+
+  publishCameraExposureStarted:
+    action: send
+    channel:
+      $ref: "#/channels/cameraExposureStarted"
+    messages:
+      - $ref: "#/channels/cameraExposureStarted/messages/cameraExposureStarted"
+
+  publishCameraExposureCompleted:
+    action: send
+    channel:
+      $ref: "#/channels/cameraExposureCompleted"
+    messages:
+      - $ref: "#/channels/cameraExposureCompleted/messages/cameraExposureCompleted"
+
+  publishCameraCoolingStarted:
+    action: send
+    channel:
+      $ref: "#/channels/cameraCoolingStarted"
+    messages:
+      - $ref: "#/channels/cameraCoolingStarted/messages/cameraCoolingStarted"
+
+  publishCameraCoolingStopped:
+    action: send
+    channel:
+      $ref: "#/channels/cameraCoolingStopped"
+    messages:
+      - $ref: "#/channels/cameraCoolingStopped/messages/cameraCoolingStopped"
+
+  publishTelescopeConnected:
+    action: send
+    channel:
+      $ref: "#/channels/telescopeConnected"
+    messages:
+      - $ref: "#/channels/telescopeConnected/messages/telescopeConnected"
+
+  publishTelescopeDisconnected:
+    action: send
+    channel:
+      $ref: "#/channels/telescopeDisconnected"
+    messages:
+      - $ref: "#/channels/telescopeDisconnected/messages/telescopeDisconnected"
+
+  publishTelescopeSlewing:
+    action: send
+    channel:
+      $ref: "#/channels/telescopeSlewing"
+    messages:
+      - $ref: "#/channels/telescopeSlewing/messages/telescopeSlewing"
+
+  publishTelescopeSlewComplete:
+    action: send
+    channel:
+      $ref: "#/channels/telescopeSlewComplete"
+    messages:
+      - $ref: "#/channels/telescopeSlewComplete/messages/telescopeSlewComplete"
+
+  publishTelescopeTrackingStarted:
+    action: send
+    channel:
+      $ref: "#/channels/telescopeTrackingStarted"
+    messages:
+      - $ref: "#/channels/telescopeTrackingStarted/messages/telescopeTrackingStarted"
+
+  publishTelescopeTrackingStopped:
+    action: send
+    channel:
+      $ref: "#/channels/telescopeTrackingStopped"
+    messages:
+      - $ref: "#/channels/telescopeTrackingStopped/messages/telescopeTrackingStopped"
+
+  publishImagingImageSaving:
+    action: send
+    channel:
+      $ref: "#/channels/imagingImageSaving"
+    messages:
+      - $ref: "#/channels/imagingImageSaving/messages/imagingImageSaving"
+
+  publishImagingImageSaved:
+    action: send
+    channel:
+      $ref: "#/channels/imagingImageSaved"
+    messages:
+      - $ref: "#/channels/imagingImageSaved/messages/imagingImageSaved"
+
+# ─── Components ──────────────────────────────────────────────────────────────
+components:
+
+  parameters:
+    InstanceId:
+      description: Lowercased machine hostname of the PC running NINA
+
+  messages:
+    WeatherDeviceInfo:
+      name: WeatherDeviceInfo
+      title: Weather Device Info
+      summary: Periodic weather station reading — CloudEvent type io.nina.weather.device-info
+      contentType: application/cloudevents+json
+      payload:
+        schemaFormat: application/schema+json;version=draft-07
+        schema:
+          allOf:
+            - $ref: "./schemas/cloudevents.json"
+            - type: object
+              properties:
+                type:
+                  const: "io.nina.weather.device-info"
+                data:
+                  $ref: "./schemas/weather_data.yaml"
+
+    CameraEvent:
+      name: CameraEvent
+      title: Camera Event
+      summary: Camera state change — CloudEvent type io.nina.camera.{eventType}
+      contentType: application/cloudevents+json
+      payload:
+        schemaFormat: application/schema+json;version=draft-07
+        schema:
+          allOf:
+            - $ref: "./schemas/cloudevents.json"
+            - type: object
+              properties:
+                type:
+                  pattern: "^io\\.nina\\.camera\\..+"
+                data:
+                  $ref: "./schemas/camera_data.yaml"
+
+    TelescopeEvent:
+      name: TelescopeEvent
+      title: Telescope Event
+      summary: Mount state change — CloudEvent type io.nina.telescope.{eventType}
+      contentType: application/cloudevents+json
+      payload:
+        schemaFormat: application/schema+json;version=draft-07
+        schema:
+          allOf:
+            - $ref: "./schemas/cloudevents.json"
+            - type: object
+              properties:
+                type:
+                  pattern: "^io\\.nina\\.telescope\\..+"
+                data:
+                  $ref: "./schemas/telescope_data.yaml"
+
+    ImagingEvent:
+      name: ImagingEvent
+      title: Imaging Event
+      summary: Image capture lifecycle event — CloudEvent type io.nina.imaging.{eventType}
+      contentType: application/cloudevents+json
+      payload:
+        schemaFormat: application/schema+json;version=draft-07
+        schema:
+          allOf:
+            - $ref: "./schemas/cloudevents.json"
+            - type: object
+              properties:
+                type:
+                  pattern: "^io\\.nina\\.imaging\\..+"
+                data:
+                  $ref: "./schemas/imaging_data.yaml"

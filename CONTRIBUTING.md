@@ -20,13 +20,13 @@ dotnet test
 
 Please also install the plugin on your local system and do testing.
 
-## Checking
-
-TBD
-
 ## Formatting
 
-TBD
+You can also format the code with:
+
+```bash
+dotnet format
+```
 
 ## Releases
 

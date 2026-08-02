@@ -1,0 +1,45 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: WeatherData
+type: object
+description: Weather station sensor readings
+properties:
+  connected:
+    type: boolean
+  temperature:
+    type: ["number", "null"]
+    description: Ambient temperature in degrees Celsius; null if unsupported by the device
+  humidity:
+    type: ["number", "null"]
+    description: Relative humidity as a percentage (0–100); null if unsupported by the device
+  dew_point:
+    type: ["number", "null"]
+    description: Dew point in degrees Celsius; null if unsupported by the device
+  pressure:
+    type: ["number", "null"]
+    description: Atmospheric pressure in hPa; null if unsupported by the device
+  wind_speed:
+    type: ["number", "null"]
+    description: Wind speed in m/s; null if unsupported by the device
+  wind_direction:
+    type: ["number", "null"]
+    description: Wind direction in degrees (0–360); null if unsupported by the device
+  wind_gust:
+    type: ["number", "null"]
+    description: Wind gust speed in m/s; null if unsupported by the device
+  sky_temperature:
+    type: ["number", "null"]
+    description: Sky temperature in degrees Celsius; null if unsupported by the device
+  sky_quality:
+    type: ["number", "null"]
+    description: Sky quality in magnitudes per square arcsecond; null if unsupported by the device
+  rain_rate:
+    type: ["number", "null"]
+    description: Rain rate in mm/h; null if unsupported by the device
+  cloud_cover:
+    type: ["number", "null"]
+    description: Cloud cover as a percentage (0–100); null if unsupported by the device
+  star_fwhm:
+    type: ["number", "null"]
+    description: Seeing estimate — star FWHM in arcseconds; null if unsupported by the device
+required:
+  - connected

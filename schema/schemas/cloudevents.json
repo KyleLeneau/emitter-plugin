@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "CloudEvents Specification JSON Schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Identifies the event.",
+      "$ref": "#/definitions/iddef"
+    },
+    "source": {
+      "description": "Identifies the context in which an event happened.",
+      "$ref": "#/definitions/sourcedef"
+    },
+    "specversion": {
+      "description": "The version of the CloudEvents specification which the event uses.",
+      "$ref": "#/definitions/specversiondef"
+    },
+    "type": {
+      "description": "Describes the type of event related to the originating occurrence.",
+      "$ref": "#/definitions/typedef"
+    },
+    "datacontenttype": {
+      "description": "Content type of the data value. Must adhere to RFC 2046 format.",
+      "$ref": "#/definitions/datacontenttypedef"
+    },
+    "dataschema": {
+      "description": "Identifies the schema that data adheres to.",
+      "$ref": "#/definitions/dataschemadef"
+    },
+    "subject": {
+      "description": "Describes the subject of the event in the context of the event producer (identified by source).",
+      "$ref": "#/definitions/subjectdef"
+    },
+    "time": {
+      "description": "Timestamp of when the occurrence happened. Must adhere to RFC 3339.",
+      "$ref": "#/definitions/timedef"
+    },
+    "data": {
+      "description": "The event payload.",
+      "$ref": "#/definitions/datadef"
+    },
+    "data_base64": {
+      "description": "Base64 encoded event payload. Must adhere to RFC4648.",
+      "$ref": "#/definitions/data_base64def"
+    }
+  },
+  "required": ["id", "source", "specversion", "type"],
+  "definitions": {
+    "iddef":              { "type": "string", "minLength": 1 },
+    "sourcedef":          { "type": "string", "format": "uri-reference", "minLength": 1 },
+    "specversiondef":     { "type": "string", "minLength": 1 },
+    "typedef":            { "type": "string", "minLength": 1 },
+    "datacontenttypedef": { "type": ["string", "null"], "minLength": 1 },
+    "dataschemadef":      { "type": ["string", "null"], "format": "uri", "minLength": 1 },
+    "subjectdef":         { "type": ["string", "null"], "minLength": 1 },
+    "timedef":            { "type": ["string", "null"], "format": "date-time", "minLength": 1 },
+    "datadef":            { "type": ["object", "string", "number", "array", "boolean", "null"] },
+    "data_base64def":     { "type": ["string", "null"], "contentEncoding": "base64" }
+  }
+}
