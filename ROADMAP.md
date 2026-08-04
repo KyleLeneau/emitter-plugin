@@ -27,6 +27,7 @@
 * [ ] Setup MVVM for Global Options
 * [ ] Allow nats subject prefix to be specified / changed
 * [ ] Build an example webhook endpoint that logs using python
+* [ ] Need a better pattern to hold the handlers & nina interfaces and not have everything bloat in root plugin
 
 ### Bugs
 
