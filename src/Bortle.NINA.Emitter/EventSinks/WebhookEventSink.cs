@@ -1,5 +1,5 @@
-using Bortle.NINA.Emitter.Events;
 using Bortle.NINA.Emitter.Configuration;
+using Bortle.NINA.Emitter.Events;
 using CloudNative.CloudEvents;
 using CloudNative.CloudEvents.SystemTextJson;
 using System;
