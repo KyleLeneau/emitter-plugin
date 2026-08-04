@@ -1,0 +1,5 @@
+# Normalize all text files to LF in the repository, regardless of each
+# contributor's local core.autocrlf setting (matches .editorconfig's
+# end_of_line = lf). Git still checks files out using the OS-native line
+# ending your editor/tools expect unless you override that locally.
+* text=auto eol=lf
