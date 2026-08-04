@@ -95,6 +95,27 @@ namespace Bortle.NINA.Emitter.Tests.Events {
             Assert.Equal(new[] { "item-0", "item-3" }, values);
         }
 
+        [Fact]
+        public async Task Enqueue_WhenOneSinkIsSlow_FastSinkStillReceivesSubsequentEventsPromptly() {
+            var slowSinkGate = new TaskCompletionSource();
+            var slowSink = new FakeEventSink(onSend: async (_, _) => await slowSinkGate.Task);
+            var fastSink = new FakeEventSink("fast");
+
+            await using var emitter = new EventEmitterService(new IEventSink[] { slowSink, fastSink }, instanceId: "test-host");
+
+            // First event: the slow sink blocks indefinitely (until the gate is released below).
+            emitter.Enqueue("weather", "device-info", new SamplePayload("item-0"));
+            await WaitUntil(() => slowSink.Received.Count == 1);
+
+            // Second event: should still reach the fast sink promptly even though the slow
+            // sink hasn't finished (or even started) processing item-0's delivery.
+            emitter.Enqueue("weather", "device-info", new SamplePayload("item-1"));
+            await WaitUntil(() => fastSink.Received.Count == 2);
+
+            Assert.Single(slowSink.Received);
+            slowSinkGate.TrySetResult();
+        }
+
         private static async Task<T> WaitAsync<T>(Task<T> task) {
             var completed = await Task.WhenAny(task, Task.Delay(Timeout));
             Assert.Same(task, completed);

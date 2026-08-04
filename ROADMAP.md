@@ -24,7 +24,9 @@
 * [ ] create images and artifacts for deployment
 * [ ] implement kafka backend
 * [ ] Global options configuration for 1 or more sinks
+* [ ] Setup MVVM for Global Options
 * [ ] Allow nats subject prefix to be specified / changed
+* [ ] Build an example webhook endpoint that logs using python
 
 ### Bugs
 
@@ -35,6 +37,7 @@
 * [ ] Sequence item to emit a generic event defined by a user and still wrapped in a cloudevent
 * [ ] Allow for configuring which events / domains to emit
 * [ ] A dockable with current status of queue or connections on emitting
+* [ ] Refactor project so Core of Emitter can not depend on NINA.Plugin and be testable
 
 ### Parking Lot
 

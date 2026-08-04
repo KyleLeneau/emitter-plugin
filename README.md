@@ -1,5 +1,7 @@
 # Emitter
 
+[![Actions status](https://github.com/KyleLeNeau/emitter-plugin/actions/workflows/ci.yml/badge.svg)](https://github.com/KyleLeNeau/emitter-plugin/actions)
+
 Emitter is a [NINA](https://nighttime-imaging.eu/) plugin that sends events to a variety of backends including nats.io, webhook &amp; kafka
 
 ## Featues

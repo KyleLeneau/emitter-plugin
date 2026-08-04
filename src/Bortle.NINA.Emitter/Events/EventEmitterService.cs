@@ -13,29 +13,20 @@ namespace Bortle.NINA.Emitter.Events {
     public class EventEmitterService : IEventEmitter {
         private const int DefaultQueueCapacity = 1000;
 
-        private readonly List<IEventSink> sinks;
+        private readonly List<SinkWorker> workers;
         private readonly string instanceId;
-        private readonly Channel<CloudEvent> channel;
-        private readonly CancellationTokenSource cts = new CancellationTokenSource();
-        private readonly Task consumerLoop;
 
         public EventEmitterService(IEnumerable<IEventSink> sinks, string instanceId = null, int queueCapacity = DefaultQueueCapacity) {
-            this.sinks = sinks.ToList();
             this.instanceId = (instanceId ?? Environment.MachineName).ToLowerInvariant();
-            this.channel = Channel.CreateBounded<CloudEvent>(new BoundedChannelOptions(queueCapacity) {
-                FullMode = BoundedChannelFullMode.DropOldest,
-                SingleReader = true,
-                SingleWriter = false
-            });
-            this.consumerLoop = Task.Run(() => this.ProcessQueueAsync(this.cts.Token));
+            this.workers = sinks.Select(sink => new SinkWorker(sink, queueCapacity)).ToList();
         }
 
-        public IReadOnlyList<IEventSink> Sinks => this.sinks;
+        public IReadOnlyList<IEventSink> Sinks => this.workers.Select(w => w.Sink).ToList();
 
         public async Task StartAsync(CancellationToken ct = default) {
-            foreach (var sink in this.sinks) {
+            foreach (var worker in this.workers) {
                 try {
-                    await sink.ConnectAsync(ct);
+                    await worker.Sink.ConnectAsync(ct);
                 } catch (Exception ex) {
                     Logger.Error(ex);
                 }
@@ -52,49 +43,76 @@ namespace Bortle.NINA.Emitter.Events {
                 Data = data
             };
 
-            if (!this.channel.Writer.TryWrite(evt)) {
-                Logger.Warning($"Emitter queue rejected event {evt.Type}");
-            }
-        }
-
-        private async Task ProcessQueueAsync(CancellationToken ct) {
-            try {
-                await foreach (var evt in this.channel.Reader.ReadAllAsync(ct)) {
-                    var sendTasks = this.sinks.Select(sink => this.SendSafeAsync(sink, evt, ct));
-                    await Task.WhenAll(sendTasks);
+            // Fan out to each sink's own queue so a slow/backed-up sink only drops its own
+            // events instead of blocking or starving delivery to the other sinks.
+            foreach (var worker in this.workers) {
+                if (!worker.TryEnqueue(evt)) {
+                    Logger.Warning($"Emitter queue rejected event {evt.Type} for sink {worker.Sink.GetType().Name}");
                 }
-            } catch (OperationCanceledException) {
-                // expected during shutdown
-            }
-        }
-
-        private async Task SendSafeAsync(IEventSink sink, CloudEvent evt, CancellationToken ct) {
-            try {
-                await sink.SendAsync(evt, ct);
-            } catch (Exception ex) {
-                Logger.Error(ex);
             }
         }
 
         public async ValueTask DisposeAsync() {
-            this.channel.Writer.TryComplete();
-            this.cts.Cancel();
+            await Task.WhenAll(this.workers.Select(w => w.DisposeAsync().AsTask()));
 
-            try {
-                await this.consumerLoop;
-            } catch (Exception ex) {
-                Logger.Error(ex);
-            }
-
-            foreach (var sink in this.sinks) {
+            foreach (var worker in this.workers) {
                 try {
-                    await sink.DisconnectAsync(CancellationToken.None);
+                    await worker.Sink.DisconnectAsync(CancellationToken.None);
                 } catch (Exception ex) {
                     Logger.Error(ex);
                 }
             }
+        }
 
-            this.cts.Dispose();
+        /// <summary>
+        /// Owns an independent bounded queue and consumer loop for a single sink, so that
+        /// delivery to one sink can never block or slow down delivery to another.
+        /// </summary>
+        private sealed class SinkWorker : IAsyncDisposable {
+            private readonly Channel<CloudEvent> channel;
+            private readonly CancellationTokenSource cts = new CancellationTokenSource();
+            private readonly Task consumerLoop;
+
+            public SinkWorker(IEventSink sink, int queueCapacity) {
+                this.Sink = sink;
+                this.channel = Channel.CreateBounded<CloudEvent>(new BoundedChannelOptions(queueCapacity) {
+                    FullMode = BoundedChannelFullMode.DropOldest,
+                    SingleReader = true,
+                    SingleWriter = false
+                });
+                this.consumerLoop = Task.Run(() => this.ProcessQueueAsync(this.cts.Token));
+            }
+
+            public IEventSink Sink { get; }
+
+            public bool TryEnqueue(CloudEvent evt) => this.channel.Writer.TryWrite(evt);
+
+            private async Task ProcessQueueAsync(CancellationToken ct) {
+                try {
+                    await foreach (var evt in this.channel.Reader.ReadAllAsync(ct)) {
+                        try {
+                            await this.Sink.SendAsync(evt, ct);
+                        } catch (Exception ex) {
+                            Logger.Error(ex);
+                        }
+                    }
+                } catch (OperationCanceledException) {
+                    // expected during shutdown
+                }
+            }
+
+            public async ValueTask DisposeAsync() {
+                this.channel.Writer.TryComplete();
+                this.cts.Cancel();
+
+                try {
+                    await this.consumerLoop;
+                } catch (Exception ex) {
+                    Logger.Error(ex);
+                }
+
+                this.cts.Dispose();
+            }
         }
     }
 }
