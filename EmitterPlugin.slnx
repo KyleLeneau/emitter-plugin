@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="src/Bortle.NINA.Emitter/Bortle.NINA.Emitter.csproj" Id="b30d8e38-ce3d-4a2d-9002-39935e04226e" />
+  <Project Path="src/Bortle.NINA.Emitter.Tests/Bortle.NINA.Emitter.Tests.csproj" />
 </Solution>

@@ -14,14 +14,14 @@
 * [x] Update readme
 * [x] create schema directory, scripts and CLAUDE.md convention
 * [x] build asyncapi documentation html
+* [x] architect enque to sink data flow for backends
+* [x] implement nats io backend
+* [x] implement webhook backend
 * [ ] deploy documentation and plugin/manifests file to github pages + logo
 * [ ] gitops release & CD automation
 * [ ] setup release process
 * [ ] setup example client uses
 * [ ] create images and artifacts for deployment
-* [ ] architect enque to sink data flow for backends
-* [ ] implement nats io backend
-* [ ] implement webhook backend
 * [ ] implement kafka backend
 * [ ] Global options configuration for 1 or more sinks
 * [ ] Allow nats subject prefix to be specified / changed
