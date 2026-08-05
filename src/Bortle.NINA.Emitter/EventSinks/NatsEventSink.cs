@@ -2,9 +2,12 @@ using Bortle.NINA.Emitter.Configuration;
 using Bortle.NINA.Emitter.Events;
 using CloudNative.CloudEvents;
 using CloudNative.CloudEvents.SystemTextJson;
+using NATS.Client.Core;
 using NATS.Net;
+using NINA.Core.Utility;
 using System;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -41,10 +44,18 @@ namespace Bortle.NINA.Emitter.EventSinks {
             this.State = ConnectionState.Connecting;
 
             try {
-                this.client = new NatsClient(this.options.Url);
+                Logger.Info($"NatsEventProducer: connecting to {options.Url}");
+                var opts = NatsOpts.Default with { Url = this.options.Url };
+                if (this.options.RequiresAuthentication) {
+                    opts = opts with { AuthOpts = opts.AuthOpts with { Username = this.options.Username, Password = this.options.Password } };
+                }
+
+                this.client = new NatsClient(opts);
                 await this.client.ConnectAsync();
+                Logger.Info("NatsEventProducer: connected");
                 this.State = ConnectionState.Connected;
-            } catch (Exception) {
+            } catch (Exception ex) {
+                Logger.Error($"NatsEventProducer: connect to '{options.Url}' failed: {ex.Message}");
                 this.State = ConnectionState.Faulted;
                 throw;
             }
@@ -68,6 +79,7 @@ namespace Bortle.NINA.Emitter.EventSinks {
 
             try {
                 await this.client.PublishAsync(subject, bytes.ToArray(), cancellationToken: ct);
+                Logger.Info($"publish event: '{subject}' body: {Encoding.UTF8.GetString(bytes.ToArray())}");
                 this.State = ConnectionState.Connected;
             } catch (Exception) {
                 this.State = ConnectionState.Faulted;

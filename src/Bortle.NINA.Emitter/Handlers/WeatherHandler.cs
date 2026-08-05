@@ -41,7 +41,7 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {
-            var data = new DeviceData { Connected = false, DeviceType = "Weather" };
+            var data = new DeviceData { Connected = true, DeviceType = "Weather" };
             emitter.Enqueue("device", "connection", data);
             return Task.CompletedTask;
         }

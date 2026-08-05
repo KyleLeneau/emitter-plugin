@@ -3,7 +3,6 @@ using Bortle.NINA.Emitter.Models;
 using NINA.Equipment.Equipment.MySafetyMonitor;
 using NINA.Equipment.Interfaces.Mediator;
 using NINA.Equipment.Interfaces.ViewModel;
-using NINA.WPF.Base.Mediator;
 using System;
 using System.Threading.Tasks;
 
@@ -11,6 +10,7 @@ namespace Bortle.NINA.Emitter.Handlers {
     public class SafetyHandler : ISafetyMonitorConsumer {
         private readonly IEventEmitter emitter;
         private readonly ISafetyMonitorMediator mediator;
+        private SafetyMonitorInfo? info = null;
 
         public SafetyHandler(IEventEmitter eventEmitter, ISafetyMonitorMediator safetyMonitorMediator) {
             emitter = eventEmitter;
@@ -22,6 +22,9 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         public void UpdateDeviceInfo(SafetyMonitorInfo deviceInfo) {
+            // Skip duplicates from internal nina polling
+            if (deviceInfo.Equals(info)) return;
+
             var data = new SafetyData {
                 Connected = deviceInfo.Connected,
                 IsSafe = deviceInfo.IsSafe,
@@ -32,6 +35,7 @@ namespace Bortle.NINA.Emitter.Handlers {
                 DeviceId = deviceInfo.DeviceId,
             };
             emitter.Enqueue("safety_monitor", "device-info", data);
+            info = deviceInfo;
         }
 
         private void MediatorOnIsSafeChanged(object sender, IsSafeEventArgs e) {
@@ -40,7 +44,7 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {
-            var data = new DeviceData { Connected = false, DeviceType = "SafetyMonitor" };
+            var data = new DeviceData { Connected = true, DeviceType = "SafetyMonitor" };
             emitter.Enqueue("device", "connection", data);
             return Task.CompletedTask;
         }
