@@ -18,7 +18,7 @@ using System.Runtime.InteropServices;
 // [MANDATORY] A short description of your plugin
 [assembly: AssemblyDescription("An event emitter to various backends")]
 
-// The following attributes are not required for the plugin per se, but are required by the official manifest meta data
+// The following attributes are not required for the plugin per se, but are required by the official manifest metadata
 
 // Your name
 [assembly: AssemblyCompany("Kyle LeNeau")]
@@ -36,7 +36,7 @@ using System.Runtime.InteropServices;
 // The repository where your pluggin is hosted
 [assembly: AssemblyMetadata("Repository", "https://mypluginsourcerepo.com/project")]
 
-// The following attributes are optional for the official manifest meta data
+// The following attributes are optional for the official manifest metadata
 
 //[Optional] Your plugin homepage URL - omit if not applicaple
 [assembly: AssemblyMetadata("Homepage", "https://mypluginwebsite.com/")]
@@ -51,7 +51,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyMetadata("FeaturedImageURL", "")]
 //[Optional] A url to an example screenshot of your plugin in action
 [assembly: AssemblyMetadata("ScreenshotURL", "")]
-//[Optional] An additional url to an example example screenshot of your plugin in action
+//[Optional] An additional url to an example screenshot of your plugin in action
 [assembly: AssemblyMetadata("AltScreenshotURL", "")]
 //[Optional] An in-depth description of your plugin
 [assembly: AssemblyMetadata("LongDescription", @"")]

@@ -29,10 +29,19 @@ namespace Bortle.NINA.Emitter {
     /// </summary>
     [Export(typeof(IPluginManifest))]
     public class EmitterPlugin : PluginBase, INotifyPropertyChanged {
-        private readonly IPluginOptionsAccessor pluginSettings;
         private readonly IEventEmitter eventEmitter;
-        private readonly WeatherHandler weatherHandler;
+
+        private readonly CameraHandler cameraHandler;
+        private readonly DomeHandler domeHandler;
+        private readonly FilterWheelHandler filterWheelHandler;
+        private readonly FlatPanelHandler flatPanelHandler;
+        private readonly FocuserHandler focuserHandler;
+        private readonly GuiderHandler guiderHandler;
+        private readonly MountHandler mountHandler;
+        private readonly RotatorHandler rotatorHandler;
         private readonly SafetyHandler safetyHandler;
+        private readonly SwitchHandler switchHandler;
+        private readonly WeatherHandler weatherHandler;
 
         /// <summary>
         /// DataContext for the "Emitter_Options" DataTemplate (Options.xaml). Kept separate from
@@ -45,8 +54,17 @@ namespace Bortle.NINA.Emitter {
             IProfileService profileService,
             IOptionsVM options,
             IImageSaveMediator imageSaveMediator,
-            IWeatherDataMediator weatherDataMediator,
-            ISafetyMonitorMediator safetyMonitorMediator
+            ICameraMediator cameraDataMediator,
+            IDomeMediator domeMediator,
+            IFilterWheelMediator filterWheelMediator,
+            IFlatDeviceMediator flatMediator,
+            IFocuserMediator focuserMediator,
+            IGuiderMediator guiderMediator,
+            ITelescopeMediator telescopeMediator,
+            IRotatorMediator rotatorMediator,
+            ISafetyMonitorMediator safetyMonitorMediator,
+            ISwitchMediator switchMediator,
+            IWeatherDataMediator weatherDataMediator
         ) {
             if (Settings.Default.UpdateSettings) {
                 Settings.Default.Upgrade();
@@ -55,9 +73,9 @@ namespace Bortle.NINA.Emitter {
             }
 
             // This helper class can be used to store plugin settings that are dependent on the current profile
-            this.pluginSettings = new PluginOptionsAccessor(profileService, Guid.Parse(this.Identifier));
+            var pluginSettings = new PluginOptionsAccessor(profileService, Guid.Parse(Identifier));
 
-            var emitterOptions = EmitterOptions.Load(this.pluginSettings);
+            var emitterOptions = EmitterOptions.Load(pluginSettings);
             var sinks = new List<IEventSink>();
             if (emitterOptions.Nats.Enabled) {
                 sinks.Add(new NatsEventSink(emitterOptions.Nats));
@@ -66,21 +84,40 @@ namespace Bortle.NINA.Emitter {
                 sinks.Add(new WebhookEventSink(emitterOptions.Webhook));
             }
 
-            this.eventEmitter = new EventEmitterService(sinks);
-            _ = this.eventEmitter.StartAsync();
+            eventEmitter = new EventEmitterService(sinks);
+            _ = eventEmitter.StartAsync();
 
-            this.weatherHandler = new WeatherHandler(this.eventEmitter, weatherDataMediator);
-            this.safetyHandler = new SafetyHandler(this.eventEmitter, safetyMonitorMediator);
+            // Setup event handlers
+            cameraHandler = new CameraHandler(eventEmitter, cameraDataMediator);
+            domeHandler = new DomeHandler(eventEmitter, domeMediator);
+            filterWheelHandler = new FilterWheelHandler(eventEmitter, filterWheelMediator);
+            flatPanelHandler = new FlatPanelHandler(eventEmitter, flatMediator);
+            focuserHandler = new FocuserHandler(eventEmitter, focuserMediator);
+            guiderHandler = new GuiderHandler(eventEmitter, guiderMediator);
+            mountHandler = new MountHandler(eventEmitter, telescopeMediator);
+            rotatorHandler = new RotatorHandler(eventEmitter, rotatorMediator);
+            safetyHandler = new SafetyHandler(eventEmitter, safetyMonitorMediator);
+            switchHandler = new SwitchHandler(eventEmitter, switchMediator);
+            weatherHandler = new WeatherHandler(eventEmitter, weatherDataMediator);
 
-            this.OptionsVM = new GlobalOptionsViewModel(this.pluginSettings, this.eventEmitter);
+            OptionsVM = new GlobalOptionsViewModel(pluginSettings, eventEmitter);
         }
 
         public override async Task Teardown() {
             // Make sure to unregister an event when the object is no longer in use. Otherwise, garbage collection will be prevented.
-            this.OptionsVM.Dispose();
-            this.weatherHandler.Dispose();
-            this.safetyHandler.Dispose();
-            await this.eventEmitter.DisposeAsync();
+            OptionsVM.Dispose();
+            cameraHandler.Dispose();
+            domeHandler.Dispose();
+            filterWheelHandler.Dispose();
+            flatPanelHandler.Dispose();
+            focuserHandler.Dispose();
+            guiderHandler.Dispose();
+            mountHandler.Dispose();
+            rotatorHandler.Dispose();
+            safetyHandler.Dispose();
+            switchHandler.Dispose();
+            weatherHandler.Dispose();
+            await eventEmitter.DisposeAsync();
 
             await base.Teardown();
         }
