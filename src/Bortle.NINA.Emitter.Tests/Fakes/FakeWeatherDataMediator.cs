@@ -3,13 +3,15 @@ using NINA.Equipment.Interfaces;
 using NINA.Equipment.Interfaces.Mediator;
 using NINA.Equipment.Interfaces.ViewModel;
 
-namespace Bortle.NINA.Emitter.Tests.Fakes {
+namespace Bortle.NINA.Emitter.Tests.Fakes
+{
 
     /// <summary>
     /// Minimal fake covering only the RegisterConsumer/RemoveConsumer members WeatherHandler
     /// actually uses; the rest of the wide IDeviceMediator surface is unused in these tests.
     /// </summary>
-    public class FakeWeatherDataMediator : IWeatherDataMediator {
+    public class FakeWeatherDataMediator : IWeatherDataMediator
+    {
         public List<IWeatherDataConsumer> RegisteredConsumers { get; } = new List<IWeatherDataConsumer>();
 
         public void RegisterConsumer(IWeatherDataConsumer consumer) => this.RegisteredConsumers.Add(consumer);

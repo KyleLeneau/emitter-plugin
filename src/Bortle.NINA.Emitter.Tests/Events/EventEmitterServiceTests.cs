@@ -2,17 +2,21 @@ using Bortle.NINA.Emitter.Events;
 using Bortle.NINA.Emitter.EventSinks;
 using Bortle.NINA.Emitter.Tests.Fakes;
 
-namespace Bortle.NINA.Emitter.Tests.Events {
+namespace Bortle.NINA.Emitter.Tests.Events
+{
 
-    public class EventEmitterServiceTests {
+    public class EventEmitterServiceTests
+    {
         private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(5);
 
         private record SamplePayload(string Value);
 
         [Fact]
-        public async Task Enqueue_BuildsCloudEventWithExpectedEnvelope() {
+        public async Task Enqueue_BuildsCloudEventWithExpectedEnvelope()
+        {
             var received = new TaskCompletionSource<CloudNative.CloudEvents.CloudEvent>();
-            var sink = new FakeEventSink(onSend: (evt, ct) => {
+            var sink = new FakeEventSink(onSend: (evt, ct) =>
+            {
                 received.TrySetResult(evt);
                 return Task.CompletedTask;
             });
@@ -35,7 +39,8 @@ namespace Bortle.NINA.Emitter.Tests.Events {
         }
 
         [Fact]
-        public async Task Enqueue_FansOutToAllRegisteredSinks() {
+        public async Task Enqueue_FansOutToAllRegisteredSinks()
+        {
             var sinkA = new FakeEventSink("a");
             var sinkB = new FakeEventSink("b");
 
@@ -50,7 +55,8 @@ namespace Bortle.NINA.Emitter.Tests.Events {
         }
 
         [Fact]
-        public async Task Enqueue_WhenOneSinkThrows_OtherSinkStillReceivesEvent() {
+        public async Task Enqueue_WhenOneSinkThrows_OtherSinkStillReceivesEvent()
+        {
             var faultySink = new FakeEventSink("faulty", onSend: (_, _) => throw new InvalidOperationException("boom"));
             var healthySink = new FakeEventSink("healthy");
 
@@ -64,12 +70,15 @@ namespace Bortle.NINA.Emitter.Tests.Events {
         }
 
         [Fact]
-        public async Task Enqueue_WhenQueueIsFull_DropsOldestPendingEvent() {
+        public async Task Enqueue_WhenQueueIsFull_DropsOldestPendingEvent()
+        {
             var gate = new TaskCompletionSource();
             var firstItemProcessing = new TaskCompletionSource();
 
-            var sink = new FakeEventSink(onSend: async (evt, ct) => {
-                if (((SamplePayload)evt.Data!).Value == "item-0") {
+            var sink = new FakeEventSink(onSend: async (evt, ct) =>
+            {
+                if (((SamplePayload)evt.Data!).Value == "item-0")
+                {
                     firstItemProcessing.TrySetResult();
                     await gate.Task;
                 }
@@ -96,7 +105,8 @@ namespace Bortle.NINA.Emitter.Tests.Events {
         }
 
         [Fact]
-        public async Task Enqueue_WhenOneSinkIsSlow_FastSinkStillReceivesSubsequentEventsPromptly() {
+        public async Task Enqueue_WhenOneSinkIsSlow_FastSinkStillReceivesSubsequentEventsPromptly()
+        {
             var slowSinkGate = new TaskCompletionSource();
             var slowSink = new FakeEventSink(onSend: async (_, _) => await slowSinkGate.Task);
             var fastSink = new FakeEventSink("fast");
@@ -116,22 +126,27 @@ namespace Bortle.NINA.Emitter.Tests.Events {
             slowSinkGate.TrySetResult();
         }
 
-        private static async Task<T> WaitAsync<T>(Task<T> task) {
+        private static async Task<T> WaitAsync<T>(Task<T> task)
+        {
             var completed = await Task.WhenAny(task, Task.Delay(Timeout));
             Assert.Same(task, completed);
             return await task;
         }
 
-        private static async Task WaitAsync(Task task) {
+        private static async Task WaitAsync(Task task)
+        {
             var completed = await Task.WhenAny(task, Task.Delay(Timeout));
             Assert.Same(task, completed);
             await task;
         }
 
-        private static async Task WaitUntil(Func<bool> predicate) {
+        private static async Task WaitUntil(Func<bool> predicate)
+        {
             var deadline = DateTime.UtcNow + Timeout;
-            while (!predicate()) {
-                if (DateTime.UtcNow > deadline) {
+            while (!predicate())
+            {
+                if (DateTime.UtcNow > deadline)
+                {
                     Assert.Fail("Condition was not met within the timeout.");
                 }
                 await Task.Delay(10);

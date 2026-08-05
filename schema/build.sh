@@ -22,6 +22,9 @@ DATA_SCHEMAS=(
   "$SCHEMAS/telescope_data.yaml"
   "$SCHEMAS/imaging_data.yaml"
   "$SCHEMAS/weather_data.yaml"
+  "$SCHEMAS/device_data.yaml"
+  "$SCHEMAS/safety_data.yaml"
+  "$SCHEMAS/safety_changed_data.yaml"
 )
 
 generate() {

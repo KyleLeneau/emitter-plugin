@@ -1,0 +1,12 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: DeviceData
+type: object
+description: General device connection data
+properties:
+  connected:
+    type: boolean
+  device_type:
+    type: string
+required:
+  - connected
+  - device_type

@@ -3,11 +3,14 @@ using Bortle.NINA.Emitter.Models;
 using Bortle.NINA.Emitter.Tests.Fakes;
 using NINA.Equipment.Equipment.MyWeatherData;
 
-namespace Bortle.NINA.Emitter.Tests.Handlers {
+namespace Bortle.NINA.Emitter.Tests.Handlers
+{
 
-    public class WeatherHandlerTests {
+    public class WeatherHandlerTests
+    {
         [Fact]
-        public void Constructor_RegistersItselfAsConsumer() {
+        public void Constructor_RegistersItselfAsConsumer()
+        {
             var mediator = new FakeWeatherDataMediator();
             var handler = new WeatherHandler(new FakeEventEmitter(), mediator);
 
@@ -15,7 +18,8 @@ namespace Bortle.NINA.Emitter.Tests.Handlers {
         }
 
         [Fact]
-        public void Dispose_RemovesItselfAsConsumer() {
+        public void Dispose_RemovesItselfAsConsumer()
+        {
             var mediator = new FakeWeatherDataMediator();
             var handler = new WeatherHandler(new FakeEventEmitter(), mediator);
 
@@ -25,11 +29,13 @@ namespace Bortle.NINA.Emitter.Tests.Handlers {
         }
 
         [Fact]
-        public void UpdateDeviceInfo_EnqueuesWeatherDeviceInfoEvent() {
+        public void UpdateDeviceInfo_EnqueuesWeatherDeviceInfoEvent()
+        {
             var emitter = new FakeEventEmitter();
             var handler = new WeatherHandler(emitter, new FakeWeatherDataMediator());
 
-            var info = new WeatherDataInfo {
+            var info = new WeatherDataInfo
+            {
                 Connected = true,
                 Temperature = 12.3,
                 Humidity = 55.0,
@@ -68,11 +74,13 @@ namespace Bortle.NINA.Emitter.Tests.Handlers {
         }
 
         [Fact]
-        public void UpdateDeviceInfo_MapsUnsupportedSensorNaNValuesToNull() {
+        public void UpdateDeviceInfo_MapsUnsupportedSensorNaNValuesToNull()
+        {
             var emitter = new FakeEventEmitter();
             var handler = new WeatherHandler(emitter, new FakeWeatherDataMediator());
 
-            var info = new WeatherDataInfo {
+            var info = new WeatherDataInfo
+            {
                 Connected = false,
                 Temperature = double.NaN,
                 Humidity = double.NaN,

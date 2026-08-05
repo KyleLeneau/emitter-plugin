@@ -141,3 +141,37 @@ pub struct WeatherData {
     /// Wind speed in m/s; null if unsupported by the device
     pub wind_speed: Option<f64>,
 }
+
+/// General device connection data
+#[derive(Serialize, Deserialize)]
+pub struct DeviceData {
+    pub connected: bool,
+
+    pub device_type: String,
+}
+
+/// Safety monitor event data
+#[derive(Serialize, Deserialize)]
+pub struct SafetyData {
+    pub connected: bool,
+
+    pub description: Option<String>,
+
+    pub device_id: Option<String>,
+
+    pub display_name: Option<String>,
+
+    pub driver_info: Option<String>,
+
+    pub driver_version: Option<String>,
+
+    pub is_safe: bool,
+
+    pub name: Option<String>,
+}
+
+/// Safety monitor is_safe changed
+#[derive(Serialize, Deserialize)]
+pub struct SafetyChangeData {
+    pub is_safe: bool,
+}

@@ -1,11 +1,14 @@
 // To parse this data:
 //
-//   import { Convert, CameraData, TelescopeData, ImagingData, WeatherData } from "./file";
+//   import { Convert, CameraData, TelescopeData, ImagingData, WeatherData, DeviceData, SafetyData, SafetyChangeData } from "./file";
 //
 //   const cameraData = Convert.toCameraData(json);
 //   const telescopeData = Convert.toTelescopeData(json);
 //   const imagingData = Convert.toImagingData(json);
 //   const weatherData = Convert.toWeatherData(json);
+//   const deviceData = Convert.toDeviceData(json);
+//   const safetyData = Convert.toSafetyData(json);
+//   const safetyChangeData = Convert.toSafetyChangeData(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
@@ -177,6 +180,38 @@ export interface WeatherData {
     [property: string]: any;
 }
 
+/**
+ * General device connection data
+ */
+export interface DeviceData {
+    connected:   boolean;
+    device_type: string;
+    [property: string]: any;
+}
+
+/**
+ * Safety monitor event data
+ */
+export interface SafetyData {
+    connected:       boolean;
+    description?:    null | string;
+    device_id?:      null | string;
+    display_name?:   null | string;
+    driver_info?:    null | string;
+    driver_version?: null | string;
+    is_safe:         boolean;
+    name?:           null | string;
+    [property: string]: any;
+}
+
+/**
+ * Safety monitor is_safe changed
+ */
+export interface SafetyChangeData {
+    is_safe: boolean;
+    [property: string]: any;
+}
+
 // Converts JSON strings to/from your types
 // and asserts the results of JSON.parse at runtime
 export class Convert {
@@ -210,6 +245,30 @@ export class Convert {
 
     public static weatherDataToJson(value: WeatherData): string {
         return JSON.stringify(uncast(value, r("WeatherData")), null, 2);
+    }
+
+    public static toDeviceData(json: string): DeviceData {
+        return cast(JSON.parse(json), r("DeviceData"));
+    }
+
+    public static deviceDataToJson(value: DeviceData): string {
+        return JSON.stringify(uncast(value, r("DeviceData")), null, 2);
+    }
+
+    public static toSafetyData(json: string): SafetyData {
+        return cast(JSON.parse(json), r("SafetyData"));
+    }
+
+    public static safetyDataToJson(value: SafetyData): string {
+        return JSON.stringify(uncast(value, r("SafetyData")), null, 2);
+    }
+
+    public static toSafetyChangeData(json: string): SafetyChangeData {
+        return cast(JSON.parse(json), r("SafetyChangeData"));
+    }
+
+    public static safetyChangeDataToJson(value: SafetyChangeData): string {
+        return JSON.stringify(uncast(value, r("SafetyChangeData")), null, 2);
     }
 }
 
@@ -413,5 +472,22 @@ const typeMap: any = {
         { json: "wind_direction", js: "wind_direction", typ: u(undefined, u(3.14, null)) },
         { json: "wind_gust", js: "wind_gust", typ: u(undefined, u(3.14, null)) },
         { json: "wind_speed", js: "wind_speed", typ: u(undefined, u(3.14, null)) },
+    ], "any"),
+    "DeviceData": o([
+        { json: "connected", js: "connected", typ: true },
+        { json: "device_type", js: "device_type", typ: "" },
+    ], "any"),
+    "SafetyData": o([
+        { json: "connected", js: "connected", typ: true },
+        { json: "description", js: "description", typ: u(undefined, u(null, "")) },
+        { json: "device_id", js: "device_id", typ: u(undefined, u(null, "")) },
+        { json: "display_name", js: "display_name", typ: u(undefined, u(null, "")) },
+        { json: "driver_info", js: "driver_info", typ: u(undefined, u(null, "")) },
+        { json: "driver_version", js: "driver_version", typ: u(undefined, u(null, "")) },
+        { json: "is_safe", js: "is_safe", typ: true },
+        { json: "name", js: "name", typ: u(undefined, u(null, "")) },
+    ], "any"),
+    "SafetyChangeData": o([
+        { json: "is_safe", js: "is_safe", typ: true },
     ], "any"),
 };
