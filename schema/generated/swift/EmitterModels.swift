@@ -5,6 +5,9 @@
 //   let telescopeData = try TelescopeData(json)
 //   let imagingData = try ImagingData(json)
 //   let weatherData = try WeatherData(json)
+//   let deviceData = try DeviceData(json)
+//   let safetyData = try SafetyData(json)
+//   let safetyChangeData = try SafetyChangeData(json)
 
 import Foundation
 
@@ -344,6 +347,169 @@ extension WeatherData {
             windDirection: windDirection ?? self.windDirection,
             windGust: windGust ?? self.windGust,
             windSpeed: windSpeed ?? self.windSpeed
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// General device connection data
+// MARK: - DeviceData
+struct DeviceData: Codable {
+    let connected: Bool
+    let deviceType: String
+
+    enum CodingKeys: String, CodingKey {
+        case connected
+        case deviceType = "device_type"
+    }
+}
+
+// MARK: DeviceData convenience initializers and mutators
+
+extension DeviceData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(DeviceData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        connected: Bool? = nil,
+        deviceType: String? = nil
+    ) -> DeviceData {
+        return DeviceData(
+            connected: connected ?? self.connected,
+            deviceType: deviceType ?? self.deviceType
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Safety monitor event data
+// MARK: - SafetyData
+struct SafetyData: Codable {
+    let connected: Bool
+    let description, deviceID, displayName, driverInfo: String?
+    let driverVersion: String?
+    let isSafe: Bool
+    let name: String?
+
+    enum CodingKeys: String, CodingKey {
+        case connected, description
+        case deviceID = "device_id"
+        case displayName = "display_name"
+        case driverInfo = "driver_info"
+        case driverVersion = "driver_version"
+        case isSafe = "is_safe"
+        case name
+    }
+}
+
+// MARK: SafetyData convenience initializers and mutators
+
+extension SafetyData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(SafetyData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        connected: Bool? = nil,
+        description: String?? = nil,
+        deviceID: String?? = nil,
+        displayName: String?? = nil,
+        driverInfo: String?? = nil,
+        driverVersion: String?? = nil,
+        isSafe: Bool? = nil,
+        name: String?? = nil
+    ) -> SafetyData {
+        return SafetyData(
+            connected: connected ?? self.connected,
+            description: description ?? self.description,
+            deviceID: deviceID ?? self.deviceID,
+            displayName: displayName ?? self.displayName,
+            driverInfo: driverInfo ?? self.driverInfo,
+            driverVersion: driverVersion ?? self.driverVersion,
+            isSafe: isSafe ?? self.isSafe,
+            name: name ?? self.name
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Safety monitor is_safe changed
+// MARK: - SafetyChangeData
+struct SafetyChangeData: Codable {
+    let isSafe: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case isSafe = "is_safe"
+    }
+}
+
+// MARK: SafetyChangeData convenience initializers and mutators
+
+extension SafetyChangeData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(SafetyChangeData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        isSafe: Bool? = nil
+    ) -> SafetyChangeData {
+        return SafetyChangeData(
+            isSafe: isSafe ?? self.isSafe
         )
     }
 

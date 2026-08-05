@@ -8,6 +8,9 @@
 //    var telescopeData = TelescopeData.FromJson(jsonString);
 //    var imagingData = ImagingData.FromJson(jsonString);
 //    var weatherData = WeatherData.FromJson(jsonString);
+//    var deviceData = DeviceData.FromJson(jsonString);
+//    var safetyData = SafetyData.FromJson(jsonString);
+//    var safetyChangeData = SafetyChangeData.FromJson(jsonString);
 #nullable enable
 #pragma warning disable CS8618
 #pragma warning disable CS8601
@@ -265,6 +268,57 @@ namespace Bortle.NINA.Emitter.Models
         public double? WindSpeed { get; set; }
     }
 
+    /// <summary>
+    /// General device connection data
+    /// </summary>
+    public partial class DeviceData
+    {
+        [JsonPropertyName("connected")]
+        public bool Connected { get; set; }
+
+        [JsonPropertyName("device_type")]
+        public string DeviceType { get; set; }
+    }
+
+    /// <summary>
+    /// Safety monitor event data
+    /// </summary>
+    public partial class SafetyData
+    {
+        [JsonPropertyName("connected")]
+        public bool Connected { get; set; }
+
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
+
+        [JsonPropertyName("device_id")]
+        public string DeviceId { get; set; }
+
+        [JsonPropertyName("display_name")]
+        public string DisplayName { get; set; }
+
+        [JsonPropertyName("driver_info")]
+        public string DriverInfo { get; set; }
+
+        [JsonPropertyName("driver_version")]
+        public string DriverVersion { get; set; }
+
+        [JsonPropertyName("is_safe")]
+        public bool IsSafe { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+    }
+
+    /// <summary>
+    /// Safety monitor is_safe changed
+    /// </summary>
+    public partial class SafetyChangeData
+    {
+        [JsonPropertyName("is_safe")]
+        public bool IsSafe { get; set; }
+    }
+
     public partial class CameraData
     {
         public static CameraData FromJson(string json) => JsonSerializer.Deserialize<CameraData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -285,12 +339,30 @@ namespace Bortle.NINA.Emitter.Models
         public static WeatherData FromJson(string json) => JsonSerializer.Deserialize<WeatherData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
+    public partial class DeviceData
+    {
+        public static DeviceData FromJson(string json) => JsonSerializer.Deserialize<DeviceData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class SafetyData
+    {
+        public static SafetyData FromJson(string json) => JsonSerializer.Deserialize<SafetyData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class SafetyChangeData
+    {
+        public static SafetyChangeData FromJson(string json) => JsonSerializer.Deserialize<SafetyChangeData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
     public static class Serialize
     {
         public static string ToJson(this CameraData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this TelescopeData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this ImagingData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this WeatherData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this DeviceData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this SafetyData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this SafetyChangeData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
     internal static class Converter

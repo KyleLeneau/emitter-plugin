@@ -55,6 +55,7 @@
       <Dependencies Include="$(TargetDir)System.IO.Pipelines.dll" />
       <Dependencies Include="$(TargetDir)System.Text.Json.dll" />
       <Dependencies Include="$(TargetDir)System.Text.Encodings.Web.dll" />
+      <Dependencies Include="$(TargetDir)System.Diagnostics.DiagnosticSource.dll" />
     </ItemGroup>
     
     <!-- Build up the artifact stage directory -->

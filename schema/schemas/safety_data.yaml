@@ -1,0 +1,24 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: SafetyData
+type: object
+description: Safety monitor event data
+properties:
+  connected:
+    type: boolean
+  name:
+    type: ["string", "null"]
+  display_name:
+    type: ["string", "null"]
+  description:
+    type: ["string", "null"]
+  driver_info:
+    type: ["string", "null"]
+  driver_version:
+    type: ["string", "null"]
+  device_id:
+    type: ["string", "null"]
+  is_safe:
+    type: boolean
+required:
+  - connected
+  - is_safe

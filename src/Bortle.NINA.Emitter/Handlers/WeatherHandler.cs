@@ -3,17 +3,21 @@ using Bortle.NINA.Emitter.Models;
 using Bortle.NINA.Emitter.Utils;
 using NINA.Equipment.Equipment.MyWeatherData;
 using NINA.Equipment.Interfaces.Mediator;
+using System;
+using System.Threading.Tasks;
 
 namespace Bortle.NINA.Emitter.Handlers {
 
     public class WeatherHandler : IWeatherDataConsumer {
         private readonly IEventEmitter emitter;
-        private readonly IWeatherDataMediator weatherDataMediator;
+        private readonly IWeatherDataMediator mediator;
 
-        public WeatherHandler(IEventEmitter emitter, IWeatherDataMediator weatherDataMediator) {
-            this.emitter = emitter;
-            this.weatherDataMediator = weatherDataMediator;
-            this.weatherDataMediator.RegisterConsumer(this);
+        public WeatherHandler(IEventEmitter eventEmitter, IWeatherDataMediator weatherDataMediator) {
+            emitter = eventEmitter;
+            mediator = weatherDataMediator;
+            mediator.RegisterConsumer(this);
+            mediator.Connected += MediatorOnConnected;
+            mediator.Disconnected += MediatorOnDisconnected;
         }
 
         public void UpdateDeviceInfo(WeatherDataInfo deviceInfo) {
@@ -33,11 +37,25 @@ namespace Bortle.NINA.Emitter.Handlers {
                 StarFwhm = deviceInfo.StarFWHM.Optional()
             };
 
-            this.emitter.Enqueue("weather", "device-info", data);
+            emitter.Enqueue("weather", "device-info", data);
+        }
+
+        private Task MediatorOnConnected(object arg1, EventArgs arg2) {
+            var data = new DeviceData { Connected = true, DeviceType = "Weather" };
+            emitter.Enqueue("device", "connection", data);
+            return Task.CompletedTask;
+        }
+
+        private Task MediatorOnDisconnected(object arg1, EventArgs arg2) {
+            var data = new DeviceData { Connected = false, DeviceType = "Weather" };
+            emitter.Enqueue("device", "connection", data);
+            return Task.CompletedTask;
         }
 
         public void Dispose() {
-            this.weatherDataMediator.RemoveConsumer(this);
+            mediator.Disconnected -= MediatorOnDisconnected;
+            mediator.Connected -= MediatorOnConnected;
+            mediator.RemoveConsumer(this);
         }
     }
 }
