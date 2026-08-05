@@ -11,10 +11,10 @@ namespace Bortle.NINA.Emitter.Configuration {
 
         public string SubjectPrefix { get; set; } = "nina";
 
-        public bool RequiresAuthentication {  
+        public bool RequiresAuthentication {
             get {
                 return !string.IsNullOrEmpty(Username);
-            } 
+            }
         }
     }
 }

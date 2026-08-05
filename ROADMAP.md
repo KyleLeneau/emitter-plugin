@@ -17,15 +17,15 @@
 * [x] architect enque to sink data flow for backends
 * [x] implement nats io backend
 * [x] implement webhook backend
+* [x] Global options configuration for 1 or more sinks
+* [x] Setup MVVM for Global Options
+* [x] Allow nats subject prefix to be specified / changed
 * [ ] deploy documentation and plugin/manifests file to github pages + logo
 * [ ] gitops release & CD automation
 * [ ] setup release process
 * [ ] setup example client uses
 * [ ] create images and artifacts for deployment
 * [ ] implement kafka backend
-* [ ] Global options configuration for 1 or more sinks
-* [ ] Setup MVVM for Global Options
-* [ ] Allow nats subject prefix to be specified / changed
 * [ ] Build an example webhook endpoint that logs using python
 * [ ] Need a better pattern to hold the handlers & nina interfaces and not have everything bloat in root plugin
 

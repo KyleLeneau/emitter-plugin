@@ -10,7 +10,7 @@ namespace Bortle.NINA.Emitter.Handlers {
     public class SafetyHandler : ISafetyMonitorConsumer {
         private readonly IEventEmitter emitter;
         private readonly ISafetyMonitorMediator mediator;
-        private SafetyMonitorInfo? info = null;
+        private SafetyMonitorInfo info = null;
 
         public SafetyHandler(IEventEmitter eventEmitter, ISafetyMonitorMediator safetyMonitorMediator) {
             emitter = eventEmitter;

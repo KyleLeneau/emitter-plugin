@@ -19,6 +19,10 @@ namespace Bortle.NINA.Emitter.Tests.Fakes
             this.Calls.Add(new EnqueuedCall(domain, eventType, data));
         }
 
+        public Task SetSinkAsync(IEventSink sink, CancellationToken ct = default) => Task.CompletedTask;
+
+        public Task RemoveSinkAsync(string name, CancellationToken ct = default) => Task.CompletedTask;
+
         public ValueTask DisposeAsync() => ValueTask.CompletedTask;
     }
 }

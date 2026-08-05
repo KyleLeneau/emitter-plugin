@@ -2,6 +2,7 @@ using Bortle.NINA.Emitter.Configuration;
 using Bortle.NINA.Emitter.Events;
 using Bortle.NINA.Emitter.EventSinks;
 using Bortle.NINA.Emitter.Handlers;
+using Bortle.NINA.Emitter.UI.GlobalOptions;
 using NINA.Core.Utility;
 using NINA.Equipment.Interfaces.Mediator;
 using NINA.Plugin;
@@ -32,6 +33,12 @@ namespace Bortle.NINA.Emitter {
         private readonly IEventEmitter eventEmitter;
         private readonly WeatherHandler weatherHandler;
         private readonly SafetyHandler safetyHandler;
+
+        /// <summary>
+        /// DataContext for the "Emitter_Options" DataTemplate (Options.xaml). Kept separate from
+        /// this class so plugin-options UI logic doesn't bloat the plugin entry point.
+        /// </summary>
+        public GlobalOptionsViewModel OptionsVM { get; }
 
         [ImportingConstructor]
         public EmitterPlugin(
@@ -64,10 +71,13 @@ namespace Bortle.NINA.Emitter {
 
             this.weatherHandler = new WeatherHandler(this.eventEmitter, weatherDataMediator);
             this.safetyHandler = new SafetyHandler(this.eventEmitter, safetyMonitorMediator);
+
+            this.OptionsVM = new GlobalOptionsViewModel(this.pluginSettings, this.eventEmitter);
         }
 
         public override async Task Teardown() {
             // Make sure to unregister an event when the object is no longer in use. Otherwise, garbage collection will be prevented.
+            this.OptionsVM.Dispose();
             this.weatherHandler.Dispose();
             this.safetyHandler.Dispose();
             await this.eventEmitter.DisposeAsync();
