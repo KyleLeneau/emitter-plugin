@@ -20,6 +20,7 @@
 * [x] Global options configuration for 1 or more sinks
 * [x] Setup MVVM for Global Options
 * [x] Allow nats subject prefix to be specified / changed
+* [x] Need a better pattern to hold the handlers & nina interfaces and not have everything bloat in root plugin
 * [ ] deploy documentation and plugin/manifests file to github pages + logo
 * [ ] gitops release & CD automation
 * [ ] setup release process
@@ -27,7 +28,7 @@
 * [ ] create images and artifacts for deployment
 * [ ] implement kafka backend
 * [ ] Build an example webhook endpoint that logs using python
-* [ ] Need a better pattern to hold the handlers & nina interfaces and not have everything bloat in root plugin
+* [ ] Implement skeleton handlers
 
 ### Bugs
 

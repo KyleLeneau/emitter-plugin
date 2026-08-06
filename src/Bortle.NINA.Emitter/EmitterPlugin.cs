@@ -2,6 +2,7 @@ using Bortle.NINA.Emitter.Configuration;
 using Bortle.NINA.Emitter.Events;
 using Bortle.NINA.Emitter.EventSinks;
 using Bortle.NINA.Emitter.Handlers;
+using Bortle.NINA.Emitter.Handlers.App;
 using Bortle.NINA.Emitter.UI.GlobalOptions;
 using NINA.Core.Utility;
 using NINA.Equipment.Interfaces.Mediator;
@@ -29,19 +30,9 @@ namespace Bortle.NINA.Emitter {
     /// </summary>
     [Export(typeof(IPluginManifest))]
     public class EmitterPlugin : PluginBase, INotifyPropertyChanged {
-        private readonly IEventEmitter eventEmitter;
 
-        private readonly CameraHandler cameraHandler;
-        private readonly DomeHandler domeHandler;
-        private readonly FilterWheelHandler filterWheelHandler;
-        private readonly FlatPanelHandler flatPanelHandler;
-        private readonly FocuserHandler focuserHandler;
-        private readonly GuiderHandler guiderHandler;
-        private readonly MountHandler mountHandler;
-        private readonly RotatorHandler rotatorHandler;
-        private readonly SafetyHandler safetyHandler;
-        private readonly SwitchHandler switchHandler;
-        private readonly WeatherHandler weatherHandler;
+        private readonly IEventEmitter eventEmitter;
+        private readonly HandlerRegistry registry = new();
 
         /// <summary>
         /// DataContext for the "Emitter_Options" DataTemplate (Options.xaml). Kept separate from
@@ -49,6 +40,9 @@ namespace Bortle.NINA.Emitter {
         /// </summary>
         public GlobalOptionsViewModel OptionsVM { get; }
 
+        /// <summary>
+        /// Injectable list: https://github.com/isbeorn/nina.plugin.template#constructor-injection
+        /// </summary>
         [ImportingConstructor]
         public EmitterPlugin(
             IProfileService profileService,
@@ -75,6 +69,7 @@ namespace Bortle.NINA.Emitter {
             // This helper class can be used to store plugin settings that are dependent on the current profile
             var pluginSettings = new PluginOptionsAccessor(profileService, Guid.Parse(Identifier));
 
+            // Load up configured Sinks from settings
             var emitterOptions = EmitterOptions.Load(pluginSettings);
             var sinks = new List<IEventSink>();
             if (emitterOptions.Nats.Enabled) {
@@ -84,41 +79,32 @@ namespace Bortle.NINA.Emitter {
                 sinks.Add(new WebhookEventSink(emitterOptions.Webhook));
             }
 
+            // Create the Emitter with configured Sinks
             eventEmitter = new EventEmitterService(sinks);
             _ = eventEmitter.StartAsync();
 
             // Setup event handlers
-            cameraHandler = new CameraHandler(eventEmitter, cameraDataMediator);
-            domeHandler = new DomeHandler(eventEmitter, domeMediator);
-            filterWheelHandler = new FilterWheelHandler(eventEmitter, filterWheelMediator);
-            flatPanelHandler = new FlatPanelHandler(eventEmitter, flatMediator);
-            focuserHandler = new FocuserHandler(eventEmitter, focuserMediator);
-            guiderHandler = new GuiderHandler(eventEmitter, guiderMediator);
-            mountHandler = new MountHandler(eventEmitter, telescopeMediator);
-            rotatorHandler = new RotatorHandler(eventEmitter, rotatorMediator);
-            safetyHandler = new SafetyHandler(eventEmitter, safetyMonitorMediator);
-            switchHandler = new SwitchHandler(eventEmitter, switchMediator);
-            weatherHandler = new WeatherHandler(eventEmitter, weatherDataMediator);
+            registry.Add(new CameraHandler(eventEmitter, cameraDataMediator));
+            registry.Add(new DomeHandler(eventEmitter, domeMediator));
+            registry.Add(new FilterWheelHandler(eventEmitter, filterWheelMediator));
+            registry.Add(new FlatPanelHandler(eventEmitter, flatMediator));
+            registry.Add(new FocuserHandler(eventEmitter, focuserMediator));
+            registry.Add(new GuiderHandler(eventEmitter, guiderMediator));
+            registry.Add(new MountHandler(eventEmitter, telescopeMediator));
+            registry.Add(new RotatorHandler(eventEmitter, rotatorMediator));
+            registry.Add(new SafetyHandler(eventEmitter, safetyMonitorMediator));
+            registry.Add(new SwitchHandler(eventEmitter, switchMediator));
+            registry.Add(new WeatherHandler(eventEmitter, weatherDataMediator));
+            registry.Add(new ProfileHandler(eventEmitter, profileService));
 
+            // Setup GlobalOptions View Model
             OptionsVM = new GlobalOptionsViewModel(pluginSettings, eventEmitter);
         }
 
         public override async Task Teardown() {
-            // Make sure to unregister an event when the object is no longer in use. Otherwise, garbage collection will be prevented.
             OptionsVM.Dispose();
-            cameraHandler.Dispose();
-            domeHandler.Dispose();
-            filterWheelHandler.Dispose();
-            flatPanelHandler.Dispose();
-            focuserHandler.Dispose();
-            guiderHandler.Dispose();
-            mountHandler.Dispose();
-            rotatorHandler.Dispose();
-            safetyHandler.Dispose();
-            switchHandler.Dispose();
-            weatherHandler.Dispose();
+            registry.Dispose();
             await eventEmitter.DisposeAsync();
-
             await base.Teardown();
         }
 
