@@ -16,10 +16,16 @@ namespace Bortle.NINA.Emitter.Handlers {
             mediator.RegisterConsumer(this);
             mediator.Connected += MediatorOnConnected;
             mediator.Disconnected += MediatorOnDisconnected;
+            mediator.Closed += MediatorOnClosed;
+            mediator.Homed += MediatorOnHomed;
+            mediator.Opened += MediatorOnOpened;
+            mediator.Parked += MediatorOnParked;
+            mediator.Slewed += MediatorOnSlewed;
+            mediator.Synced += MediatorOnSynced;
         }
 
         public void UpdateDeviceInfo(DomeInfo deviceInfo) {
-            // throw new System.NotImplementedException();
+            // TODO: Implement event
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {
@@ -43,7 +49,42 @@ namespace Bortle.NINA.Emitter.Handlers {
             return Task.CompletedTask;
         }
 
+        private Task MediatorOnClosed(object arg1, EventArgs arg2) {
+            // TODO: Implement event
+            return Task.CompletedTask;
+        }
+
+        private Task MediatorOnHomed(object arg1, EventArgs arg2) {
+            // TODO: Implement event
+            return Task.CompletedTask;
+        }
+
+        private Task MediatorOnOpened(object arg1, EventArgs arg2) {
+            // TODO: Implement event
+            return Task.CompletedTask;
+        }
+
+        private Task MediatorOnParked(object arg1, EventArgs arg2) {
+            // TODO: Implement event
+            return Task.CompletedTask;
+        }
+
+        private Task MediatorOnSlewed(object arg1, DomeEventArgs arg2) {
+            // TODO: Implement event
+            return Task.CompletedTask;
+        }
+
+        private void MediatorOnSynced(object sender, EventArgs e) {
+            // TODO: Implement event
+        }
+
         public void Dispose() {
+            mediator.Synced -= MediatorOnSynced;
+            mediator.Slewed -= MediatorOnSlewed;
+            mediator.Parked -= MediatorOnParked;
+            mediator.Opened -= MediatorOnOpened;
+            mediator.Homed -= MediatorOnHomed;
+            mediator.Closed -= MediatorOnClosed;
             mediator.Disconnected -= MediatorOnDisconnected;
             mediator.Connected -= MediatorOnConnected;
             mediator.RemoveConsumer(this);

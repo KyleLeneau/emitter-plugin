@@ -16,10 +16,13 @@ namespace Bortle.NINA.Emitter.Handlers {
             mediator.RegisterConsumer(this);
             mediator.Connected += MediatorOnConnected;
             mediator.Disconnected += MediatorOnDisconnected;
+            mediator.Moved += MediatorOnMoved;
+            mediator.MovedMechanical += MediatorOnMovedMechanical;
+            mediator.Synced += MediatorOnSynced;
         }
 
         public void UpdateDeviceInfo(RotatorInfo deviceInfo) {
-            // throw new System.NotImplementedException();
+            // TODO: Implement event
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {
@@ -43,7 +46,24 @@ namespace Bortle.NINA.Emitter.Handlers {
             return Task.CompletedTask;
         }
 
+        private Task MediatorOnMoved(object arg1, RotatorEventArgs arg2) {
+            // TODO: Implement event
+            return Task.CompletedTask;
+        }
+
+        private Task MediatorOnMovedMechanical(object arg1, RotatorEventArgs arg2) {
+            // TODO: Implement event
+            return Task.CompletedTask;
+        }
+
+        private void MediatorOnSynced(object sender, RotatorEventArgs e) {
+            // TODO: Implement event
+        }
+
         public void Dispose() {
+            mediator.Synced -= MediatorOnSynced;
+            mediator.MovedMechanical -= MediatorOnMovedMechanical;
+            mediator.Moved -= MediatorOnMoved;
             mediator.Disconnected -= MediatorOnDisconnected;
             mediator.Connected -= MediatorOnConnected;
             mediator.RemoveConsumer(this);

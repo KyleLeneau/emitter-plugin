@@ -16,10 +16,11 @@ namespace Bortle.NINA.Emitter.Handlers {
             mediator.RegisterConsumer(this);
             mediator.Connected += MediatorOnConnected;
             mediator.Disconnected += MediatorOnDisconnected;
+            mediator.DownloadTimeout += MediatorOnDownloadTimeout;
         }
 
         public void UpdateDeviceInfo(CameraInfo deviceInfo) {
-            // throw new System.NotImplementedException();
+            // TODO: Implement event
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {
@@ -43,7 +44,13 @@ namespace Bortle.NINA.Emitter.Handlers {
             return Task.CompletedTask;
         }
 
+        private Task MediatorOnDownloadTimeout(object arg1, EventArgs arg2) {
+            // TODO: Implement event
+            return Task.CompletedTask;
+        }
+
         public void Dispose() {
+            mediator.DownloadTimeout -= MediatorOnDownloadTimeout;
             mediator.Disconnected -= MediatorOnDisconnected;
             mediator.Connected -= MediatorOnConnected;
             mediator.RemoveConsumer(this);

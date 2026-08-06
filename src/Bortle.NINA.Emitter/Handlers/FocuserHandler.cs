@@ -19,15 +19,15 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         public void UpdateDeviceInfo(FocuserInfo deviceInfo) {
-            // throw new System.NotImplementedException();
+            // TODO: Implement event
         }
 
         public void UpdateEndAutoFocusRun(AutoFocusInfo info) {
-            // throw new NotImplementedException();
+            // TODO: Implement event
         }
 
         public void UpdateUserFocused(FocuserInfo info) {
-            // throw new NotImplementedException();
+            // TODO: Implement event
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {

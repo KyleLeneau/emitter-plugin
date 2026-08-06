@@ -16,10 +16,16 @@ namespace Bortle.NINA.Emitter.Handlers {
             mediator.RegisterConsumer(this);
             mediator.Connected += MediatorOnConnected;
             mediator.Disconnected += MediatorOnDisconnected;
+            mediator.AfterMeridianFlip += MediatorOnAfterMeridianFlip;
+            mediator.BeforeMeridianFlip += MediatorOnBeforeMeridianFlip;
+            mediator.Homed += MediatorOnHomed;
+            mediator.Parked += MediatorOnParked;
+            mediator.Slewed += MediatorOnSlewed;
+            mediator.Unparked += MediatorOnUnparked;
         }
 
         public void UpdateDeviceInfo(TelescopeInfo deviceInfo) {
-            // throw new System.NotImplementedException();
+            // TODO: Implement event
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {
@@ -43,7 +49,43 @@ namespace Bortle.NINA.Emitter.Handlers {
             return Task.CompletedTask;
         }
 
+        private Task MediatorOnAfterMeridianFlip(object arg1, AfterMeridianFlipEventArgs arg2) {
+            // TODO: Implement event
+            return Task.CompletedTask;
+        }
+
+        private Task MediatorOnBeforeMeridianFlip(object arg1, BeforeMeridianFlipEventArgs arg2) {
+            // TODO: Implement event
+            return Task.CompletedTask;
+        }
+
+        private Task MediatorOnHomed(object arg1, EventArgs arg2) {
+            // TODO: Implement event
+            return Task.CompletedTask;
+        }
+
+        private Task MediatorOnParked(object arg1, EventArgs arg2) {
+            // TODO: Implement event
+            return Task.CompletedTask;
+        }
+
+        private Task MediatorOnSlewed(object arg1, MountSlewedEventArgs arg2) {
+            // TODO: Implement event
+            return Task.CompletedTask;
+        }
+
+        private Task MediatorOnUnparked(object arg1, EventArgs arg2) {
+            // TODO: Implement event
+            return Task.CompletedTask;
+        }
+
         public void Dispose() {
+            mediator.Unparked -= MediatorOnUnparked;
+            mediator.Slewed -= MediatorOnSlewed;
+            mediator.Parked -= MediatorOnParked;
+            mediator.Homed -= MediatorOnHomed;
+            mediator.BeforeMeridianFlip -= MediatorOnBeforeMeridianFlip;
+            mediator.AfterMeridianFlip -= MediatorOnAfterMeridianFlip;
             mediator.Disconnected -= MediatorOnDisconnected;
             mediator.Connected -= MediatorOnConnected;
             mediator.RemoveConsumer(this);

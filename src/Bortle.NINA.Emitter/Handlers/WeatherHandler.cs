@@ -4,7 +4,6 @@ using Bortle.NINA.Emitter.Utils;
 using NINA.Equipment.Equipment.MyWeatherData;
 using NINA.Equipment.Interfaces.Mediator;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Bortle.NINA.Emitter.Handlers {

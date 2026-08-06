@@ -9,6 +9,7 @@ using NINA.Plugin;
 using NINA.Plugin.Interfaces;
 using NINA.Profile;
 using NINA.Profile.Interfaces;
+using NINA.Sequencer.Interfaces.Mediator;
 using NINA.WPF.Base.Interfaces.Mediator;
 using NINA.WPF.Base.Interfaces.ViewModel;
 using System;
@@ -57,7 +58,9 @@ namespace Bortle.NINA.Emitter {
             IRotatorMediator rotatorMediator,
             ISafetyMonitorMediator safetyMonitorMediator,
             ISwitchMediator switchMediator,
-            IWeatherDataMediator weatherDataMediator
+            IWeatherDataMediator weatherDataMediator,
+            ISequenceMediator sequenceMediator,
+            IMessageBroker messageBroker
         ) {
             if (Settings.Default.UpdateSettings) {
                 Settings.Default.Upgrade();
@@ -94,7 +97,10 @@ namespace Bortle.NINA.Emitter {
             registry.Add(new SafetyHandler(eventEmitter, safetyMonitorMediator));
             registry.Add(new SwitchHandler(eventEmitter, switchMediator));
             registry.Add(new WeatherHandler(eventEmitter, weatherDataMediator));
+            registry.Add(new ImageSaveHandler(eventEmitter, imageSaveMediator));
             registry.Add(new ProfileHandler(eventEmitter, profileService));
+            registry.Add(new SequenceHandler(eventEmitter, sequenceMediator));
+            registry.Add(new TargetSchedulerHandler(eventEmitter, messageBroker));
 
             // Setup GlobalOptions View Model
             OptionsVM = new GlobalOptionsViewModel(pluginSettings, eventEmitter);

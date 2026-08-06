@@ -1,5 +1,6 @@
 using Bortle.NINA.Emitter.Events;
 using Bortle.NINA.Emitter.Models;
+using NINA.Core.Interfaces;
 using NINA.Equipment.Equipment.MyGuider;
 using NINA.Equipment.Interfaces.Mediator;
 using System;
@@ -16,10 +17,14 @@ namespace Bortle.NINA.Emitter.Handlers {
             mediator.RegisterConsumer(this);
             mediator.Connected += MediatorOnConnected;
             mediator.Disconnected += MediatorOnDisconnected;
+            mediator.AfterDither += MediatorOnAfterDither;
+            mediator.GuideEvent += MediatorOnGuideEvent;
+            mediator.GuidingStarted += MediatorOnGuidingStarted;
+            mediator.GuidingStopped += MediatorOnGuidingStopped;
         }
 
         public void UpdateDeviceInfo(GuiderInfo deviceInfo) {
-            // throw new System.NotImplementedException();
+            // TODO: Implement event
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {
@@ -43,7 +48,30 @@ namespace Bortle.NINA.Emitter.Handlers {
             return Task.CompletedTask;
         }
 
+        private Task MediatorOnAfterDither(object arg1, EventArgs arg2) {
+            // TODO: Implement event
+            return Task.CompletedTask;
+        }
+
+        private void MediatorOnGuideEvent(object sender, IGuideStep e) {
+            // TODO: Implement event
+        }
+
+        private Task MediatorOnGuidingStarted(object arg1, EventArgs arg2) {
+            // TODO: Implement event
+            return Task.CompletedTask;
+        }
+
+        private Task MediatorOnGuidingStopped(object arg1, EventArgs arg2) {
+            // TODO: Implement event
+            return Task.CompletedTask;
+        }
+
         public void Dispose() {
+            mediator.GuidingStopped -= MediatorOnGuidingStopped;
+            mediator.GuidingStarted -= MediatorOnGuidingStarted;
+            mediator.GuideEvent -= MediatorOnGuideEvent;
+            mediator.AfterDither -= MediatorOnAfterDither;
             mediator.Disconnected -= MediatorOnDisconnected;
             mediator.Connected -= MediatorOnConnected;
             mediator.RemoveConsumer(this);

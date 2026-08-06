@@ -19,7 +19,7 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private void ProfilesOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-            // throw new NotImplementedException();
+            // TODO: Implement event
             // switch (e.Action) {
             //     case NotifyCollectionChangedAction.Add: 
             //     case NotifyCollectionChangedAction.Remove:
@@ -28,19 +28,19 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private void OnProfileChanged(object sender, EventArgs e) {
-            // throw new NotImplementedException();
+            // TODO: Implement event
         }
 
         private void OnLocationChanged(object sender, EventArgs e) {
-            // throw new NotImplementedException();
+            // TODO: Implement event
         }
 
         private void OnHorizonChanged(object sender, EventArgs e) {
-            // throw new NotImplementedException();
+            // TODO: Implement event
         }
 
         private void OnLocaleChanged(object sender, EventArgs e) {
-            // throw new NotImplementedException();
+            // TODO: Implement event
         }
 
         public void Dispose() {

@@ -64,22 +64,22 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private Task MediatorOnBrightnessChanged(object arg1, FlatDeviceBrightnessChangedEventArgs arg2) {
-            // throw new NotImplementedException();
+            // TODO: Implement event
             return Task.CompletedTask;
         }
 
         private Task MediatorOnClosed(object arg1, EventArgs arg2) {
-            // throw new NotImplementedException();
+            // TODO: Implement event
             return Task.CompletedTask;
         }
 
         private Task MediatorOnOpened(object arg1, EventArgs arg2) {
-            // throw new NotImplementedException();
+            // TODO: Implement event
             return Task.CompletedTask;
         }
 
         private Task MediatorOnLightToggled(object arg1, EventArgs arg2) {
-            // throw new NotImplementedException();
+            // TODO: Implement event
             return Task.CompletedTask;
         }
 
