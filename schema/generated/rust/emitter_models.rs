@@ -4,14 +4,40 @@
 // extern crate serde_derive;
 // extern crate serde_json;
 //
-// use generated_module::CameraData;
+// use generated_module::DeviceConnectionData;
 //
 // fn main() {
 //     let json = r#"{"answer": 42}"#;
-//     let model: CameraData = serde_json::from_str(&json).unwrap();
+//     let model: DeviceConnectionData = serde_json::from_str(&json).unwrap();
 // }
 
 use serde::{Serialize, Deserialize};
+
+/// General device connection data
+#[derive(Serialize, Deserialize)]
+pub struct DeviceConnectionData {
+    pub connected: bool,
+
+    /// Device description
+    pub description: Option<String>,
+
+    /// Driver ID
+    pub device_id: Option<String>,
+
+    pub device_type: String,
+
+    /// A friendly name of the device for dipslay
+    pub display_name: Option<String>,
+
+    /// Driver name and info
+    pub driver_info: Option<String>,
+
+    /// Driver version information
+    pub driver_version: Option<String>,
+
+    /// The name of the device
+    pub name: Option<String>,
+}
 
 /// Camera device state snapshot
 #[derive(Serialize, Deserialize)]
@@ -30,9 +56,6 @@ pub struct CameraData {
 
     /// Duration of last image download in seconds
     pub last_download_time: f64,
-
-    /// Camera device name; null if not connected
-    pub name: Option<String>,
 
     /// Sensor temperature in degrees Celsius; null if unsupported by the device
     pub temperature: Option<f64>,
@@ -54,9 +77,6 @@ pub struct TelescopeData {
 
     /// Current Dec in decimal degrees (−90 to +90); null if unsupported by the device
     pub declination: Option<f64>,
-
-    /// Mount device name; null if not connected
-    pub name: Option<String>,
 
     /// Current RA in decimal hours (0–24); null if unsupported by the device
     pub right_ascension: Option<f64>,
@@ -142,32 +162,12 @@ pub struct WeatherData {
     pub wind_speed: Option<f64>,
 }
 
-/// General device connection data
-#[derive(Serialize, Deserialize)]
-pub struct DeviceData {
-    pub connected: bool,
-
-    pub device_type: String,
-}
-
 /// Safety monitor event data
 #[derive(Serialize, Deserialize)]
 pub struct SafetyData {
     pub connected: bool,
 
-    pub description: Option<String>,
-
-    pub device_id: Option<String>,
-
-    pub display_name: Option<String>,
-
-    pub driver_info: Option<String>,
-
-    pub driver_version: Option<String>,
-
     pub is_safe: bool,
-
-    pub name: Option<String>,
 }
 
 /// Safety monitor is_safe changed

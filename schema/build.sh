@@ -18,11 +18,11 @@ DEST_DIR="$PLUGIN_DIR/Generated"
 DOCS_OUT="$SCRIPT_DIR/../build/docs"
 
 DATA_SCHEMAS=(
+  "$SCHEMAS/device_connect_data.yaml"
   "$SCHEMAS/camera_data.yaml"
   "$SCHEMAS/telescope_data.yaml"
   "$SCHEMAS/imaging_data.yaml"
   "$SCHEMAS/weather_data.yaml"
-  "$SCHEMAS/device_data.yaml"
   "$SCHEMAS/safety_data.yaml"
   "$SCHEMAS/safety_changed_data.yaml"
 )

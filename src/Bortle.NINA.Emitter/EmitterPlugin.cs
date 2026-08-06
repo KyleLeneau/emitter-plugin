@@ -2,7 +2,6 @@ using Bortle.NINA.Emitter.Configuration;
 using Bortle.NINA.Emitter.Events;
 using Bortle.NINA.Emitter.EventSinks;
 using Bortle.NINA.Emitter.Handlers;
-using Bortle.NINA.Emitter.Handlers.App;
 using Bortle.NINA.Emitter.UI.GlobalOptions;
 using NINA.Core.Utility;
 using NINA.Equipment.Interfaces.Mediator;

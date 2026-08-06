@@ -1,0 +1,30 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: DeviceConnectionData
+type: object
+description: General device connection data
+properties:
+  connected:
+    type: boolean
+  device_type:
+    type: string
+  name:
+    type: [ "string", "null" ]
+    description: The name of the device
+  display_name:
+    type: [ "string", "null" ]
+    description: A friendly name of the device for dipslay
+  description:
+    type: [ "string", "null" ]
+    description: Device description
+  driver_info:
+    type: [ "string", "null" ]
+    description: Driver name and info
+  driver_version:
+    type: [ "string", "null" ]
+    description: Driver version information
+  device_id:
+    type: [ "string", "null" ]
+    description: Driver ID
+required:
+  - connected
+  - device_type

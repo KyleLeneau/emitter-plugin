@@ -1,15 +1,93 @@
 // This file was generated from JSON Schema using quicktype, do not modify it directly.
 // To parse the JSON, add this file to your project and do:
 //
+//   let deviceConnectionData = try DeviceConnectionData(json)
 //   let cameraData = try CameraData(json)
 //   let telescopeData = try TelescopeData(json)
 //   let imagingData = try ImagingData(json)
 //   let weatherData = try WeatherData(json)
-//   let deviceData = try DeviceData(json)
 //   let safetyData = try SafetyData(json)
 //   let safetyChangeData = try SafetyChangeData(json)
 
 import Foundation
+
+/// General device connection data
+// MARK: - DeviceConnectionData
+struct DeviceConnectionData: Codable {
+    let connected: Bool
+    /// Device description
+    let description: String?
+    /// Driver ID
+    let deviceID: String?
+    let deviceType: String
+    /// A friendly name of the device for dipslay
+    let displayName: String?
+    /// Driver name and info
+    let driverInfo: String?
+    /// Driver version information
+    let driverVersion: String?
+    /// The name of the device
+    let name: String?
+
+    enum CodingKeys: String, CodingKey {
+        case connected, description
+        case deviceID = "device_id"
+        case deviceType = "device_type"
+        case displayName = "display_name"
+        case driverInfo = "driver_info"
+        case driverVersion = "driver_version"
+        case name
+    }
+}
+
+// MARK: DeviceConnectionData convenience initializers and mutators
+
+extension DeviceConnectionData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(DeviceConnectionData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        connected: Bool? = nil,
+        description: String?? = nil,
+        deviceID: String?? = nil,
+        deviceType: String? = nil,
+        displayName: String?? = nil,
+        driverInfo: String?? = nil,
+        driverVersion: String?? = nil,
+        name: String?? = nil
+    ) -> DeviceConnectionData {
+        return DeviceConnectionData(
+            connected: connected ?? self.connected,
+            description: description ?? self.description,
+            deviceID: deviceID ?? self.deviceID,
+            deviceType: deviceType ?? self.deviceType,
+            displayName: displayName ?? self.displayName,
+            driverInfo: driverInfo ?? self.driverInfo,
+            driverVersion: driverVersion ?? self.driverVersion,
+            name: name ?? self.name
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
 
 /// Camera device state snapshot
 // MARK: - CameraData
@@ -22,8 +100,6 @@ struct CameraData: Codable {
     let isExposing: Bool
     /// Duration of last image download in seconds
     let lastDownloadTime: Double
-    /// Camera device name; null if not connected
-    let name: String?
     /// Sensor temperature in degrees Celsius; null if unsupported by the device
     let temperature: Double?
     /// Target cooler temperature in degrees Celsius; null if unsupported by the device
@@ -36,7 +112,7 @@ struct CameraData: Codable {
         case exposureEndTime = "exposure_end_time"
         case isExposing = "is_exposing"
         case lastDownloadTime = "last_download_time"
-        case name, temperature
+        case temperature
         case temperatureSetPoint = "temperature_set_point"
     }
 }
@@ -66,7 +142,6 @@ extension CameraData {
         exposureEndTime: Date?? = nil,
         isExposing: Bool? = nil,
         lastDownloadTime: Double? = nil,
-        name: String?? = nil,
         temperature: Double?? = nil,
         temperatureSetPoint: Double?? = nil
     ) -> CameraData {
@@ -77,7 +152,6 @@ extension CameraData {
             exposureEndTime: exposureEndTime ?? self.exposureEndTime,
             isExposing: isExposing ?? self.isExposing,
             lastDownloadTime: lastDownloadTime ?? self.lastDownloadTime,
-            name: name ?? self.name,
             temperature: temperature ?? self.temperature,
             temperatureSetPoint: temperatureSetPoint ?? self.temperatureSetPoint
         )
@@ -102,8 +176,6 @@ struct TelescopeData: Codable {
     let connected: Bool
     /// Current Dec in decimal degrees (−90 to +90); null if unsupported by the device
     let declination: Double?
-    /// Mount device name; null if not connected
-    let name: String?
     /// Current RA in decimal hours (0–24); null if unsupported by the device
     let rightAscension: Double?
     /// Observer elevation in meters above sea level; null if unsupported by the device
@@ -115,7 +187,7 @@ struct TelescopeData: Codable {
     let slewing, trackingEnabled: Bool
 
     enum CodingKeys: String, CodingKey {
-        case altitude, azimuth, connected, declination, name
+        case altitude, azimuth, connected, declination
         case rightAscension = "right_ascension"
         case siteElevation = "site_elevation"
         case siteLatitude = "site_latitude"
@@ -148,7 +220,6 @@ extension TelescopeData {
         azimuth: Double?? = nil,
         connected: Bool? = nil,
         declination: Double?? = nil,
-        name: String?? = nil,
         rightAscension: Double?? = nil,
         siteElevation: Double?? = nil,
         siteLatitude: Double?? = nil,
@@ -161,7 +232,6 @@ extension TelescopeData {
             azimuth: azimuth ?? self.azimuth,
             connected: connected ?? self.connected,
             declination: declination ?? self.declination,
-            name: name ?? self.name,
             rightAscension: rightAscension ?? self.rightAscension,
             siteElevation: siteElevation ?? self.siteElevation,
             siteLatitude: siteLatitude ?? self.siteLatitude,
@@ -359,72 +429,14 @@ extension WeatherData {
     }
 }
 
-/// General device connection data
-// MARK: - DeviceData
-struct DeviceData: Codable {
-    let connected: Bool
-    let deviceType: String
-
-    enum CodingKeys: String, CodingKey {
-        case connected
-        case deviceType = "device_type"
-    }
-}
-
-// MARK: DeviceData convenience initializers and mutators
-
-extension DeviceData {
-    init(data: Data) throws {
-        self = try newJSONDecoder().decode(DeviceData.self, from: data)
-    }
-
-    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
-        guard let data = json.data(using: encoding) else {
-            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
-        }
-        try self.init(data: data)
-    }
-
-    init(fromURL url: URL) throws {
-        try self.init(data: try Data(contentsOf: url))
-    }
-
-    func with(
-        connected: Bool? = nil,
-        deviceType: String? = nil
-    ) -> DeviceData {
-        return DeviceData(
-            connected: connected ?? self.connected,
-            deviceType: deviceType ?? self.deviceType
-        )
-    }
-
-    func jsonData() throws -> Data {
-        return try newJSONEncoder().encode(self)
-    }
-
-    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
-        return String(data: try self.jsonData(), encoding: encoding)
-    }
-}
-
 /// Safety monitor event data
 // MARK: - SafetyData
 struct SafetyData: Codable {
-    let connected: Bool
-    let description, deviceID, displayName, driverInfo: String?
-    let driverVersion: String?
-    let isSafe: Bool
-    let name: String?
+    let connected, isSafe: Bool
 
     enum CodingKeys: String, CodingKey {
-        case connected, description
-        case deviceID = "device_id"
-        case displayName = "display_name"
-        case driverInfo = "driver_info"
-        case driverVersion = "driver_version"
+        case connected
         case isSafe = "is_safe"
-        case name
     }
 }
 
@@ -448,23 +460,11 @@ extension SafetyData {
 
     func with(
         connected: Bool? = nil,
-        description: String?? = nil,
-        deviceID: String?? = nil,
-        displayName: String?? = nil,
-        driverInfo: String?? = nil,
-        driverVersion: String?? = nil,
-        isSafe: Bool? = nil,
-        name: String?? = nil
+        isSafe: Bool? = nil
     ) -> SafetyData {
         return SafetyData(
             connected: connected ?? self.connected,
-            description: description ?? self.description,
-            deviceID: deviceID ?? self.deviceID,
-            displayName: displayName ?? self.displayName,
-            driverInfo: driverInfo ?? self.driverInfo,
-            driverVersion: driverVersion ?? self.driverVersion,
-            isSafe: isSafe ?? self.isSafe,
-            name: name ?? self.name
+            isSafe: isSafe ?? self.isSafe
         )
     }
 

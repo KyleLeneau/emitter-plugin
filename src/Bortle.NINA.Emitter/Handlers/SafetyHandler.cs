@@ -27,12 +27,7 @@ namespace Bortle.NINA.Emitter.Handlers {
 
             var data = new SafetyData {
                 Connected = deviceInfo.Connected,
-                IsSafe = deviceInfo.IsSafe,
-                Name = deviceInfo.Name,
-                Description = deviceInfo.Description,
-                DriverInfo = deviceInfo.DriverInfo,
-                DriverVersion = deviceInfo.DriverVersion,
-                DeviceId = deviceInfo.DeviceId,
+                IsSafe = deviceInfo.IsSafe
             };
             emitter.Enqueue("safety_monitor", "device-info", data);
             info = deviceInfo;
@@ -44,13 +39,22 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {
-            var data = new DeviceData { Connected = true, DeviceType = "SafetyMonitor" };
+            var deviceInfo = mediator.GetInfo();
+            var data = new DeviceConnectionData {
+                Connected = true,
+                DeviceType = "SafetyMonitor",
+                Name = deviceInfo.Name,
+                Description = deviceInfo.Description,
+                DriverInfo = deviceInfo.DriverInfo,
+                DriverVersion = deviceInfo.DriverVersion,
+                DeviceId = deviceInfo.DeviceId
+            };
             emitter.Enqueue("device", "connection", data);
             return Task.CompletedTask;
         }
 
         private Task MediatorOnDisconnected(object arg1, EventArgs arg2) {
-            var data = new DeviceData { Connected = false, DeviceType = "SafetyMonitor" };
+            var data = new DeviceConnectionData { Connected = false, DeviceType = "SafetyMonitor" };
             emitter.Enqueue("device", "connection", data);
             return Task.CompletedTask;
         }

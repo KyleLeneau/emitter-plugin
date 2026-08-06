@@ -25,9 +25,6 @@ properties:
     type: ["string", "null"]
     format: date-time
     description: UTC time when the current or last exposure ends; null if none
-  name:
-    type: ["string", "null"]
-    description: Camera device name; null if not connected
 required:
   - connected
   - is_exposing

@@ -23,13 +23,22 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {
-            var data = new DeviceData { Connected = true, DeviceType = "FilterWheel" };
+            var deviceInfo = mediator.GetInfo();
+            var data = new DeviceConnectionData {
+                Connected = true,
+                DeviceType = "FilterWheel",
+                Name = deviceInfo.Name,
+                Description = deviceInfo.Description,
+                DriverInfo = deviceInfo.DriverInfo,
+                DriverVersion = deviceInfo.DriverVersion,
+                DeviceId = deviceInfo.DeviceId
+            };
             emitter.Enqueue("device", "connection", data);
             return Task.CompletedTask;
         }
 
         private Task MediatorOnDisconnected(object arg1, EventArgs arg2) {
-            var data = new DeviceData { Connected = false, DeviceType = "FilterWheel" };
+            var data = new DeviceConnectionData { Connected = false, DeviceType = "FilterWheel" };
             emitter.Enqueue("device", "connection", data);
             return Task.CompletedTask;
         }

@@ -30,9 +30,6 @@ properties:
   site_elevation:
     type: ["number", "null"]
     description: Observer elevation in meters above sea level; null if unsupported by the device
-  name:
-    type: ["string", "null"]
-    description: Mount device name; null if not connected
 required:
   - connected
   - slewing
