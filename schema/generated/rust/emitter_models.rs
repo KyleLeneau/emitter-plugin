@@ -175,3 +175,53 @@ pub struct SafetyData {
 pub struct SafetyChangeData {
     pub is_safe: bool,
 }
+
+/// Flat Panel device state
+#[derive(Serialize, Deserialize)]
+pub struct FlatPanelData {
+    pub brightness: i64,
+
+    pub connected: bool,
+
+    pub cover_state: String,
+
+    pub light_on: bool,
+
+    pub max_brightness: Option<i64>,
+
+    pub min_brightness: Option<i64>,
+
+    pub supports_on_off: Option<bool>,
+
+    pub supports_open_close: Option<bool>,
+}
+
+/// Filter Wheel device state
+#[derive(Serialize, Deserialize)]
+pub struct FilterWheelData {
+    pub connected: bool,
+
+    pub is_moving: bool,
+
+    pub selected_filter: Option<FilterInfo>,
+}
+
+/// Info on a specific filter
+#[derive(Serialize, Deserialize)]
+pub struct FilterInfo {
+    pub auto_focus_binning: Option<String>,
+
+    pub auto_focus_gain: Option<f64>,
+
+    pub auto_focus_offset: Option<f64>,
+
+    pub auto_focus_time: Option<f64>,
+
+    pub is_af_filter: Option<bool>,
+
+    pub name: Option<String>,
+
+    pub offset: Option<f64>,
+
+    pub postion: Option<f64>,
+}

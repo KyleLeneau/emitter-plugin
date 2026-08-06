@@ -9,6 +9,7 @@ namespace Bortle.NINA.Emitter.Handlers {
     public class FlatPanelHandler : IFlatDeviceConsumer {
         private readonly IEventEmitter emitter;
         private readonly IFlatDeviceMediator mediator;
+        private FlatDeviceInfo lastInfo;
 
         public FlatPanelHandler(IEventEmitter eventEmitter, IFlatDeviceMediator flatDeviceMediator) {
             emitter = eventEmitter;
@@ -16,10 +17,29 @@ namespace Bortle.NINA.Emitter.Handlers {
             mediator.RegisterConsumer(this);
             mediator.Connected += MediatorOnConnected;
             mediator.Disconnected += MediatorOnDisconnected;
+            mediator.BrightnessChanged += MediatorOnBrightnessChanged;
+            mediator.Closed += MediatorOnClosed;
+            mediator.Opened += MediatorOnOpened;
+            mediator.LightToggled += MediatorOnLightToggled;
         }
 
         public void UpdateDeviceInfo(FlatDeviceInfo deviceInfo) {
-            // throw new System.NotImplementedException();
+            // Skip duplicates from internal nina polling
+            if (deviceInfo.Equals(lastInfo)) return;
+
+            var data = new FlatPanelData {
+                Connected = deviceInfo.Connected,
+                Brightness = deviceInfo.Brightness,
+                CoverState = deviceInfo.CoverState.ToString(),
+                LightOn = deviceInfo.LightOn,
+                MaxBrightness = deviceInfo.MaxBrightness,
+                MinBrightness = deviceInfo.MinBrightness,
+                SupportsOnOff = deviceInfo.SupportsOnOff,
+                SupportsOpenClose = deviceInfo.SupportsOpenClose,
+            };
+
+            emitter.Enqueue("flat_panel", "device-info", data);
+            lastInfo = deviceInfo;
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {
@@ -43,7 +63,31 @@ namespace Bortle.NINA.Emitter.Handlers {
             return Task.CompletedTask;
         }
 
+        private Task MediatorOnBrightnessChanged(object arg1, FlatDeviceBrightnessChangedEventArgs arg2) {
+            // throw new NotImplementedException();
+            return Task.CompletedTask;
+        }
+
+        private Task MediatorOnClosed(object arg1, EventArgs arg2) {
+            // throw new NotImplementedException();
+            return Task.CompletedTask;
+        }
+
+        private Task MediatorOnOpened(object arg1, EventArgs arg2) {
+            // throw new NotImplementedException();
+            return Task.CompletedTask;
+        }
+
+        private Task MediatorOnLightToggled(object arg1, EventArgs arg2) {
+            // throw new NotImplementedException();
+            return Task.CompletedTask;
+        }
+
         public void Dispose() {
+            mediator.LightToggled -= MediatorOnLightToggled;
+            mediator.Opened -= MediatorOnOpened;
+            mediator.Closed -= MediatorOnClosed;
+            mediator.BrightnessChanged -= MediatorOnBrightnessChanged;
             mediator.Disconnected -= MediatorOnDisconnected;
             mediator.Connected -= MediatorOnConnected;
             mediator.RemoveConsumer(this);

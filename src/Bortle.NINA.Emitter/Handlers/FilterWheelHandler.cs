@@ -4,11 +4,13 @@ using NINA.Equipment.Equipment.MyFilterWheel;
 using NINA.Equipment.Interfaces.Mediator;
 using System;
 using System.Threading.Tasks;
+using NINAFilterInfo = NINA.Core.Model.Equipment.FilterInfo;
 
 namespace Bortle.NINA.Emitter.Handlers {
     public class FilterWheelHandler : IFilterWheelConsumer {
         private readonly IEventEmitter emitter;
         private readonly IFilterWheelMediator mediator;
+        private FilterWheelInfo lastInfo;
 
         public FilterWheelHandler(IEventEmitter eventEmitter, IFilterWheelMediator filterWheelMediator) {
             emitter = eventEmitter;
@@ -16,10 +18,20 @@ namespace Bortle.NINA.Emitter.Handlers {
             mediator.RegisterConsumer(this);
             mediator.Connected += MediatorOnConnected;
             mediator.Disconnected += MediatorOnDisconnected;
+            mediator.FilterChanged += MediatorOnFilterChanged;
         }
 
         public void UpdateDeviceInfo(FilterWheelInfo deviceInfo) {
-            // throw new System.NotImplementedException();
+            // Skip duplicates from internal nina polling
+            if (deviceInfo.Equals(lastInfo)) return;
+
+            var data = new FilterWheelData {
+                Connected = deviceInfo.Connected,
+                IsMoving = deviceInfo.IsMoving,
+                SelectedFilter = ToFilterInfo(deviceInfo.SelectedFilter)
+            };
+            emitter.Enqueue("safety_monitor", "device-info", data);
+            lastInfo = deviceInfo;
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {
@@ -43,10 +55,29 @@ namespace Bortle.NINA.Emitter.Handlers {
             return Task.CompletedTask;
         }
 
+        private Task MediatorOnFilterChanged(object arg1, FilterChangedEventArgs arg2) {
+            // TODO: Implement event
+            return Task.CompletedTask;
+        }
+
         public void Dispose() {
+            mediator.FilterChanged -= MediatorOnFilterChanged;
             mediator.Disconnected -= MediatorOnDisconnected;
             mediator.Connected -= MediatorOnConnected;
             mediator.RemoveConsumer(this);
+        }
+
+        private FilterInfo ToFilterInfo(NINAFilterInfo filterInfo) {
+            return new FilterInfo {
+                Name = filterInfo.Name,
+                Offset = filterInfo.FocusOffset,
+                Postion = filterInfo.Position,
+                AutoFocusTime = filterInfo.AutoFocusExposureTime,
+                IsAfFilter = filterInfo.AutoFocusFilter,
+                AutoFocusBinning = filterInfo.AutoFocusBinning.ToString(),
+                AutoFocusGain = filterInfo.AutoFocusGain,
+                AutoFocusOffset = filterInfo.AutoFocusOffset
+            };
         }
     }
 }

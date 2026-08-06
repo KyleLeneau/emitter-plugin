@@ -1,0 +1,14 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: FilterWheelData
+type: object
+description: Filter Wheel device state
+properties:
+  connected:
+    type: boolean
+  is_moving:
+    type: boolean
+  selected_filter:
+    $ref: "common.yaml#/definitions/FilterInfo"
+required:
+  - connected
+  - is_moving

@@ -11,6 +11,8 @@
 //    var weatherData = WeatherData.FromJson(jsonString);
 //    var safetyData = SafetyData.FromJson(jsonString);
 //    var safetyChangeData = SafetyChangeData.FromJson(jsonString);
+//    var flatPanelData = FlatPanelData.FromJson(jsonString);
+//    var filterWheelData = FilterWheelData.FromJson(jsonString);
 #nullable enable
 #pragma warning disable CS8618
 #pragma warning disable CS8601
@@ -325,6 +327,87 @@ namespace Bortle.NINA.Emitter.Models
         public bool IsSafe { get; set; }
     }
 
+    /// <summary>
+    /// Flat Panel device state
+    /// </summary>
+    public partial class FlatPanelData
+    {
+        [JsonPropertyName("brightness")]
+        public long Brightness { get; set; }
+
+        [JsonPropertyName("connected")]
+        public bool Connected { get; set; }
+
+        [JsonPropertyName("cover_state")]
+        public string CoverState { get; set; }
+
+        [JsonPropertyName("light_on")]
+        public bool LightOn { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("max_brightness")]
+        public long? MaxBrightness { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("min_brightness")]
+        public long? MinBrightness { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("supports_on_off")]
+        public bool? SupportsOnOff { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("supports_open_close")]
+        public bool? SupportsOpenClose { get; set; }
+    }
+
+    /// <summary>
+    /// Filter Wheel device state
+    /// </summary>
+    public partial class FilterWheelData
+    {
+        [JsonPropertyName("connected")]
+        public bool Connected { get; set; }
+
+        [JsonPropertyName("is_moving")]
+        public bool IsMoving { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("selected_filter")]
+        public FilterInfo SelectedFilter { get; set; }
+    }
+
+    /// <summary>
+    /// Info on a specific filter
+    /// </summary>
+    public partial class FilterInfo
+    {
+        [JsonPropertyName("auto_focus_binning")]
+        public string AutoFocusBinning { get; set; }
+
+        [JsonPropertyName("auto_focus_gain")]
+        public double? AutoFocusGain { get; set; }
+
+        [JsonPropertyName("auto_focus_offset")]
+        public double? AutoFocusOffset { get; set; }
+
+        [JsonPropertyName("auto_focus_time")]
+        public double? AutoFocusTime { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("is_af_filter")]
+        public bool? IsAfFilter { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("offset")]
+        public double? Offset { get; set; }
+
+        [JsonPropertyName("postion")]
+        public double? Postion { get; set; }
+    }
+
     public partial class DeviceConnectionData
     {
         public static DeviceConnectionData FromJson(string json) => JsonSerializer.Deserialize<DeviceConnectionData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -360,6 +443,16 @@ namespace Bortle.NINA.Emitter.Models
         public static SafetyChangeData FromJson(string json) => JsonSerializer.Deserialize<SafetyChangeData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
+    public partial class FlatPanelData
+    {
+        public static FlatPanelData FromJson(string json) => JsonSerializer.Deserialize<FlatPanelData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class FilterWheelData
+    {
+        public static FilterWheelData FromJson(string json) => JsonSerializer.Deserialize<FilterWheelData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
     public static class Serialize
     {
         public static string ToJson(this DeviceConnectionData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -369,6 +462,8 @@ namespace Bortle.NINA.Emitter.Models
         public static string ToJson(this WeatherData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this SafetyData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this SafetyChangeData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this FlatPanelData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this FilterWheelData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
     internal static class Converter

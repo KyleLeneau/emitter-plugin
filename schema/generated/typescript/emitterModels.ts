@@ -1,6 +1,6 @@
 // To parse this data:
 //
-//   import { Convert, DeviceConnectionData, CameraData, TelescopeData, ImagingData, WeatherData, SafetyData, SafetyChangeData } from "./file";
+//   import { Convert, DeviceConnectionData, CameraData, TelescopeData, ImagingData, WeatherData, SafetyData, SafetyChangeData, FlatPanelData, FilterWheelData } from "./file";
 //
 //   const deviceConnectionData = Convert.toDeviceConnectionData(json);
 //   const cameraData = Convert.toCameraData(json);
@@ -9,6 +9,8 @@
 //   const weatherData = Convert.toWeatherData(json);
 //   const safetyData = Convert.toSafetyData(json);
 //   const safetyChangeData = Convert.toSafetyChangeData(json);
+//   const flatPanelData = Convert.toFlatPanelData(json);
+//   const filterWheelData = Convert.toFilterWheelData(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
@@ -222,6 +224,46 @@ export interface SafetyChangeData {
     [property: string]: any;
 }
 
+/**
+ * Flat Panel device state
+ */
+export interface FlatPanelData {
+    brightness:           number;
+    connected:            boolean;
+    cover_state:          string;
+    light_on:             boolean;
+    max_brightness?:      number;
+    min_brightness?:      number;
+    supports_on_off?:     boolean;
+    supports_open_close?: boolean;
+    [property: string]: any;
+}
+
+/**
+ * Filter Wheel device state
+ */
+export interface FilterWheelData {
+    connected:        boolean;
+    is_moving:        boolean;
+    selected_filter?: FilterInfo;
+    [property: string]: any;
+}
+
+/**
+ * Info on a specific filter
+ */
+export interface FilterInfo {
+    auto_focus_binning?: null | string;
+    auto_focus_gain?:    number | null;
+    auto_focus_offset?:  number | null;
+    auto_focus_time?:    number | null;
+    is_af_filter?:       boolean;
+    name?:               null | string;
+    offset?:             number | null;
+    postion?:            number | null;
+    [property: string]: any;
+}
+
 // Converts JSON strings to/from your types
 // and asserts the results of JSON.parse at runtime
 export class Convert {
@@ -279,6 +321,22 @@ export class Convert {
 
     public static safetyChangeDataToJson(value: SafetyChangeData): string {
         return JSON.stringify(uncast(value, r("SafetyChangeData")), null, 2);
+    }
+
+    public static toFlatPanelData(json: string): FlatPanelData {
+        return cast(JSON.parse(json), r("FlatPanelData"));
+    }
+
+    public static flatPanelDataToJson(value: FlatPanelData): string {
+        return JSON.stringify(uncast(value, r("FlatPanelData")), null, 2);
+    }
+
+    public static toFilterWheelData(json: string): FilterWheelData {
+        return cast(JSON.parse(json), r("FilterWheelData"));
+    }
+
+    public static filterWheelDataToJson(value: FilterWheelData): string {
+        return JSON.stringify(uncast(value, r("FilterWheelData")), null, 2);
     }
 }
 
@@ -497,5 +555,30 @@ const typeMap: any = {
     ], "any"),
     "SafetyChangeData": o([
         { json: "is_safe", js: "is_safe", typ: true },
+    ], "any"),
+    "FlatPanelData": o([
+        { json: "brightness", js: "brightness", typ: 0 },
+        { json: "connected", js: "connected", typ: true },
+        { json: "cover_state", js: "cover_state", typ: "" },
+        { json: "light_on", js: "light_on", typ: true },
+        { json: "max_brightness", js: "max_brightness", typ: u(undefined, 0) },
+        { json: "min_brightness", js: "min_brightness", typ: u(undefined, 0) },
+        { json: "supports_on_off", js: "supports_on_off", typ: u(undefined, true) },
+        { json: "supports_open_close", js: "supports_open_close", typ: u(undefined, true) },
+    ], "any"),
+    "FilterWheelData": o([
+        { json: "connected", js: "connected", typ: true },
+        { json: "is_moving", js: "is_moving", typ: true },
+        { json: "selected_filter", js: "selected_filter", typ: u(undefined, r("FilterInfo")) },
+    ], "any"),
+    "FilterInfo": o([
+        { json: "auto_focus_binning", js: "auto_focus_binning", typ: u(undefined, u(null, "")) },
+        { json: "auto_focus_gain", js: "auto_focus_gain", typ: u(undefined, u(3.14, null)) },
+        { json: "auto_focus_offset", js: "auto_focus_offset", typ: u(undefined, u(3.14, null)) },
+        { json: "auto_focus_time", js: "auto_focus_time", typ: u(undefined, u(3.14, null)) },
+        { json: "is_af_filter", js: "is_af_filter", typ: u(undefined, true) },
+        { json: "name", js: "name", typ: u(undefined, u(null, "")) },
+        { json: "offset", js: "offset", typ: u(undefined, u(3.14, null)) },
+        { json: "postion", js: "postion", typ: u(undefined, u(3.14, null)) },
     ], "any"),
 };

@@ -8,6 +8,8 @@
 //   let weatherData = try WeatherData(json)
 //   let safetyData = try SafetyData(json)
 //   let safetyChangeData = try SafetyChangeData(json)
+//   let flatPanelData = try FlatPanelData(json)
+//   let filterWheelData = try FilterWheelData(json)
 
 import Foundation
 
@@ -510,6 +512,196 @@ extension SafetyChangeData {
     ) -> SafetyChangeData {
         return SafetyChangeData(
             isSafe: isSafe ?? self.isSafe
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Flat Panel device state
+// MARK: - FlatPanelData
+struct FlatPanelData: Codable {
+    let brightness: Int
+    let connected: Bool
+    let coverState: String
+    let lightOn: Bool
+    let maxBrightness, minBrightness: Int?
+    let supportsOnOff, supportsOpenClose: Bool?
+
+    enum CodingKeys: String, CodingKey {
+        case brightness, connected
+        case coverState = "cover_state"
+        case lightOn = "light_on"
+        case maxBrightness = "max_brightness"
+        case minBrightness = "min_brightness"
+        case supportsOnOff = "supports_on_off"
+        case supportsOpenClose = "supports_open_close"
+    }
+}
+
+// MARK: FlatPanelData convenience initializers and mutators
+
+extension FlatPanelData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(FlatPanelData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        brightness: Int? = nil,
+        connected: Bool? = nil,
+        coverState: String? = nil,
+        lightOn: Bool? = nil,
+        maxBrightness: Int?? = nil,
+        minBrightness: Int?? = nil,
+        supportsOnOff: Bool?? = nil,
+        supportsOpenClose: Bool?? = nil
+    ) -> FlatPanelData {
+        return FlatPanelData(
+            brightness: brightness ?? self.brightness,
+            connected: connected ?? self.connected,
+            coverState: coverState ?? self.coverState,
+            lightOn: lightOn ?? self.lightOn,
+            maxBrightness: maxBrightness ?? self.maxBrightness,
+            minBrightness: minBrightness ?? self.minBrightness,
+            supportsOnOff: supportsOnOff ?? self.supportsOnOff,
+            supportsOpenClose: supportsOpenClose ?? self.supportsOpenClose
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Filter Wheel device state
+// MARK: - FilterWheelData
+struct FilterWheelData: Codable {
+    let connected, isMoving: Bool
+    let selectedFilter: FilterInfo?
+
+    enum CodingKeys: String, CodingKey {
+        case connected
+        case isMoving = "is_moving"
+        case selectedFilter = "selected_filter"
+    }
+}
+
+// MARK: FilterWheelData convenience initializers and mutators
+
+extension FilterWheelData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(FilterWheelData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        connected: Bool? = nil,
+        isMoving: Bool? = nil,
+        selectedFilter: FilterInfo?? = nil
+    ) -> FilterWheelData {
+        return FilterWheelData(
+            connected: connected ?? self.connected,
+            isMoving: isMoving ?? self.isMoving,
+            selectedFilter: selectedFilter ?? self.selectedFilter
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Info on a specific filter
+// MARK: - FilterInfo
+struct FilterInfo: Codable {
+    let autoFocusBinning: String?
+    let autoFocusGain, autoFocusOffset, autoFocusTime: Double?
+    let isAFFilter: Bool?
+    let name: String?
+    let offset, postion: Double?
+
+    enum CodingKeys: String, CodingKey {
+        case autoFocusBinning = "auto_focus_binning"
+        case autoFocusGain = "auto_focus_gain"
+        case autoFocusOffset = "auto_focus_offset"
+        case autoFocusTime = "auto_focus_time"
+        case isAFFilter = "is_af_filter"
+        case name, offset, postion
+    }
+}
+
+// MARK: FilterInfo convenience initializers and mutators
+
+extension FilterInfo {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(FilterInfo.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        autoFocusBinning: String?? = nil,
+        autoFocusGain: Double?? = nil,
+        autoFocusOffset: Double?? = nil,
+        autoFocusTime: Double?? = nil,
+        isAFFilter: Bool?? = nil,
+        name: String?? = nil,
+        offset: Double?? = nil,
+        postion: Double?? = nil
+    ) -> FilterInfo {
+        return FilterInfo(
+            autoFocusBinning: autoFocusBinning ?? self.autoFocusBinning,
+            autoFocusGain: autoFocusGain ?? self.autoFocusGain,
+            autoFocusOffset: autoFocusOffset ?? self.autoFocusOffset,
+            autoFocusTime: autoFocusTime ?? self.autoFocusTime,
+            isAFFilter: isAFFilter ?? self.isAFFilter,
+            name: name ?? self.name,
+            offset: offset ?? self.offset,
+            postion: postion ?? self.postion
         )
     }
 

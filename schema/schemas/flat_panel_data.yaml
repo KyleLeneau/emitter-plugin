@@ -1,0 +1,26 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: FlatPanelData
+type: object
+description: Flat Panel device state
+properties:
+  connected:
+    type: boolean
+  cover_state:
+    type: string
+  light_on:
+    type: boolean
+  brightness:
+    type: integer
+  supports_open_close:
+    type: boolean
+  min_brightness:
+    type: integer
+  max_brightness:
+    type: integer
+  supports_on_off:
+    type: boolean
+required:
+  - connected
+  - cover_state
+  - light_on
+  - brightness
