@@ -17,7 +17,7 @@ namespace Bortle.NINA.Emitter.EventSinks {
         private const string TypePrefix = "io.nina.";
 
         private readonly NatsSinkOptions options;
-        private readonly JsonEventFormatter formatter = new JsonEventFormatter();
+        private readonly JsonEventFormatter formatter = new JsonEventFormatter(CloudEventJsonOptions.Settings, default);
         private NatsClient client;
         private ConnectionState state = ConnectionState.Disconnected;
 

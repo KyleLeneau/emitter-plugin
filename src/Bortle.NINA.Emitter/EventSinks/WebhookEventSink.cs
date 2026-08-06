@@ -12,7 +12,7 @@ namespace Bortle.NINA.Emitter.EventSinks {
 
     public class WebhookEventSink : IEventSink {
         private readonly WebhookSinkOptions options;
-        private readonly JsonEventFormatter formatter = new JsonEventFormatter();
+        private readonly JsonEventFormatter formatter = new JsonEventFormatter(CloudEventJsonOptions.Settings, default);
         private HttpClient httpClient;
         private ConnectionState state = ConnectionState.Disconnected;
 
