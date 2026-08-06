@@ -68,6 +68,8 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private FilterInfo ToFilterInfo(NINAFilterInfo filterInfo) {
+            if (filterInfo == null) return null;
+
             return new FilterInfo {
                 Name = filterInfo.Name,
                 Offset = filterInfo.FocusOffset,
