@@ -2,11 +2,20 @@
 name: Deploy static content to Github Pages
 
 on:
-  # Runs on pushes targeting the default branch
+  # Runs on pushes targeting the default branch, but only when schema or
+  # landing-page content actually changed
   push:
     branches: ["main"]
+    paths:
+      - "schema/**"
+      - "docs/pages/**"
 
-  # Allows you to run this workflow manually from the Actions tab
+  # Runs whenever a new GitHub release is published
+  release:
+    types: [published]
+
+  # Allows you to run this workflow manually from the Actions tab, regardless
+  # of what changed
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
