@@ -94,7 +94,7 @@ install() {
 
 generate_docs() {
   if ! command -v asyncapi &>/dev/null; then
-    echo "error: asyncapi not found — install with: npm install -g asyncapi"
+    echo "error: asyncapi not found — install with: npm install -g @asyncapi/cli"
     exit 1
   fi
 
