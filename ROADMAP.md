@@ -24,10 +24,11 @@
 * [x] Implement skeleton handlers
 * [x] Build an example webhook endpoint that logs using python
 * [x] setup example webhook servers (rust, ts, python) client uses
-* [ ] deploy documentation and plugin/manifests file to github pages + logo
+* [x] deploy landing page & documentation to github pages
+* [ ] deploy plugin/manifests file to github pages
+* [ ] create and deploy logo/image github pages
 * [ ] gitops release & CD automation
 * [ ] setup release process
-* [ ] create images and artifacts for deployment
 * [ ] implement kafka backend
 
 ### Bugs

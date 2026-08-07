@@ -34,27 +34,27 @@ using System.Runtime.InteropServices;
 // The url to the license
 [assembly: AssemblyMetadata("LicenseURL", "https://www.mozilla.org/en-US/MPL/2.0/")]
 // The repository where your pluggin is hosted
-[assembly: AssemblyMetadata("Repository", "https://mypluginsourcerepo.com/project")]
+[assembly: AssemblyMetadata("Repository", "https://github.com/KyleLeneau/emitter-plugin")]
 
 // The following attributes are optional for the official manifest metadata
 
-//[Optional] Your plugin homepage URL - omit if not applicaple
-[assembly: AssemblyMetadata("Homepage", "https://mypluginwebsite.com/")]
+// [Optional] Your plugin homepage URL - omit if not applicaple
+[assembly: AssemblyMetadata("Homepage", "https://kyleleneau.github.io/emitter-plugin/")]
 
-//[Optional] Common tags that quickly describe your plugin
+// [Optional] Common tags that quickly describe your plugin
 [assembly: AssemblyMetadata("Tags", "")]
 
-//[Optional] A link that will show a log of all changes in between your plugin's versions
-[assembly: AssemblyMetadata("ChangelogURL", "https://mypluginsourcerepo.com/project/CHANGELOG.md")]
+// [Optional] A link that will show a log of all changes in between your plugin's versions
+[assembly: AssemblyMetadata("ChangelogURL", "https://github.com/KyleLeneau/emitter-plugin/releases")]
 
-//[Optional] The url to a featured logo that will be displayed in the plugin list next to the name
+// [Optional] The url to a featured logo that will be displayed in the plugin list next to the name
 [assembly: AssemblyMetadata("FeaturedImageURL", "")]
-//[Optional] A url to an example screenshot of your plugin in action
+// [Optional] A url to an example screenshot of your plugin in action
 [assembly: AssemblyMetadata("ScreenshotURL", "")]
-//[Optional] An additional url to an example screenshot of your plugin in action
+// [Optional] An additional url to an example screenshot of your plugin in action
 [assembly: AssemblyMetadata("AltScreenshotURL", "")]
-//[Optional] An in-depth description of your plugin
-[assembly: AssemblyMetadata("LongDescription", @"")]
+// [Optional] An in-depth description of your plugin
+[assembly: AssemblyMetadata("LongDescription", @"Emitter is a plugin that sends events to a variety of backends including nats.io, webhook & kafka.")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from
