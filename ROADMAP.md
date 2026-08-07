@@ -32,6 +32,7 @@
 
 ### Bugs
 
+* [ ] Update asyncapi docs to match the events and topics being sent
 
 ### Future
 
