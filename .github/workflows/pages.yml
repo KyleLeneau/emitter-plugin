@@ -22,15 +22,28 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Single deploy job since we're just deploying
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  # Generates the AsyncAPI docs and stages them alongside the landing page
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install asyncapi CLI
+        run: npm install -g asyncapi
+
+      - name: Generate docs
+        run: ./schema/build.sh docs
+
+      - name: Copy docs into pages directory
+        run: |
+          mkdir -p docs/pages/docs
+          cp -r build/docs/. docs/pages/docs/
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -38,9 +51,15 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
           path: './docs/pages'
 
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
