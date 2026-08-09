@@ -1,42 +1,165 @@
-# CI that:
+# Automated release process, kicked off by pushing a semantic version tag
+# (e.g. "0.1.0" or "v0.1.0"), or manually via workflow_dispatch against an
+# already-pushed tag.
 #
-# * checks for a Git Tag that looks like a release
-# * Parses the CHANGELOG.md for the release notes
-# * builds artifact (archive, hashes)
-# * uploads those artifacts to temporary workflow zip
-# * on success, uploads the artifacts to a GitHub Release
-#
-# Note that the GitHub Release will be created with a generated
-# title/body based on your CHAGELOG.md.
-
+# Stages:
+#   1. prepare - resolve the tag/build-number into a VersionNumber, and
+#      render the release notes from CHANGELOG.md + release_template.md.
+#   2. build   - build the plugin in Release mode with that VersionNumber.
+#      NINAPlugin.targets stamps the assembly version and packages the
+#      zip + .sha256 into /build as part of the build itself.
+#   3. release - create the GitHub release as a draft, upload the zip and
+#      .sha256, and only then publish it. If prepare or build fails, this
+#      job never runs and no release is created.
 name: Release
-permissions:
-  "contents": "write"
 
-# This task will run whenever you push a git tag that looks like a version
-# like "1.0.0", "v0.1.0-prerelease.1", "my-app/0.1.0", "releases/v1.0.0", etc.
-# Various formats will be parsed into a VERSION and an optional PACKAGE_NAME, where
-# PACKAGE_NAME must be the name of a Cargo package in your workspace, and VERSION
-# must be a Cargo-style SemVer Version (must have at least major.minor.patch).
-##
-# If you push multiple tags at once, separate instances of this workflow will
-# spin up, creating an independent announcement for each one. However, GitHub
-# will hard limit this to 3 tags per commit, as it will assume more tags is a
-# mistake.
-#
-# If there's a prerelease-style suffix to the version, then the release(s)
-# will be marked as a prerelease.
+permissions:
+  contents: write
+
 on:
-  pull_request:
   push:
     tags:
-      - '**[0-9]+.[0-9]+.[0-9]+*'
+      - "[0-9]+.[0-9]+.[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to release (e.g. 0.1.0), for re-running a failed release without re-pushing the tag"
+        required: true
+        type: string
+
+concurrency:
+  group: release-${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+env:
+  RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
 
 jobs:
-
-  build-local-artifacts:
-    runs-on: [windows-latest]
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      version_core: ${{ steps.version.outputs.version_core }}
+      version_number: ${{ steps.version.outputs.version_number }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_TAG }}
 
+      - name: Compute version number
+        id: version
+        run: |
+          set -euo pipefail
+          version_core="${RELEASE_TAG#v}"
+          if [[ ! "$version_core" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Tag '$RELEASE_TAG' is not a semantic version (expected e.g. 0.1.0 or v0.1.0)"
+            exit 1
+          fi
+          version_number="${version_core}.${{ github.run_number }}"
+          echo "version_core=$version_core" >> "$GITHUB_OUTPUT"
+          echo "version_number=$version_number" >> "$GITHUB_OUTPUT"
+
+      - name: Extract CHANGELOG.md section
+        run: |
+          set -euo pipefail
+          version_core="${{ steps.version.outputs.version_core }}"
+
+          awk -v ver="$version_core" '
+            /^## / {
+              if (printing) exit
+              if ($0 == "## " ver) { printing = 1; found = 1 }
+              next
+            }
+            printing { print }
+            END { exit !found }
+          ' CHANGELOG.md > changelog-section.md || {
+            echo "::error::No '## $version_core' section found in CHANGELOG.md"
+            exit 1
+          }
+
+          # Trim leading/trailing blank lines
+          sed -i -e '/./,$!d' -e ':a' -e '/^\n*$/{$d;N;ba' -e '}' changelog-section.md
+
+          if [ ! -s changelog-section.md ]; then
+            echo "::error::CHANGELOG.md section for $version_core is empty"
+            exit 1
+          fi
+
+      - name: Render release notes
+        run: |
+          set -euo pipefail
+          awk '
+            /<!-- CHANGELOG -->/ {
+              while ((getline line < "changelog-section.md") > 0) print line
+              next
+            }
+            { print }
+          ' .github/release_template.md > RELEASE_NOTES.md
+
+      - name: Upload release notes
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-notes
+          path: RELEASE_NOTES.md
+          if-no-files-found: error
+
+  build:
+    needs: prepare
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_TAG }}
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.x"
+          cache: true
+          cache-dependency-path: "**/packages.lock.json"
+
+      - name: Install dependencies
+        run: dotnet restore --locked-mode
+
+      - name: Build (Release)
+        run: dotnet build -c Release -p:VersionNumber=${{ needs.prepare.outputs.version_number }} --no-restore
+
+      - name: Upload release assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-assets
+          path: |
+            build/${{ needs.prepare.outputs.version_number }}-Emitter-Release.zip
+            build/${{ needs.prepare.outputs.version_number }}-Emitter-Release.zip.sha256
+          if-no-files-found: error
+
+  release:
+    needs: [prepare, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download release notes
+        uses: actions/download-artifact@v4
+        with:
+          name: release-notes
+
+      - name: Download release assets
+        uses: actions/download-artifact@v4
+        with:
+          name: release-assets
+          path: release-assets
+
+      - name: Create draft release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: ${{ env.RELEASE_TAG }}
+          body_path: RELEASE_NOTES.md
+          draft: true
+          files: release-assets/*
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release edit "$RELEASE_TAG" --draft=false --repo "$GITHUB_REPOSITORY"

@@ -25,9 +25,9 @@
 * [x] Build an example webhook endpoint that logs using python
 * [x] setup example webhook servers (rust, ts, python) client uses
 * [x] deploy landing page & documentation to github pages
+* [x] gitops release & CD automation
 * [ ] deploy plugin/manifests file to github pages
 * [ ] create and deploy logo/image github pages
-* [ ] gitops release & CD automation
 * [ ] setup release process
 * [ ] implement kafka backend
 
