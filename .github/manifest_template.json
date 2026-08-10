@@ -3,7 +3,7 @@
     "Descriptions": {
         "ShortDescription": "An event emitter to various backends.",
         "AltScreenshotURL": "",
-        "FeaturedImageURL": "",
+        "FeaturedImageURL": "https://github.com/KyleLeneau/emitter-plugin/emitter_icon.jpg",
         "LongDescription": "Emitter is a plugin that sends events to a variety of backends including nats.io, webhook & kafka.",
         "ScreenshotURL": ""
     },
