@@ -1,0 +1,36 @@
+{
+    "Author": "Kyle LeNeau",
+    "Descriptions": {
+        "ShortDescription": "An event emitter to various backends.",
+        "AltScreenshotURL": "",
+        "FeaturedImageURL": "",
+        "LongDescription": "Emitter is a plugin that sends events to a variety of backends including nats.io, webhook & kafka.",
+        "ScreenshotURL": ""
+    },
+    "Identifier": "1bfaec31-f66b-4dc9-a799-51ba124234dd",
+    "Installer": {
+        "Checksum": "",
+        "ChecksumType": "SHA256",
+        "Type": "ARCHIVE",
+        "URL": ""
+    },
+    "License": "BSD 3-Clause License",
+    "LicenseURL": "https://github.com/KyleLeneau/emitter-plugin/blob/main/LICENSE",
+    "MinimumApplicationVersion": {
+        "Build": "2001",
+        "Major": "3",
+        "Minor": "0",
+        "Patch": "0"
+    },
+    "Name": "Emitter",
+    "Repository": "https://github.com/KyleLeneau/emitter-plugin",
+    "Version": {
+        "Build": "1",
+        "Major": "1",
+        "Minor": "0",
+        "Patch": "0"
+    },
+    "ChangelogURL": "",
+    "Homepage": "https://kyleleneau.github.io/emitter-plugin/",
+    "Tags": []
+}

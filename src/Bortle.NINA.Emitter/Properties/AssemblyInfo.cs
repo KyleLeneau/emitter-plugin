@@ -16,7 +16,7 @@ using System.Runtime.InteropServices;
 // [MANDATORY] The name of your plugin
 [assembly: AssemblyTitle("Emitter")]
 // [MANDATORY] A short description of your plugin
-[assembly: AssemblyDescription("An event emitter to various backends")]
+[assembly: AssemblyDescription("An event emitter to various backends.")]
 
 // The following attributes are not required for the plugin per se, but are required by the official manifest metadata
 

@@ -1,0 +1,17 @@
+name: 'Build Plugin Manifests'
+description: >-
+  Builds the NINA plugin manifests file: a JSON array of manifest objects, one per
+  published GitHub release (newest first), by combining a template with dynamic
+  per-release data from the GitHub API. See docs/adr/003-github-manifests.md.
+inputs:
+  output_path:
+    description: 'Path to write the generated manifests JSON array to.'
+    required: false
+    default: 'docs/pages/plugins/manifests'
+  template_path:
+    description: 'Path to the manifest template JSON used as the baseline for each entry.'
+    required: false
+    default: '.github/manifest_template.json'
+runs:
+  using: 'node24'
+  main: 'index.js'
