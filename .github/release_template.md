@@ -6,7 +6,7 @@
 
 ### Manual
 
-Download the zip file and exctract the contents to `%APPDATA%\Local\NINA\Plugins\3.0.0`
+Download the zip file and extract the contents to `%APPDATA%\Local\NINA\Plugins\3.0.0`
 
 ### Automatic
 

@@ -15,11 +15,17 @@ TBD
 
 ## Installation
 
-TBD
+### Manual
+
+Download the zip file from the [releases](https://github.com/KyleLeneau/emitter-plugin/releases) and extract the contents to `%APPDATA%\Local\NINA\Plugins\3.0.0`
+
+### Automatic
+
+Add `https://kyleleneau.github.io/emitter-plugin/` as a NINA plugin repository and check for updates.
 
 ## Uninstallation
 
-TBD
+You can uninstall in NINA or delete the plugin in `%APPDATA%\Local\NINA\Plugins\3.0.0`.
 
 ## Usage
 
