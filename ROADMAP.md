@@ -28,7 +28,8 @@
 * [x] gitops release & CD automation
 * [x] deploy plugin/manifests file to github pages
 * [x] setup release process
-* [ ] create and deploy logo/image github pages
+* [x] create and deploy logo/image github pages
+* [x] generate asyncapi website / docs
 * [ ] implement kafka backend
 
 ### Bugs
@@ -37,7 +38,6 @@
 
 ### Future
 
-* [ ] generate asyncapi website / docs
 * [ ] Sequence item to emit a generic event defined by a user and still wrapped in a cloudevent
 * [ ] Allow for configuring which events / domains to emit
 * [ ] A dockable with current status of queue or connections on emitting
@@ -49,5 +49,3 @@
 ### Housekeeping
 
 * [ ] Bump NINA.Plugin nuget to 3.3.0 to resolve ToastNotification and VVVV.FreeImage warnings, then remove `<NoWarn>$(NoWarn);NU1701</NoWarn>` from csproj.
-
-A high-resolution, cinematic icon of a powerful astrophysical jet erupting from a central black hole accretion disk. The jet consists of bright, glowing plasma and swirling cosmic dust, emitting intense streaks of light in deep blues and vibrant magentas. Centered composition, dark void background with subtle starfield, symmetrical design, macro photography style, 8k resolution, highly detailed textures, dramatic lighting, isolated on a black background to function as an app icon.
