@@ -33,7 +33,7 @@ concurrency:
 jobs:
   # Builds the plugin manifests file (one entry per published GitHub release) from
   # the GitHub API. See docs/adr/003-github-manifests.md.
-  manifests:
+  build-manifests:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -56,8 +56,8 @@ jobs:
           if-no-files-found: error
 
   # Generates the AsyncAPI docs and stages them alongside the landing page
-  build:
-    needs: manifests
+  build-pages:
+    needs: build-manifests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -80,13 +80,13 @@ jobs:
           cp -r build/docs/. docs/pages/docs/
 
       - name: Download plugin manifests
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: plugin-manifests
           path: docs/pages/plugins
 
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -94,7 +94,7 @@ jobs:
           path: './docs/pages'
 
   deploy:
-    needs: build
+    needs: build-pages
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

@@ -17,6 +17,7 @@
 const fs = require('fs');
 const path = require('path');
 
+// TODO: these would need to change to be dynamic / portable
 const ZIP_SUFFIX = '-Emitter-Release.zip';
 const VERSION_RE = /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)-Emitter-Release\.zip$/;
 
@@ -73,8 +74,10 @@ async function fetchChecksum(url, token) {
 }
 
 async function main() {
+  // TODO: these would need to change to be dynamic / portable
   const outputPath = getInput('output_path', 'docs/pages/plugins/manifests');
   const templatePath = getInput('template_path', '.github/manifest_template.json');
+
   const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
   const repo = process.env.GITHUB_REPOSITORY;
   const apiUrl = process.env.GITHUB_API_URL || 'https://api.github.com';
@@ -103,6 +106,7 @@ async function main() {
     const zipAsset = assets.find((asset) => asset.name.endsWith(ZIP_SUFFIX));
     if (!zipAsset) fail(`Release ${tag} has no asset matching *${ZIP_SUFFIX}`);
 
+    // TODO: these would need to change to be dynamic / portable
     const shaName = `${zipAsset.name}.sha256`;
     const shaAsset = assets.find((asset) => asset.name === shaName);
     if (!shaAsset) fail(`Release ${tag} has no checksum asset named ${shaName}`);

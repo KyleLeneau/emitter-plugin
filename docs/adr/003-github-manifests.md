@@ -90,7 +90,7 @@ true state of GitHub releases.
      it at the ADR-specified path:
      ```yaml
      - name: Download plugin manifests
-       uses: actions/download-artifact@v4
+       uses: actions/download-artifact@v7
        with:
          name: plugin-manifests
          path: docs/pages/plugins

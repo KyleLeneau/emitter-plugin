@@ -67,6 +67,28 @@
         GitHub Repo
       </a>
     </div>
+
+    <div class="rounded-lg border border-slate-800 bg-slate-900/60 px-5 py-4 mt-8 text-left">
+      <p class="text-sm font-medium text-slate-200 mb-2">
+        Add as a Plugin Repository in NINA
+      </p>
+      <p class="text-sm text-slate-400 mb-3">
+        In NINA, go to <span class="text-slate-300">Options &rarr; Plugins &rarr; Plugin Repositories</span> and add:
+      </p>
+      <div class="flex items-center gap-2">
+        <code id="repo-url" class="flex-1 truncate rounded-md bg-slate-950 border border-slate-800 px-3 py-2 text-sm text-indigo-300">
+          https://kyleleneau.github.io/emitter-plugin/
+        </code>
+        <button
+          type="button"
+          onclick="navigator.clipboard.writeText(document.getElementById('repo-url').textContent.trim()); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy', 1500);"
+          class="shrink-0 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-100 text-sm font-medium px-3 py-2 transition-colors border border-slate-700"
+        >
+          Copy
+        </button>
+      </div>
+    </div>
+
   </main>
 </body>
 </html>
