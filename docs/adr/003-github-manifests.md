@@ -77,7 +77,7 @@ true state of GitHub releases.
            output_path: manifests-output/manifests
          env:
            GITHUB_TOKEN: ${{ github.token }}
-       - uses: actions/upload-artifact@v4
+       - uses: actions/upload-artifact@v6
          with:
            name: plugin-manifests
            path: manifests-output/manifests

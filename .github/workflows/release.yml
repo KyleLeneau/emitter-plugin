@@ -43,7 +43,7 @@ jobs:
       version_number: ${{ steps.version.outputs.version_number }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ env.RELEASE_TAG }}
 
@@ -98,7 +98,7 @@ jobs:
           ' .github/release_template.md > RELEASE_NOTES.md
 
       - name: Upload release notes
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: release-notes
           path: RELEASE_NOTES.md
@@ -109,12 +109,12 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ env.RELEASE_TAG }}
 
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: "8.x"
           cache: true
@@ -127,7 +127,7 @@ jobs:
         run: dotnet build -c Release -p:VersionNumber=${{ needs.prepare.outputs.version_number }} --no-restore
 
       - name: Upload release assets
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: release-assets
           path: |
