@@ -109,6 +109,9 @@ generate_docs() {
       asyncapi.yaml \
       @asyncapi/html-template@3.0.0 \
       -o "$DOCS_OUT" \
+      -p sidebarOrganization=byTags \
+      -p favicon="https://kyleleneau.github.io/emitter-plugin/emitter_icon.jpg" \
+      -p config='{"show":{"sidebar":true},"expand":{"messageExamples": true}}' \
       --use-new-generator
   )
 
@@ -119,6 +122,7 @@ usage() {
   echo "Usage: $0 <generate|install|all>"
   echo "  generate  Generate model code for all target languages from schemas"
   echo "  install   Copy the generated C# models into the plugin project"
+  echo "  docs      Build the html asyncapi docs"
   echo "  all       Run generate then install"
   exit 1
 }
