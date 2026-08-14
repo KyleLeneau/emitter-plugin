@@ -57,7 +57,7 @@ namespace Bortle.NINA.Emitter.Tests.Handlers
             Assert.Equal("weather", call.Domain);
             Assert.Equal("device-info", call.EventType);
 
-            var data = Assert.IsType<WeatherData>(call.Data);
+            var data = Assert.IsType<WeatherDeviceInfoData>(call.Data);
             Assert.True(data.Connected);
             Assert.Equal(12.3, data.Temperature);
             Assert.Equal(55.0, data.Humidity);
@@ -99,7 +99,7 @@ namespace Bortle.NINA.Emitter.Tests.Handlers
             handler.UpdateDeviceInfo(info);
 
             var call = Assert.Single(emitter.Calls);
-            var data = Assert.IsType<WeatherData>(call.Data);
+            var data = Assert.IsType<WeatherDeviceInfoData>(call.Data);
 
             Assert.False(data.Connected);
             Assert.Null(data.Temperature);

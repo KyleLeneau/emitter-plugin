@@ -24,7 +24,7 @@ DATA_SCHEMAS=(
   "$SCHEMAS/imaging_data.yaml"
   "$SCHEMAS/weather_data.yaml"
   "$SCHEMAS/safety_data.yaml"
-  "$SCHEMAS/safety_changed_data.yaml"
+  "$SCHEMAS/safety_change_data.yaml"
   "$SCHEMAS/flat_panel_data.yaml"
   "$SCHEMAS/filter_wheel_data.yaml"
 )

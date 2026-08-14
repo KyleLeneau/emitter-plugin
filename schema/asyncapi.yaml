@@ -58,17 +58,37 @@ channels:
       deviceConnectionEvent:
         $ref: "#/components/messages/DeviceConnectionEvent"
 
-
   # Weather ─────────────────────────────────────────────────────────────────
-  # weatherDeviceInfo:
-  #   address: "nina.{instanceId}.weather.device-info"
-  #   description: Periodic weather station sensor readings
-  #   parameters:
-  #     instanceId:
-  #       $ref: "#/components/parameters/InstanceId"
-  #   messages:
-  #     weatherDeviceInfo:
-  #       $ref: "#/components/messages/WeatherDeviceInfo"
+  weatherDeviceInfo:
+    address: "nina.{instanceId}.weather.device-info"
+    description: Periodic weather station sensor readings
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      weatherDeviceInfoEvent:
+        $ref: "#/components/messages/WeatherDeviceInfoEvent"
+
+  # Saftey -─────────────────────────────────────────────────────────────────
+  safetyDeviceInfo:
+    address: "nina.{instanceId}.safety_monitor.device-info"
+    description: Periodic data about the safety monitor
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      safetyDeviceInfoEvent:
+        $ref: "#/components/messages/SafetyDeviceInfoEvent"
+
+  safetyChange:
+    address: "nina.{instanceId}.safety_monitor.is_safe"
+    description: Updates with the saftey monitor value changes
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      safetyChangeEvent:
+        $ref: "#/components/messages/SafetyChangeEvent"
 
   # Camera ──────────────────────────────────────────────────────────────────
 
@@ -89,6 +109,29 @@ operations:
     tags:
       - name: "Device"
 
+  # Weather ─────────────────────────────────────────────────────────────────
+  publishWeatherDeviceInfoEvent:
+    action: send
+    channel:
+      $ref: "#/channels/weatherDeviceInfo"
+    tags:
+      - name: "Weather"
+
+  # Safety ──────────────────────────────────────────────────────────────────
+  publishSafetyDeviceInfoEvent:
+    action: send
+    channel:
+      $ref: "#/channels/safetyDeviceInfo"
+    tags:
+      - name: "Safety"
+
+  publishSafetyChangeEvent:
+    action: send
+    channel:
+      $ref: "#/channels/safetyChange"
+    tags:
+      - name: "Safety"
+
 # ─── Components ──────────────────────────────────────────────────────────────
 components:
 
@@ -97,10 +140,10 @@ components:
       description: Lowercased machine hostname of the PC running NINA
 
   messages:
+    # Common Device ───────────────────────────────────────────────────────────
     DeviceConnectionEvent:
       title: DeviceConnectionEvent
       summary: Event when a device connects or disconnects in nina
-      contentType: application/cloudevents+json
       payload:
         allOf:
           - $ref: "./schemas/cloudevents.json"
@@ -111,22 +154,46 @@ components:
               data:
                 $ref: "./schemas/device_connect_data.yaml"
 
-    # WeatherDeviceInfo:
-    #   name: WeatherDeviceInfo
-    #   title: Weather Device Info
-    #   summary: Periodic weather station reading — CloudEvent type io.nina.weather.device-info
-    #   contentType: application/cloudevents+json
-    #   payload:
-    #     schemaFormat: application/schema+json;version=draft-07
-    #     schema:
-    #       allOf:
-    #         - $ref: "./schemas/cloudevents.json"
-    #         - type: object
-    #           properties:
-    #             type:
-    #               const: "io.nina.weather.device-info"
-    #             data:
-    #               $ref: "./schemas/weather_data.yaml"
+    # Weather ─────────────────────────────────────────────────────────────────
+    WeatherDeviceInfoEvent:
+      title: WeatherDeviceInfoEvent
+      summary: Periodic weather station readings
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.weather.device-info"
+              data:
+                $ref: "./schemas/weather_data.yaml"
+
+    # Saftey -─────────────────────────────────────────────────────────────────
+    SafetyDeviceInfoEvent:
+      title: SafetyDeviceInfoEvent
+      summary: Periodic safety monitor readings
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.safety_monitor.device-info"
+              data:
+                $ref: "./schemas/safety_data.yaml"
+
+    SafetyChangeEvent:
+      title: SafetyChangeEvent
+      summary: Event when is_safe changes
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.safety_monitor.is_safe"
+              data:
+                $ref: "./schemas/safety_change_data.yaml"
 
     # CameraEvent:
     #   name: CameraEvent

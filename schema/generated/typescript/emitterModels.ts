@@ -1,13 +1,13 @@
 // To parse this data:
 //
-//   import { Convert, DeviceConnectionData, CameraData, TelescopeData, ImagingData, WeatherData, SafetyData, SafetyChangeData, FlatPanelData, FilterWheelData } from "./file";
+//   import { Convert, DeviceConnectionData, CameraData, TelescopeData, ImagingData, WeatherDeviceInfoData, SafetyDeviceInfoData, SafetyChangeData, FlatPanelData, FilterWheelData } from "./file";
 //
 //   const deviceConnectionData = Convert.toDeviceConnectionData(json);
 //   const cameraData = Convert.toCameraData(json);
 //   const telescopeData = Convert.toTelescopeData(json);
 //   const imagingData = Convert.toImagingData(json);
-//   const weatherData = Convert.toWeatherData(json);
-//   const safetyData = Convert.toSafetyData(json);
+//   const weatherDeviceInfoData = Convert.toWeatherDeviceInfoData(json);
+//   const safetyDeviceInfoData = Convert.toSafetyDeviceInfoData(json);
 //   const safetyChangeData = Convert.toSafetyChangeData(json);
 //   const flatPanelData = Convert.toFlatPanelData(json);
 //   const filterWheelData = Convert.toFilterWheelData(json);
@@ -28,7 +28,7 @@ export interface DeviceConnectionData {
      * Driver ID
      */
     device_id?:  null | string;
-    device_type: string;
+    device_type: DeviceType;
     /**
      * A friendly name of the device for dipslay
      */
@@ -46,6 +46,20 @@ export interface DeviceConnectionData {
      */
     name?: null | string;
     [property: string]: any;
+}
+
+export enum DeviceType {
+    Camera = "Camera",
+    Dome = "Dome",
+    FilterWheel = "FilterWheel",
+    FlatPanel = "FlatPanel",
+    Focuser = "Focuser",
+    Guider = "Guider",
+    Mount = "Mount",
+    Rotator = "Rotator",
+    SafetyMonitor = "SafetyMonitor",
+    Switch = "Switch",
+    Weather = "Weather",
 }
 
 /**
@@ -154,7 +168,7 @@ export interface ImagingData {
 /**
  * Weather station sensor readings
  */
-export interface WeatherData {
+export interface WeatherDeviceInfoData {
     /**
      * Cloud cover as a percentage (0–100); null if unsupported by the device
      */
@@ -210,7 +224,7 @@ export interface WeatherData {
 /**
  * Safety monitor event data
  */
-export interface SafetyData {
+export interface SafetyDeviceInfoData {
     connected: boolean;
     is_safe:   boolean;
     [property: string]: any;
@@ -299,20 +313,20 @@ export class Convert {
         return JSON.stringify(uncast(value, r("ImagingData")), null, 2);
     }
 
-    public static toWeatherData(json: string): WeatherData {
-        return cast(JSON.parse(json), r("WeatherData"));
+    public static toWeatherDeviceInfoData(json: string): WeatherDeviceInfoData {
+        return cast(JSON.parse(json), r("WeatherDeviceInfoData"));
     }
 
-    public static weatherDataToJson(value: WeatherData): string {
-        return JSON.stringify(uncast(value, r("WeatherData")), null, 2);
+    public static weatherDeviceInfoDataToJson(value: WeatherDeviceInfoData): string {
+        return JSON.stringify(uncast(value, r("WeatherDeviceInfoData")), null, 2);
     }
 
-    public static toSafetyData(json: string): SafetyData {
-        return cast(JSON.parse(json), r("SafetyData"));
+    public static toSafetyDeviceInfoData(json: string): SafetyDeviceInfoData {
+        return cast(JSON.parse(json), r("SafetyDeviceInfoData"));
     }
 
-    public static safetyDataToJson(value: SafetyData): string {
-        return JSON.stringify(uncast(value, r("SafetyData")), null, 2);
+    public static safetyDeviceInfoDataToJson(value: SafetyDeviceInfoData): string {
+        return JSON.stringify(uncast(value, r("SafetyDeviceInfoData")), null, 2);
     }
 
     public static toSafetyChangeData(json: string): SafetyChangeData {
@@ -497,7 +511,7 @@ const typeMap: any = {
         { json: "connected", js: "connected", typ: true },
         { json: "description", js: "description", typ: u(undefined, u(null, "")) },
         { json: "device_id", js: "device_id", typ: u(undefined, u(null, "")) },
-        { json: "device_type", js: "device_type", typ: "" },
+        { json: "device_type", js: "device_type", typ: r("DeviceType") },
         { json: "display_name", js: "display_name", typ: u(undefined, u(null, "")) },
         { json: "driver_info", js: "driver_info", typ: u(undefined, u(null, "")) },
         { json: "driver_version", js: "driver_version", typ: u(undefined, u(null, "")) },
@@ -534,7 +548,7 @@ const typeMap: any = {
         { json: "offset", js: "offset", typ: 0 },
         { json: "target_name", js: "target_name", typ: u(undefined, u(null, "")) },
     ], "any"),
-    "WeatherData": o([
+    "WeatherDeviceInfoData": o([
         { json: "cloud_cover", js: "cloud_cover", typ: u(undefined, u(3.14, null)) },
         { json: "connected", js: "connected", typ: true },
         { json: "dew_point", js: "dew_point", typ: u(undefined, u(3.14, null)) },
@@ -549,7 +563,7 @@ const typeMap: any = {
         { json: "wind_gust", js: "wind_gust", typ: u(undefined, u(3.14, null)) },
         { json: "wind_speed", js: "wind_speed", typ: u(undefined, u(3.14, null)) },
     ], "any"),
-    "SafetyData": o([
+    "SafetyDeviceInfoData": o([
         { json: "connected", js: "connected", typ: true },
         { json: "is_safe", js: "is_safe", typ: true },
     ], "any"),
@@ -581,4 +595,17 @@ const typeMap: any = {
         { json: "offset", js: "offset", typ: u(undefined, u(3.14, null)) },
         { json: "postion", js: "postion", typ: u(undefined, u(3.14, null)) },
     ], "any"),
+    "DeviceType": [
+        "Camera",
+        "Dome",
+        "FilterWheel",
+        "FlatPanel",
+        "Focuser",
+        "Guider",
+        "Mount",
+        "Rotator",
+        "SafetyMonitor",
+        "Switch",
+        "Weather",
+    ],
 };

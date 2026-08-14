@@ -8,8 +8,8 @@
 //    var cameraData = CameraData.FromJson(jsonString);
 //    var telescopeData = TelescopeData.FromJson(jsonString);
 //    var imagingData = ImagingData.FromJson(jsonString);
-//    var weatherData = WeatherData.FromJson(jsonString);
-//    var safetyData = SafetyData.FromJson(jsonString);
+//    var weatherDeviceInfoData = WeatherDeviceInfoData.FromJson(jsonString);
+//    var safetyDeviceInfoData = SafetyDeviceInfoData.FromJson(jsonString);
 //    var safetyChangeData = SafetyChangeData.FromJson(jsonString);
 //    var flatPanelData = FlatPanelData.FromJson(jsonString);
 //    var filterWheelData = FilterWheelData.FromJson(jsonString);
@@ -48,7 +48,7 @@ namespace Bortle.NINA.Emitter.Models
         public string DeviceId { get; set; }
 
         [JsonPropertyName("device_type")]
-        public string DeviceType { get; set; }
+        public DeviceType DeviceType { get; set; }
 
         /// <summary>
         /// A friendly name of the device for dipslay
@@ -228,7 +228,7 @@ namespace Bortle.NINA.Emitter.Models
     /// <summary>
     /// Weather station sensor readings
     /// </summary>
-    public partial class WeatherData
+    public partial class WeatherDeviceInfoData
     {
         /// <summary>
         /// Cloud cover as a percentage (0–100); null if unsupported by the device
@@ -309,7 +309,7 @@ namespace Bortle.NINA.Emitter.Models
     /// <summary>
     /// Safety monitor event data
     /// </summary>
-    public partial class SafetyData
+    public partial class SafetyDeviceInfoData
     {
         [JsonPropertyName("connected")]
         public bool Connected { get; set; }
@@ -408,6 +408,8 @@ namespace Bortle.NINA.Emitter.Models
         public double? Postion { get; set; }
     }
 
+    public enum DeviceType { Camera, Dome, FilterWheel, FlatPanel, Focuser, Guider, Mount, Rotator, SafetyMonitor, Switch, Weather };
+
     public partial class DeviceConnectionData
     {
         public static DeviceConnectionData FromJson(string json) => JsonSerializer.Deserialize<DeviceConnectionData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -428,14 +430,14 @@ namespace Bortle.NINA.Emitter.Models
         public static ImagingData FromJson(string json) => JsonSerializer.Deserialize<ImagingData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
-    public partial class WeatherData
+    public partial class WeatherDeviceInfoData
     {
-        public static WeatherData FromJson(string json) => JsonSerializer.Deserialize<WeatherData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static WeatherDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<WeatherDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
-    public partial class SafetyData
+    public partial class SafetyDeviceInfoData
     {
-        public static SafetyData FromJson(string json) => JsonSerializer.Deserialize<SafetyData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static SafetyDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<SafetyDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
     public partial class SafetyChangeData
@@ -459,8 +461,8 @@ namespace Bortle.NINA.Emitter.Models
         public static string ToJson(this CameraData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this TelescopeData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this ImagingData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
-        public static string ToJson(this WeatherData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
-        public static string ToJson(this SafetyData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this WeatherDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this SafetyDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this SafetyChangeData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this FlatPanelData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this FilterWheelData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -472,11 +474,91 @@ namespace Bortle.NINA.Emitter.Models
         {
             Converters =
             {
+                DeviceTypeConverter.Singleton,
                 new DateOnlyConverter(),
                 new TimeOnlyConverter(),
                 IsoDateTimeOffsetConverter.Singleton
             },
         };
+    }
+
+    internal class DeviceTypeConverter : JsonConverter<DeviceType>
+    {
+        public override bool CanConvert(Type t) => t == typeof(DeviceType);
+
+        public override DeviceType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var value = reader.GetString();
+            switch (value)
+            {
+                case "Camera":
+                    return DeviceType.Camera;
+                case "Dome":
+                    return DeviceType.Dome;
+                case "FilterWheel":
+                    return DeviceType.FilterWheel;
+                case "FlatPanel":
+                    return DeviceType.FlatPanel;
+                case "Focuser":
+                    return DeviceType.Focuser;
+                case "Guider":
+                    return DeviceType.Guider;
+                case "Mount":
+                    return DeviceType.Mount;
+                case "Rotator":
+                    return DeviceType.Rotator;
+                case "SafetyMonitor":
+                    return DeviceType.SafetyMonitor;
+                case "Switch":
+                    return DeviceType.Switch;
+                case "Weather":
+                    return DeviceType.Weather;
+            }
+            throw new Exception("Cannot unmarshal type DeviceType");
+        }
+
+        public override void Write(Utf8JsonWriter writer, DeviceType value, JsonSerializerOptions options)
+        {
+            switch (value)
+            {
+                case DeviceType.Camera:
+                    JsonSerializer.Serialize(writer, "Camera", options);
+                    return;
+                case DeviceType.Dome:
+                    JsonSerializer.Serialize(writer, "Dome", options);
+                    return;
+                case DeviceType.FilterWheel:
+                    JsonSerializer.Serialize(writer, "FilterWheel", options);
+                    return;
+                case DeviceType.FlatPanel:
+                    JsonSerializer.Serialize(writer, "FlatPanel", options);
+                    return;
+                case DeviceType.Focuser:
+                    JsonSerializer.Serialize(writer, "Focuser", options);
+                    return;
+                case DeviceType.Guider:
+                    JsonSerializer.Serialize(writer, "Guider", options);
+                    return;
+                case DeviceType.Mount:
+                    JsonSerializer.Serialize(writer, "Mount", options);
+                    return;
+                case DeviceType.Rotator:
+                    JsonSerializer.Serialize(writer, "Rotator", options);
+                    return;
+                case DeviceType.SafetyMonitor:
+                    JsonSerializer.Serialize(writer, "SafetyMonitor", options);
+                    return;
+                case DeviceType.Switch:
+                    JsonSerializer.Serialize(writer, "Switch", options);
+                    return;
+                case DeviceType.Weather:
+                    JsonSerializer.Serialize(writer, "Weather", options);
+                    return;
+            }
+            throw new Exception("Cannot marshal type DeviceType");
+        }
+
+        public static readonly DeviceTypeConverter Singleton = new DeviceTypeConverter();
     }
     
     public class DateOnlyConverter : JsonConverter<DateOnly>

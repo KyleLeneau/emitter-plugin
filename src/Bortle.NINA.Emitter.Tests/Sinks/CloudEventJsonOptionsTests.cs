@@ -13,7 +13,7 @@ namespace Bortle.NINA.Emitter.Tests.EventSinks
         public void EncodeStructuredModeMessage_OmitsNullOptionalFields()
         {
             var formatter = new JsonEventFormatter(CloudEventJsonOptions.Settings, default);
-            var data = new WeatherData
+            var data = new WeatherDeviceInfoData
             {
                 Connected = false,
                 // Every other field is left null, mirroring a device that reports no sensors.
@@ -39,7 +39,7 @@ namespace Bortle.NINA.Emitter.Tests.EventSinks
         public void EncodeStructuredModeMessage_IncludesNonNullOptionalFields()
         {
             var formatter = new JsonEventFormatter(CloudEventJsonOptions.Settings, default);
-            var data = new WeatherData
+            var data = new WeatherDeviceInfoData
             {
                 Connected = true,
                 Temperature = 12.5,

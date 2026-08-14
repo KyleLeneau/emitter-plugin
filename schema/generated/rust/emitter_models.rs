@@ -24,7 +24,7 @@ pub struct DeviceConnectionData {
     /// Driver ID
     pub device_id: Option<String>,
 
-    pub device_type: String,
+    pub device_type: DeviceType,
 
     /// A friendly name of the device for dipslay
     pub display_name: Option<String>,
@@ -37,6 +37,34 @@ pub struct DeviceConnectionData {
 
     /// The name of the device
     pub name: Option<String>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum DeviceType {
+    Camera,
+
+    Dome,
+
+    #[serde(rename = "FilterWheel")]
+    FilterWheel,
+
+    #[serde(rename = "FlatPanel")]
+    FlatPanel,
+
+    Focuser,
+
+    Guider,
+
+    Mount,
+
+    Rotator,
+
+    #[serde(rename = "SafetyMonitor")]
+    SafetyMonitor,
+
+    Switch,
+
+    Weather,
 }
 
 /// Camera device state snapshot
@@ -122,7 +150,7 @@ pub struct ImagingData {
 
 /// Weather station sensor readings
 #[derive(Serialize, Deserialize)]
-pub struct WeatherData {
+pub struct WeatherDeviceInfoData {
     /// Cloud cover as a percentage (0–100); null if unsupported by the device
     pub cloud_cover: Option<f64>,
 
@@ -164,7 +192,7 @@ pub struct WeatherData {
 
 /// Safety monitor event data
 #[derive(Serialize, Deserialize)]
-pub struct SafetyData {
+pub struct SafetyDeviceInfoData {
     pub connected: bool,
 
     pub is_safe: bool,

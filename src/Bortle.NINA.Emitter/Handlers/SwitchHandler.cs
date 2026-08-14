@@ -26,7 +26,7 @@ namespace Bortle.NINA.Emitter.Handlers {
             var deviceInfo = mediator.GetInfo();
             var data = new DeviceConnectionData {
                 Connected = true,
-                DeviceType = "Switch",
+                DeviceType = DeviceType.Switch,
                 Name = deviceInfo.Name,
                 Description = deviceInfo.Description,
                 DriverInfo = deviceInfo.DriverInfo,
@@ -38,7 +38,7 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private Task MediatorOnDisconnected(object arg1, EventArgs arg2) {
-            var data = new DeviceConnectionData { Connected = false, DeviceType = "Switch" };
+            var data = new DeviceConnectionData { Connected = false, DeviceType = DeviceType.Switch };
             emitter.Enqueue("device", "connection", data);
             return Task.CompletedTask;
         }

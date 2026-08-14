@@ -25,7 +25,7 @@ namespace Bortle.NINA.Emitter.Handlers {
             // Skip duplicates from internal nina polling
             if (deviceInfo.Equals(lastInfo)) return;
 
-            var data = new SafetyData {
+            var data = new SafetyDeviceInfoData {
                 Connected = deviceInfo.Connected,
                 IsSafe = deviceInfo.IsSafe
             };
@@ -42,7 +42,7 @@ namespace Bortle.NINA.Emitter.Handlers {
             var deviceInfo = mediator.GetInfo();
             var data = new DeviceConnectionData {
                 Connected = true,
-                DeviceType = "SafetyMonitor",
+                DeviceType = DeviceType.SafetyMonitor,
                 Name = deviceInfo.Name,
                 Description = deviceInfo.Description,
                 DriverInfo = deviceInfo.DriverInfo,
@@ -54,7 +54,7 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private Task MediatorOnDisconnected(object arg1, EventArgs arg2) {
-            var data = new DeviceConnectionData { Connected = false, DeviceType = "SafetyMonitor" };
+            var data = new DeviceConnectionData { Connected = false, DeviceType = DeviceType.SafetyMonitor };
             emitter.Enqueue("device", "connection", data);
             return Task.CompletedTask;
         }

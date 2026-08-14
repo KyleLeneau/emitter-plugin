@@ -5,8 +5,8 @@
 //   let cameraData = try CameraData(json)
 //   let telescopeData = try TelescopeData(json)
 //   let imagingData = try ImagingData(json)
-//   let weatherData = try WeatherData(json)
-//   let safetyData = try SafetyData(json)
+//   let weatherDeviceInfoData = try WeatherDeviceInfoData(json)
+//   let safetyDeviceInfoData = try SafetyDeviceInfoData(json)
 //   let safetyChangeData = try SafetyChangeData(json)
 //   let flatPanelData = try FlatPanelData(json)
 //   let filterWheelData = try FilterWheelData(json)
@@ -21,7 +21,7 @@ struct DeviceConnectionData: Codable {
     let description: String?
     /// Driver ID
     let deviceID: String?
-    let deviceType: String
+    let deviceType: DeviceType
     /// A friendly name of the device for dipslay
     let displayName: String?
     /// Driver name and info
@@ -64,7 +64,7 @@ extension DeviceConnectionData {
         connected: Bool? = nil,
         description: String?? = nil,
         deviceID: String?? = nil,
-        deviceType: String? = nil,
+        deviceType: DeviceType? = nil,
         displayName: String?? = nil,
         driverInfo: String?? = nil,
         driverVersion: String?? = nil,
@@ -89,6 +89,20 @@ extension DeviceConnectionData {
     func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
         return String(data: try self.jsonData(), encoding: encoding)
     }
+}
+
+enum DeviceType: String, Codable {
+    case camera = "Camera"
+    case deviceTypeSwitch = "Switch"
+    case dome = "Dome"
+    case filterWheel = "FilterWheel"
+    case flatPanel = "FlatPanel"
+    case focuser = "Focuser"
+    case guider = "Guider"
+    case mount = "Mount"
+    case rotator = "Rotator"
+    case safetyMonitor = "SafetyMonitor"
+    case weather = "Weather"
 }
 
 /// Camera device state snapshot
@@ -328,8 +342,8 @@ extension ImagingData {
 }
 
 /// Weather station sensor readings
-// MARK: - WeatherData
-struct WeatherData: Codable {
+// MARK: - WeatherDeviceInfoData
+struct WeatherDeviceInfoData: Codable {
     /// Cloud cover as a percentage (0–100); null if unsupported by the device
     let cloudCover: Double?
     let connected: Bool
@@ -372,11 +386,11 @@ struct WeatherData: Codable {
     }
 }
 
-// MARK: WeatherData convenience initializers and mutators
+// MARK: WeatherDeviceInfoData convenience initializers and mutators
 
-extension WeatherData {
+extension WeatherDeviceInfoData {
     init(data: Data) throws {
-        self = try newJSONDecoder().decode(WeatherData.self, from: data)
+        self = try newJSONDecoder().decode(WeatherDeviceInfoData.self, from: data)
     }
 
     init(_ json: String, using encoding: String.Encoding = .utf8) throws {
@@ -404,8 +418,8 @@ extension WeatherData {
         windDirection: Double?? = nil,
         windGust: Double?? = nil,
         windSpeed: Double?? = nil
-    ) -> WeatherData {
-        return WeatherData(
+    ) -> WeatherDeviceInfoData {
+        return WeatherDeviceInfoData(
             cloudCover: cloudCover ?? self.cloudCover,
             connected: connected ?? self.connected,
             dewPoint: dewPoint ?? self.dewPoint,
@@ -432,8 +446,8 @@ extension WeatherData {
 }
 
 /// Safety monitor event data
-// MARK: - SafetyData
-struct SafetyData: Codable {
+// MARK: - SafetyDeviceInfoData
+struct SafetyDeviceInfoData: Codable {
     let connected, isSafe: Bool
 
     enum CodingKeys: String, CodingKey {
@@ -442,11 +456,11 @@ struct SafetyData: Codable {
     }
 }
 
-// MARK: SafetyData convenience initializers and mutators
+// MARK: SafetyDeviceInfoData convenience initializers and mutators
 
-extension SafetyData {
+extension SafetyDeviceInfoData {
     init(data: Data) throws {
-        self = try newJSONDecoder().decode(SafetyData.self, from: data)
+        self = try newJSONDecoder().decode(SafetyDeviceInfoData.self, from: data)
     }
 
     init(_ json: String, using encoding: String.Encoding = .utf8) throws {
@@ -463,8 +477,8 @@ extension SafetyData {
     func with(
         connected: Bool? = nil,
         isSafe: Bool? = nil
-    ) -> SafetyData {
-        return SafetyData(
+    ) -> SafetyDeviceInfoData {
+        return SafetyDeviceInfoData(
             connected: connected ?? self.connected,
             isSafe: isSafe ?? self.isSafe
         )
