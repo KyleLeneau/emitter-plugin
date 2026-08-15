@@ -59,6 +59,15 @@ channels:
 
   # Camera ──────────────────────────────────────────────────────────────────
   # Dome ────────────────────────────────────────────────────────────────────
+  domeDeviceInfo:
+    address: "nina.{instanceId}.dome.device-info"
+    description: Periodic data about the dome
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      flatPanelDeviceInfoEvent:
+        $ref: "#/components/messages/DomeDeviceInfoEvent"
 
   # FilterWheel ─────────────────────────────────────────────────────────────
   filterWheelDeviceInfo:
@@ -138,6 +147,12 @@ operations:
 
   # Camera ──────────────────────────────────────────────────────────────────
   # Dome ────────────────────────────────────────────────────────────────────
+  publishDomeDeviceInfoEvent:
+    action: send
+    channel:
+      $ref: "#/channels/domeDeviceInfo"
+    tags:
+      - name: "Dome"
 
   # FilterWheel ─────────────────────────────────────────────────────────────
   publishFilterWheelDeviceInfoEvent:
@@ -216,8 +231,20 @@ components:
               data:
                 $ref: "./schemas/device_connect_data.yaml"
 
-      # Camera ──────────────────────────────────────────────────────────────────
+    # Camera ──────────────────────────────────────────────────────────────────
     # Dome ────────────────────────────────────────────────────────────────────
+    DomeDeviceInfoEvent:
+      title: DomeDeviceInfoEvent
+      summary: Periodic dome device info
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.dome.device-info"
+              data:
+                $ref: "./schemas/dome_data.yaml"
 
     # FilterWheel ─────────────────────────────────────────────────────────────
     FilterWheelDeviceInfoEvent:

@@ -1,8 +1,9 @@
 // To parse this data:
 //
-//   import { Convert, DeviceConnectionData, FilterWheelDeviceInfoData, FlatPanelDeviceInfoData, SafetyDeviceInfoData, SafetyChangeData, WeatherDeviceInfoData } from "./file";
+//   import { Convert, DeviceConnectionData, DomeDeviceInfoData, FilterWheelDeviceInfoData, FlatPanelDeviceInfoData, SafetyDeviceInfoData, SafetyChangeData, WeatherDeviceInfoData } from "./file";
 //
 //   const deviceConnectionData = Convert.toDeviceConnectionData(json);
+//   const domeDeviceInfoData = Convert.toDomeDeviceInfoData(json);
 //   const filterWheelDeviceInfoData = Convert.toFilterWheelDeviceInfoData(json);
 //   const flatPanelDeviceInfoData = Convert.toFlatPanelDeviceInfoData(json);
 //   const safetyDeviceInfoData = Convert.toSafetyDeviceInfoData(json);
@@ -57,6 +58,39 @@ export enum DeviceType {
     SafetyMonitor = "SafetyMonitor",
     Switch = "Switch",
     Weather = "Weather",
+}
+
+/**
+ * Dome device state
+ */
+export interface DomeDeviceInfoData {
+    altitude_degrees?:     number;
+    application_following: boolean;
+    at_home:               boolean;
+    at_park:               boolean;
+    azimuth_degrees?:      number;
+    can_find_home:         boolean;
+    can_park:              boolean;
+    can_set_azimuth:       boolean;
+    can_set_park:          boolean;
+    can_set_shutter:       boolean;
+    can_sync_azimuth:      boolean;
+    connected:             boolean;
+    driver_can_follow:     boolean;
+    driver_following:      boolean;
+    following_type?:       string;
+    shutter_state:         ShutterState;
+    slewing:               boolean;
+    [property: string]: any;
+}
+
+export enum ShutterState {
+    Closed = "Closed",
+    Closing = "Closing",
+    Error = "Error",
+    None = "None",
+    Open = "Open",
+    Opening = "Opening",
 }
 
 /**
@@ -181,6 +215,14 @@ export class Convert {
 
     public static deviceConnectionDataToJson(value: DeviceConnectionData): string {
         return JSON.stringify(uncast(value, r("DeviceConnectionData")), null, 2);
+    }
+
+    public static toDomeDeviceInfoData(json: string): DomeDeviceInfoData {
+        return cast(JSON.parse(json), r("DomeDeviceInfoData"));
+    }
+
+    public static domeDeviceInfoDataToJson(value: DomeDeviceInfoData): string {
+        return JSON.stringify(uncast(value, r("DomeDeviceInfoData")), null, 2);
     }
 
     public static toFilterWheelDeviceInfoData(json: string): FilterWheelDeviceInfoData {
@@ -387,6 +429,25 @@ const typeMap: any = {
         { json: "driver_version", js: "driver_version", typ: u(undefined, u(null, "")) },
         { json: "name", js: "name", typ: u(undefined, u(null, "")) },
     ], "any"),
+    "DomeDeviceInfoData": o([
+        { json: "altitude_degrees", js: "altitude_degrees", typ: u(undefined, 3.14) },
+        { json: "application_following", js: "application_following", typ: true },
+        { json: "at_home", js: "at_home", typ: true },
+        { json: "at_park", js: "at_park", typ: true },
+        { json: "azimuth_degrees", js: "azimuth_degrees", typ: u(undefined, 3.14) },
+        { json: "can_find_home", js: "can_find_home", typ: true },
+        { json: "can_park", js: "can_park", typ: true },
+        { json: "can_set_azimuth", js: "can_set_azimuth", typ: true },
+        { json: "can_set_park", js: "can_set_park", typ: true },
+        { json: "can_set_shutter", js: "can_set_shutter", typ: true },
+        { json: "can_sync_azimuth", js: "can_sync_azimuth", typ: true },
+        { json: "connected", js: "connected", typ: true },
+        { json: "driver_can_follow", js: "driver_can_follow", typ: true },
+        { json: "driver_following", js: "driver_following", typ: true },
+        { json: "following_type", js: "following_type", typ: u(undefined, "") },
+        { json: "shutter_state", js: "shutter_state", typ: r("ShutterState") },
+        { json: "slewing", js: "slewing", typ: true },
+    ], "any"),
     "FilterWheelDeviceInfoData": o([
         { json: "connected", js: "connected", typ: true },
         { json: "is_moving", js: "is_moving", typ: true },
@@ -446,5 +507,13 @@ const typeMap: any = {
         "SafetyMonitor",
         "Switch",
         "Weather",
+    ],
+    "ShutterState": [
+        "Closed",
+        "Closing",
+        "Error",
+        "None",
+        "Open",
+        "Opening",
     ],
 };

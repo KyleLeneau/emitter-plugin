@@ -21,3 +21,12 @@ definitions:
         type: ["number", "null"]
       auto_focus_offset:
         type: ["number", "null"]
+  ShutterState:
+    type: string
+    enum:
+      - "None"
+      - "Open"
+      - "Closed"
+      - "Opening"
+      - "Closing"
+      - "Error"

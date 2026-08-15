@@ -67,6 +67,59 @@ pub enum DeviceType {
     Weather,
 }
 
+/// Dome device state
+#[derive(Serialize, Deserialize)]
+pub struct DomeDeviceInfoData {
+    pub altitude_degrees: Option<f64>,
+
+    pub application_following: bool,
+
+    pub at_home: bool,
+
+    pub at_park: bool,
+
+    pub azimuth_degrees: Option<f64>,
+
+    pub can_find_home: bool,
+
+    pub can_park: bool,
+
+    pub can_set_azimuth: bool,
+
+    pub can_set_park: bool,
+
+    pub can_set_shutter: bool,
+
+    pub can_sync_azimuth: bool,
+
+    pub connected: bool,
+
+    pub driver_can_follow: bool,
+
+    pub driver_following: bool,
+
+    pub following_type: Option<String>,
+
+    pub shutter_state: ShutterState,
+
+    pub slewing: bool,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum ShutterState {
+    Closed,
+
+    Closing,
+
+    Error,
+
+    None,
+
+    Open,
+
+    Opening,
+}
+
 /// Filter Wheel device state
 #[derive(Serialize, Deserialize)]
 pub struct FilterWheelDeviceInfoData {

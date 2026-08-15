@@ -1,0 +1,54 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: DomeDeviceInfoData
+type: object
+description: Dome device state
+properties:
+  connected:
+    type: boolean
+  shutter_state:
+    $ref: "common.yaml#/definitions/ShutterState"
+  driver_can_follow:
+    type: boolean
+  can_set_shutter:
+    type: boolean
+  can_set_park:
+    type: boolean
+  can_set_azimuth:
+    type: boolean
+  can_sync_azimuth:
+    type: boolean
+  can_park:
+    type: boolean
+  can_find_home:
+    type: boolean
+  at_park:
+    type: boolean
+  at_home:
+    type: boolean
+  driver_following:
+    type: boolean
+  application_following:
+    type: boolean
+  following_type:
+    type: string
+  slewing:
+    type: boolean
+  azimuth_degrees:
+    type: number
+  altitude_degrees:
+    type: number
+required:
+  - connected
+  - shutter_state
+  - driver_can_follow
+  - can_set_shutter
+  - can_set_park
+  - can_set_azimuth
+  - can_sync_azimuth
+  - can_park
+  - can_find_home
+  - at_park
+  - at_home
+  - driver_following
+  - application_following
+  - slewing

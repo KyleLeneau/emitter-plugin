@@ -2,6 +2,7 @@
 // To parse the JSON, add this file to your project and do:
 //
 //   let deviceConnectionData = try DeviceConnectionData(json)
+//   let domeDeviceInfoData = try DomeDeviceInfoData(json)
 //   let filterWheelDeviceInfoData = try FilterWheelDeviceInfoData(json)
 //   let flatPanelDeviceInfoData = try FlatPanelDeviceInfoData(json)
 //   let safetyDeviceInfoData = try SafetyDeviceInfoData(json)
@@ -100,6 +101,116 @@ enum DeviceType: String, Codable {
     case rotator = "Rotator"
     case safetyMonitor = "SafetyMonitor"
     case weather = "Weather"
+}
+
+/// Dome device state
+// MARK: - DomeDeviceInfoData
+struct DomeDeviceInfoData: Codable {
+    let altitudeDegrees: Double?
+    let applicationFollowing, atHome, atPark: Bool
+    let azimuthDegrees: Double?
+    let canFindHome, canPark, canSetAzimuth, canSetPark: Bool
+    let canSetShutter, canSyncAzimuth, connected, driverCanFollow: Bool
+    let driverFollowing: Bool
+    let followingType: String?
+    let shutterState: ShutterState
+    let slewing: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case altitudeDegrees = "altitude_degrees"
+        case applicationFollowing = "application_following"
+        case atHome = "at_home"
+        case atPark = "at_park"
+        case azimuthDegrees = "azimuth_degrees"
+        case canFindHome = "can_find_home"
+        case canPark = "can_park"
+        case canSetAzimuth = "can_set_azimuth"
+        case canSetPark = "can_set_park"
+        case canSetShutter = "can_set_shutter"
+        case canSyncAzimuth = "can_sync_azimuth"
+        case connected
+        case driverCanFollow = "driver_can_follow"
+        case driverFollowing = "driver_following"
+        case followingType = "following_type"
+        case shutterState = "shutter_state"
+        case slewing
+    }
+}
+
+// MARK: DomeDeviceInfoData convenience initializers and mutators
+
+extension DomeDeviceInfoData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(DomeDeviceInfoData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        altitudeDegrees: Double?? = nil,
+        applicationFollowing: Bool? = nil,
+        atHome: Bool? = nil,
+        atPark: Bool? = nil,
+        azimuthDegrees: Double?? = nil,
+        canFindHome: Bool? = nil,
+        canPark: Bool? = nil,
+        canSetAzimuth: Bool? = nil,
+        canSetPark: Bool? = nil,
+        canSetShutter: Bool? = nil,
+        canSyncAzimuth: Bool? = nil,
+        connected: Bool? = nil,
+        driverCanFollow: Bool? = nil,
+        driverFollowing: Bool? = nil,
+        followingType: String?? = nil,
+        shutterState: ShutterState? = nil,
+        slewing: Bool? = nil
+    ) -> DomeDeviceInfoData {
+        return DomeDeviceInfoData(
+            altitudeDegrees: altitudeDegrees ?? self.altitudeDegrees,
+            applicationFollowing: applicationFollowing ?? self.applicationFollowing,
+            atHome: atHome ?? self.atHome,
+            atPark: atPark ?? self.atPark,
+            azimuthDegrees: azimuthDegrees ?? self.azimuthDegrees,
+            canFindHome: canFindHome ?? self.canFindHome,
+            canPark: canPark ?? self.canPark,
+            canSetAzimuth: canSetAzimuth ?? self.canSetAzimuth,
+            canSetPark: canSetPark ?? self.canSetPark,
+            canSetShutter: canSetShutter ?? self.canSetShutter,
+            canSyncAzimuth: canSyncAzimuth ?? self.canSyncAzimuth,
+            connected: connected ?? self.connected,
+            driverCanFollow: driverCanFollow ?? self.driverCanFollow,
+            driverFollowing: driverFollowing ?? self.driverFollowing,
+            followingType: followingType ?? self.followingType,
+            shutterState: shutterState ?? self.shutterState,
+            slewing: slewing ?? self.slewing
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+enum ShutterState: String, Codable {
+    case closed = "Closed"
+    case closing = "Closing"
+    case error = "Error"
+    case none = "None"
+    case opening = "Opening"
+    case shutterStateOpen = "Open"
 }
 
 /// Filter Wheel device state

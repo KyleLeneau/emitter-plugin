@@ -5,6 +5,7 @@
 //    using Bortle.NINA.Emitter.Models;
 //
 //    var deviceConnectionData = DeviceConnectionData.FromJson(jsonString);
+//    var domeDeviceInfoData = DomeDeviceInfoData.FromJson(jsonString);
 //    var filterWheelDeviceInfoData = FilterWheelDeviceInfoData.FromJson(jsonString);
 //    var flatPanelDeviceInfoData = FlatPanelDeviceInfoData.FromJson(jsonString);
 //    var safetyDeviceInfoData = SafetyDeviceInfoData.FromJson(jsonString);
@@ -70,6 +71,66 @@ namespace Bortle.NINA.Emitter.Models
         /// </summary>
         [JsonPropertyName("name")]
         public string Name { get; set; }
+    }
+
+    /// <summary>
+    /// Dome device state
+    /// </summary>
+    public partial class DomeDeviceInfoData
+    {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("altitude_degrees")]
+        public double? AltitudeDegrees { get; set; }
+
+        [JsonPropertyName("application_following")]
+        public bool ApplicationFollowing { get; set; }
+
+        [JsonPropertyName("at_home")]
+        public bool AtHome { get; set; }
+
+        [JsonPropertyName("at_park")]
+        public bool AtPark { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("azimuth_degrees")]
+        public double? AzimuthDegrees { get; set; }
+
+        [JsonPropertyName("can_find_home")]
+        public bool CanFindHome { get; set; }
+
+        [JsonPropertyName("can_park")]
+        public bool CanPark { get; set; }
+
+        [JsonPropertyName("can_set_azimuth")]
+        public bool CanSetAzimuth { get; set; }
+
+        [JsonPropertyName("can_set_park")]
+        public bool CanSetPark { get; set; }
+
+        [JsonPropertyName("can_set_shutter")]
+        public bool CanSetShutter { get; set; }
+
+        [JsonPropertyName("can_sync_azimuth")]
+        public bool CanSyncAzimuth { get; set; }
+
+        [JsonPropertyName("connected")]
+        public bool Connected { get; set; }
+
+        [JsonPropertyName("driver_can_follow")]
+        public bool DriverCanFollow { get; set; }
+
+        [JsonPropertyName("driver_following")]
+        public bool DriverFollowing { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("following_type")]
+        public string FollowingType { get; set; }
+
+        [JsonPropertyName("shutter_state")]
+        public ShutterState ShutterState { get; set; }
+
+        [JsonPropertyName("slewing")]
+        public bool Slewing { get; set; }
     }
 
     /// <summary>
@@ -257,9 +318,16 @@ namespace Bortle.NINA.Emitter.Models
 
     public enum DeviceType { Camera, Dome, FilterWheel, FlatPanel, Focuser, Guider, Mount, Rotator, SafetyMonitor, Switch, Weather };
 
+    public enum ShutterState { Closed, Closing, Error, None, Open, Opening };
+
     public partial class DeviceConnectionData
     {
         public static DeviceConnectionData FromJson(string json) => JsonSerializer.Deserialize<DeviceConnectionData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class DomeDeviceInfoData
+    {
+        public static DomeDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<DomeDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
     public partial class FilterWheelDeviceInfoData
@@ -290,6 +358,7 @@ namespace Bortle.NINA.Emitter.Models
     public static class Serialize
     {
         public static string ToJson(this DeviceConnectionData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this DomeDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this FilterWheelDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this FlatPanelDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this SafetyDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -304,6 +373,7 @@ namespace Bortle.NINA.Emitter.Models
             Converters =
             {
                 DeviceTypeConverter.Singleton,
+                ShutterStateConverter.Singleton,
                 new DateOnlyConverter(),
                 new TimeOnlyConverter(),
                 IsoDateTimeOffsetConverter.Singleton
@@ -388,6 +458,60 @@ namespace Bortle.NINA.Emitter.Models
         }
 
         public static readonly DeviceTypeConverter Singleton = new DeviceTypeConverter();
+    }
+
+    internal class ShutterStateConverter : JsonConverter<ShutterState>
+    {
+        public override bool CanConvert(Type t) => t == typeof(ShutterState);
+
+        public override ShutterState Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var value = reader.GetString();
+            switch (value)
+            {
+                case "Closed":
+                    return ShutterState.Closed;
+                case "Closing":
+                    return ShutterState.Closing;
+                case "Error":
+                    return ShutterState.Error;
+                case "None":
+                    return ShutterState.None;
+                case "Open":
+                    return ShutterState.Open;
+                case "Opening":
+                    return ShutterState.Opening;
+            }
+            throw new Exception("Cannot unmarshal type ShutterState");
+        }
+
+        public override void Write(Utf8JsonWriter writer, ShutterState value, JsonSerializerOptions options)
+        {
+            switch (value)
+            {
+                case ShutterState.Closed:
+                    JsonSerializer.Serialize(writer, "Closed", options);
+                    return;
+                case ShutterState.Closing:
+                    JsonSerializer.Serialize(writer, "Closing", options);
+                    return;
+                case ShutterState.Error:
+                    JsonSerializer.Serialize(writer, "Error", options);
+                    return;
+                case ShutterState.None:
+                    JsonSerializer.Serialize(writer, "None", options);
+                    return;
+                case ShutterState.Open:
+                    JsonSerializer.Serialize(writer, "Open", options);
+                    return;
+                case ShutterState.Opening:
+                    JsonSerializer.Serialize(writer, "Opening", options);
+                    return;
+            }
+            throw new Exception("Cannot marshal type ShutterState");
+        }
+
+        public static readonly ShutterStateConverter Singleton = new ShutterStateConverter();
     }
     
     public class DateOnlyConverter : JsonConverter<DateOnly>

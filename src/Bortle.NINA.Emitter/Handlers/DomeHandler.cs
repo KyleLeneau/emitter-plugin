@@ -4,11 +4,13 @@ using NINA.Equipment.Equipment.MyDome;
 using NINA.Equipment.Interfaces.Mediator;
 using System;
 using System.Threading.Tasks;
+using NINAShutterState = NINA.Equipment.Interfaces.ShutterState;
 
 namespace Bortle.NINA.Emitter.Handlers {
     public class DomeHandler : IDomeConsumer {
         private readonly IEventEmitter emitter;
         private readonly IDomeMediator mediator;
+        private DomeInfo lastInfo;
 
         public DomeHandler(IEventEmitter eventEmitter, IDomeMediator domeMediator) {
             emitter = eventEmitter;
@@ -25,7 +27,30 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         public void UpdateDeviceInfo(DomeInfo deviceInfo) {
-            // TODO: Implement event
+            // Skip duplicates from internal nina polling
+            if (deviceInfo.Equals(lastInfo)) return;
+
+            var data = new DomeDeviceInfoData {
+                Connected = deviceInfo.Connected,
+                ShutterState = ToShutterState(deviceInfo.ShutterStatus),
+                DriverCanFollow = deviceInfo.DriverCanFollow,
+                CanSetShutter = deviceInfo.CanSetShutter,
+                CanSetPark = deviceInfo.CanSetPark,
+                CanSetAzimuth = deviceInfo.CanSetAzimuth,
+                CanSyncAzimuth = deviceInfo.CanSyncAzimuth,
+                CanPark = deviceInfo.CanPark,
+                CanFindHome = deviceInfo.CanFindHome,
+                AtPark = deviceInfo.AtPark,
+                AtHome = deviceInfo.AtHome,
+                DriverFollowing = deviceInfo.DriverFollowing,
+                ApplicationFollowing = deviceInfo.ApplicationFollowing,
+                FollowingType = deviceInfo.FollowingType,
+                Slewing = deviceInfo.Slewing,
+                AzimuthDegrees = deviceInfo.Azimuth,
+                AltitudeDegrees = deviceInfo.Altitude,
+            };
+            emitter.Enqueue("dome", "device-info", data);
+            lastInfo = deviceInfo;
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {
@@ -88,6 +113,24 @@ namespace Bortle.NINA.Emitter.Handlers {
             mediator.Disconnected -= MediatorOnDisconnected;
             mediator.Connected -= MediatorOnConnected;
             mediator.RemoveConsumer(this);
+        }
+
+        private ShutterState ToShutterState(NINAShutterState state) {
+            switch (state) {
+                case NINAShutterState.ShutterNone:
+                    return ShutterState.None;
+                case NINAShutterState.ShutterOpen:
+                    return ShutterState.Open;
+                case NINAShutterState.ShutterClosed:
+                    return ShutterState.Closed;
+                case NINAShutterState.ShutterOpening:
+                    return ShutterState.Opening;
+                case NINAShutterState.ShutterClosing:
+                    return ShutterState.Closing;
+                case NINAShutterState.ShutterError:
+                default:
+                    return ShutterState.Error;
+            }
         }
     }
 }
