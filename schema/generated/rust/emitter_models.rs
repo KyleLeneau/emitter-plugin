@@ -412,7 +412,150 @@ pub struct RmsUnit {
 /// Periodic Mount event data
 #[derive(Serialize, Deserialize)]
 pub struct MountDeviceInfoData {
+    pub alignment_mode: Option<AlignmentMode>,
+
+    pub altitude: Option<f64>,
+
+    pub at_home: Option<bool>,
+
+    pub at_park: Option<bool>,
+
+    pub azimuth: Option<f64>,
+
+    pub can_find_home: Option<bool>,
+
+    pub can_move_primary_axis: Option<bool>,
+
+    pub can_move_secondary_axis: Option<bool>,
+
+    pub can_park: Option<bool>,
+
+    pub can_pulse_guide: Option<bool>,
+
+    pub can_set_declination_rate: Option<bool>,
+
+    pub can_set_park: Option<bool>,
+
+    pub can_set_pier_side: Option<bool>,
+
+    pub can_set_right_ascension_rate: Option<bool>,
+
+    pub can_set_tracking: Option<bool>,
+
+    pub can_slew: Option<bool>,
+
+    pub can_slew_alt_az: Option<bool>,
+
     pub connected: bool,
+
+    pub declination: Option<f64>,
+
+    pub equatorial_system: Option<Epoch>,
+
+    pub guide_rate_dec_arc_sec_per_sec: Option<f64>,
+
+    pub guide_rate_ra_arc_sec_per_sec: Option<f64>,
+
+    pub has_unknown_epoch: Option<bool>,
+
+    pub is_pulse_guiding: Option<bool>,
+
+    pub primary_axis_rates: Option<Vec<Vec<f64>>>,
+
+    pub right_ascension: Option<f64>,
+
+    pub secondary_axis_rates: Option<Vec<Vec<f64>>>,
+
+    pub side_of_pier: Option<PierSide>,
+
+    pub sidereal_time: Option<f64>,
+
+    pub site_elevation: Option<f64>,
+
+    pub site_latitude: Option<f64>,
+
+    pub site_longitude: Option<f64>,
+
+    pub slewing: Option<bool>,
+
+    pub target_coordinates: Option<Coordinates>,
+
+    pub target_side_of_pier: Option<PierSide>,
+
+    pub time_to_meridian_flip: Option<f64>,
+
+    pub tracking_enabled: Option<bool>,
+
+    pub tracking_modes: Option<Vec<TrackingMode>>,
+
+    pub tracking_rate: Option<TrackingRate>,
+
+    pub utc_date: Option<String>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum AlignmentMode {
+    #[serde(rename = "AltAz")]
+    AltAz,
+
+    #[serde(rename = "GermanPolar")]
+    GermanPolar,
+
+    Polar,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum Epoch {
+    B1950,
+
+    J2000,
+
+    J2050,
+
+    #[serde(rename = "JNOW")]
+    Jnow,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum PierSide {
+    East,
+
+    Unknown,
+
+    West,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Coordinates {
+    pub dec_degrees: Option<f64>,
+
+    pub epoch: Option<Epoch>,
+
+    pub ra_degrees: Option<f64>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum TrackingMode {
+    Custom,
+
+    King,
+
+    Lunar,
+
+    Sidereal,
+
+    Solar,
+
+    Stopped,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct TrackingRate {
+    pub custom_dec_rate: Option<f64>,
+
+    pub custom_ra_rate: Option<f64>,
+
+    pub tracking_mode: Option<TrackingMode>,
 }
 
 /// Periodic Rotator event data

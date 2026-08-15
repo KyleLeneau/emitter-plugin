@@ -96,3 +96,34 @@ definitions:
     required:
       - "pixel"
       - "arc_seconds"
+  TrackingMode:
+    type: string
+    enum:
+      - "Sidereal"
+      - "Lunar"
+      - "Solar"
+      - "King"
+      - "Custom"
+      - "Stopped"
+  Epoch:
+    type: string
+    enum:
+      - "JNOW"
+      - "B1950"
+      - "J2000"
+      - "J2050"
+  PierSide:
+    type: string
+    enum:
+      - "East"
+      - "West"
+      - "Unknown"
+  Coordinates:
+    type: object
+    properties:
+      ra_degrees:
+        type: number
+      dec_degrees:
+        type: number
+      epoch:
+        $ref: "common.yaml#/definitions/Epoch"

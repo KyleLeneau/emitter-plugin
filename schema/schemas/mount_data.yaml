@@ -5,5 +5,107 @@ description: Periodic Mount event data
 properties:
   connected:
     type: boolean
+  sidereal_time:
+    type: number
+  right_ascension:
+    type: number
+  declination:
+    type: number
+  site_latitude:
+    type: number
+  site_longitude:
+    type: number
+  site_elevation:
+    type: number
+  time_to_meridian_flip:
+    type: number
+  side_of_pier:
+    $ref: "common.yaml#/definitions/PierSide"
+  altitude:
+    type: number
+  azimuth:
+    type: number
+  at_park:
+    type: boolean
+  tracking_rate:
+    type: object
+    properties:
+      tracking_mode:
+        $ref: "common.yaml#/definitions/TrackingMode"
+      custom_ra_rate:
+        type: number
+      custom_dec_rate:
+        type: number
+  tracking_enabled:
+    type: boolean
+  tracking_modes:
+    type: array
+    items:
+      $ref: "common.yaml#/definitions/TrackingMode"
+  at_home:
+    type: boolean
+  can_find_home:
+    type: boolean
+  can_park:
+    type: boolean
+  can_set_park:
+    type: boolean
+  can_set_tracking:
+    type: boolean
+  can_set_declination_rate:
+    type: boolean
+  can_set_right_ascension_rate:
+    type: boolean
+  equatorial_system:
+    $ref: "common.yaml#/definitions/Epoch"
+  has_unknown_epoch:
+    type: boolean
+  target_coordinates:
+    $ref: "common.yaml#/definitions/Coordinates"
+  target_side_of_pier:
+    $ref: "common.yaml#/definitions/PierSide"
+  slewing:
+    type: boolean
+  guide_rate_ra_arc_sec_per_sec:
+    type: number
+  guide_rate_dec_arc_sec_per_sec:
+    type: number
+  can_move_primary_axis:
+    type: boolean
+  can_move_secondary_axis:
+    type: boolean
+  primary_axis_rates:
+    type: array
+    items:
+      type: array
+      items:
+        - type: number
+        - type: number
+  secondary_axis_rates:
+    type: array
+    items:
+      type: array
+      items:
+        - type: number
+        - type: number
+  alignment_mode:
+    type: string
+    enum:
+      - AltAz
+      - Polar
+      - GermanPolar
+  can_pulse_guide:
+    type: boolean
+  is_pulse_guiding:
+    type: boolean
+  can_set_pier_side:
+    type: boolean
+  can_slew:
+    type: boolean
+  can_slew_alt_az:
+    type: boolean
+  utc_date:
+    type: string
+    format: "date-time"
 required:
   - connected

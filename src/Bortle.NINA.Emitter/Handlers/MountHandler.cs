@@ -3,7 +3,10 @@ using Bortle.NINA.Emitter.Models;
 using NINA.Equipment.Equipment.MyTelescope;
 using NINA.Equipment.Interfaces.Mediator;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 
 namespace Bortle.NINA.Emitter.Handlers {
     public class MountHandler : ITelescopeConsumer {
@@ -31,7 +34,44 @@ namespace Bortle.NINA.Emitter.Handlers {
 
             var data = new MountDeviceInfoData {
                 Connected = deviceInfo.Connected,
-                
+                SiderealTime = deviceInfo.SiderealTime,
+                RightAscension = deviceInfo.RightAscension,
+                Declination = deviceInfo.Declination,
+                SiteLatitude = deviceInfo.SiteLatitude,
+                SiteLongitude = deviceInfo.SiteLongitude,
+                SiteElevation = deviceInfo.SiteElevation,
+                TimeToMeridianFlip = deviceInfo.TimeToMeridianFlip,
+                SideOfPier = ToPierSide(deviceInfo.SideOfPier),
+                Altitude = deviceInfo.Altitude,
+                Azimuth = deviceInfo.Azimuth,
+                AtPark = deviceInfo.AtPark,
+                TrackingRate = ToTrackingRate(deviceInfo.TrackingRate),
+                TrackingEnabled = deviceInfo.TrackingEnabled,
+                AtHome = deviceInfo.AtHome,
+                CanFindHome = deviceInfo.CanFindHome,
+                CanPark = deviceInfo.CanPark,
+                CanSetPark = deviceInfo.CanSetPark,
+                CanSetTracking = deviceInfo.CanSetTrackingEnabled,
+                CanSetDeclinationRate = deviceInfo.CanSetDeclinationRate,
+                CanSetRightAscensionRate = deviceInfo.CanSetRightAscensionRate,
+                EquatorialSystem = ToEpoch(deviceInfo.EquatorialSystem),
+                HasUnknownEpoch = deviceInfo.HasUnknownEpoch,
+                TargetCoordinates = ToCoordinates(deviceInfo.TargetCoordinates),
+                TargetSideOfPier = ToPierSide(deviceInfo.TargetSideOfPier),
+                Slewing = deviceInfo.Slewing,
+                GuideRateRaArcSecPerSec = deviceInfo.GuideRateRightAscensionArcsecPerSec,
+                GuideRateDecArcSecPerSec = deviceInfo.GuideRateDeclinationArcsecPerSec,
+                CanMovePrimaryAxis = deviceInfo.CanMovePrimaryAxis,
+                CanMoveSecondaryAxis = deviceInfo.CanMoveSecondaryAxis,
+                PrimaryAxisRates = deviceInfo.PrimaryAxisRates.Select(v => (List<double>)[v.Item1, v.Item2]).ToList(),
+                SecondaryAxisRates = deviceInfo.SecondaryAxisRates.Select(v => (List<double>)[v.Item1, v.Item2]).ToList(),
+                AlignmentMode = ToAlignmentMode(deviceInfo.AlignmentMode),
+                CanPulseGuide = deviceInfo.CanPulseGuide,
+                IsPulseGuiding = deviceInfo.IsPulseGuiding,
+                CanSetPierSide = deviceInfo.CanSetPierSide,
+                CanSlew = deviceInfo.CanSlew,
+                CanSlewAltAz = deviceInfo.CanSlewAltAz,
+                UtcDate = deviceInfo.UTCDate
             };
             emitter.Enqueue("mount", "device-info", data);
             lastInfo = deviceInfo;
@@ -98,6 +138,62 @@ namespace Bortle.NINA.Emitter.Handlers {
             mediator.Disconnected -= MediatorOnDisconnected;
             mediator.Connected -= MediatorOnConnected;
             mediator.RemoveConsumer(this);
+        }
+
+        private PierSide? ToPierSide(global::NINA.Core.Enum.PierSide? side) {
+            return side switch {
+                global::NINA.Core.Enum.PierSide.pierEast => PierSide.East,
+                global::NINA.Core.Enum.PierSide.pierWest => PierSide.West,
+                global::NINA.Core.Enum.PierSide.pierUnknown => PierSide.Unknown,
+                _ => PierSide.Unknown
+            };
+        }
+
+        private TrackingRate ToTrackingRate(global::NINA.Equipment.Interfaces.TrackingRate rate) {
+            return new TrackingRate() {
+                TrackingMode = ToTrackingMode(rate.TrackingMode),
+                CustomRaRate = rate.CustomRightAscensionRate,
+                CustomDecRate = rate.CustomDeclinationRate
+            };
+        }
+
+        private TrackingMode? ToTrackingMode(global::NINA.Equipment.Interfaces.TrackingMode mode) {
+            return mode switch {
+                global::NINA.Equipment.Interfaces.TrackingMode.Sidereal => TrackingMode.Sidereal,
+                global::NINA.Equipment.Interfaces.TrackingMode.Lunar => TrackingMode.Lunar,
+                global::NINA.Equipment.Interfaces.TrackingMode.Solar => TrackingMode.Solar,
+                global::NINA.Equipment.Interfaces.TrackingMode.King => TrackingMode.King,
+                global::NINA.Equipment.Interfaces.TrackingMode.Custom => TrackingMode.Custom,
+                global::NINA.Equipment.Interfaces.TrackingMode.Stopped => TrackingMode.Stopped,
+                _ => null
+            };
+        }
+
+        private Epoch? ToEpoch(global::NINA.Astrometry.Epoch epoch) {
+            return epoch switch {
+                global::NINA.Astrometry.Epoch.JNOW => Epoch.Jnow,
+                global::NINA.Astrometry.Epoch.B1950 => Epoch.B1950,
+                global::NINA.Astrometry.Epoch.J2000 => Epoch.J2000,
+                global::NINA.Astrometry.Epoch.J2050 => Epoch.J2050,
+                _ => null
+            };
+        }
+
+        private Coordinates ToCoordinates(global::NINA.Astrometry.Coordinates coordinates) {
+            return new Coordinates {
+                RaDegrees = coordinates.RADegrees,
+                DecDegrees = coordinates.Dec,
+                Epoch = ToEpoch(coordinates.Epoch),
+            };
+        }
+
+        private AlignmentMode? ToAlignmentMode(global::NINA.Core.Enum.AlignmentMode mode) {
+            return mode switch {
+                global::NINA.Core.Enum.AlignmentMode.AltAz => AlignmentMode.AltAz,
+                global::NINA.Core.Enum.AlignmentMode.Polar => AlignmentMode.Polar,
+                global::NINA.Core.Enum.AlignmentMode.GermanPolar => AlignmentMode.GermanPolar,
+                _ => null
+            };
         }
     }
 }

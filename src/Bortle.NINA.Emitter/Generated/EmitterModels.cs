@@ -547,8 +547,194 @@ namespace Bortle.NINA.Emitter.Models
     /// </summary>
     public partial class MountDeviceInfoData
     {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("alignment_mode")]
+        public AlignmentMode? AlignmentMode { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("altitude")]
+        public double? Altitude { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("at_home")]
+        public bool? AtHome { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("at_park")]
+        public bool? AtPark { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("azimuth")]
+        public double? Azimuth { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("can_find_home")]
+        public bool? CanFindHome { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("can_move_primary_axis")]
+        public bool? CanMovePrimaryAxis { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("can_move_secondary_axis")]
+        public bool? CanMoveSecondaryAxis { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("can_park")]
+        public bool? CanPark { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("can_pulse_guide")]
+        public bool? CanPulseGuide { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("can_set_declination_rate")]
+        public bool? CanSetDeclinationRate { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("can_set_park")]
+        public bool? CanSetPark { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("can_set_pier_side")]
+        public bool? CanSetPierSide { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("can_set_right_ascension_rate")]
+        public bool? CanSetRightAscensionRate { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("can_set_tracking")]
+        public bool? CanSetTracking { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("can_slew")]
+        public bool? CanSlew { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("can_slew_alt_az")]
+        public bool? CanSlewAltAz { get; set; }
+
         [JsonPropertyName("connected")]
         public bool Connected { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("declination")]
+        public double? Declination { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("equatorial_system")]
+        public Epoch? EquatorialSystem { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("guide_rate_dec_arc_sec_per_sec")]
+        public double? GuideRateDecArcSecPerSec { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("guide_rate_ra_arc_sec_per_sec")]
+        public double? GuideRateRaArcSecPerSec { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("has_unknown_epoch")]
+        public bool? HasUnknownEpoch { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("is_pulse_guiding")]
+        public bool? IsPulseGuiding { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("primary_axis_rates")]
+        public List<List<double>> PrimaryAxisRates { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("right_ascension")]
+        public double? RightAscension { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("secondary_axis_rates")]
+        public List<List<double>> SecondaryAxisRates { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("side_of_pier")]
+        public PierSide? SideOfPier { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("sidereal_time")]
+        public double? SiderealTime { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("site_elevation")]
+        public double? SiteElevation { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("site_latitude")]
+        public double? SiteLatitude { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("site_longitude")]
+        public double? SiteLongitude { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("slewing")]
+        public bool? Slewing { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("target_coordinates")]
+        public Coordinates TargetCoordinates { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("target_side_of_pier")]
+        public PierSide? TargetSideOfPier { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("time_to_meridian_flip")]
+        public double? TimeToMeridianFlip { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("tracking_enabled")]
+        public bool? TrackingEnabled { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("tracking_modes")]
+        public List<TrackingMode> TrackingModes { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("tracking_rate")]
+        public TrackingRate TrackingRate { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("utc_date")]
+        public DateTimeOffset? UtcDate { get; set; }
+    }
+
+    public partial class Coordinates
+    {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("dec_degrees")]
+        public double? DecDegrees { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("epoch")]
+        public Epoch? Epoch { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("ra_degrees")]
+        public double? RaDegrees { get; set; }
+    }
+
+    public partial class TrackingRate
+    {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("custom_dec_rate")]
+        public double? CustomDecRate { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("custom_ra_rate")]
+        public double? CustomRaRate { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("tracking_mode")]
+        public TrackingMode? TrackingMode { get; set; }
     }
 
     /// <summary>
@@ -679,6 +865,14 @@ namespace Bortle.NINA.Emitter.Models
 
     public enum ShutterState { Closed, Closing, Error, None, Open, Opening };
 
+    public enum AlignmentMode { AltAz, GermanPolar, Polar };
+
+    public enum Epoch { B1950, J2000, J2050, Jnow };
+
+    public enum PierSide { East, Unknown, West };
+
+    public enum TrackingMode { Custom, King, Lunar, Sidereal, Solar, Stopped };
+
     public partial class DeviceConnectionData
     {
         public static DeviceConnectionData FromJson(string json) => JsonSerializer.Deserialize<DeviceConnectionData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -771,6 +965,10 @@ namespace Bortle.NINA.Emitter.Models
                 CameraStateConverter.Singleton,
                 SensorTypeConverter.Singleton,
                 ShutterStateConverter.Singleton,
+                AlignmentModeConverter.Singleton,
+                EpochConverter.Singleton,
+                PierSideConverter.Singleton,
+                TrackingModeConverter.Singleton,
                 new DateOnlyConverter(),
                 new TimeOnlyConverter(),
                 IsoDateTimeOffsetConverter.Singleton
@@ -1062,6 +1260,182 @@ namespace Bortle.NINA.Emitter.Models
         }
 
         public static readonly ShutterStateConverter Singleton = new ShutterStateConverter();
+    }
+
+    internal class AlignmentModeConverter : JsonConverter<AlignmentMode>
+    {
+        public override bool CanConvert(Type t) => t == typeof(AlignmentMode);
+
+        public override AlignmentMode Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var value = reader.GetString();
+            switch (value)
+            {
+                case "AltAz":
+                    return AlignmentMode.AltAz;
+                case "GermanPolar":
+                    return AlignmentMode.GermanPolar;
+                case "Polar":
+                    return AlignmentMode.Polar;
+            }
+            throw new Exception("Cannot unmarshal type AlignmentMode");
+        }
+
+        public override void Write(Utf8JsonWriter writer, AlignmentMode value, JsonSerializerOptions options)
+        {
+            switch (value)
+            {
+                case AlignmentMode.AltAz:
+                    JsonSerializer.Serialize(writer, "AltAz", options);
+                    return;
+                case AlignmentMode.GermanPolar:
+                    JsonSerializer.Serialize(writer, "GermanPolar", options);
+                    return;
+                case AlignmentMode.Polar:
+                    JsonSerializer.Serialize(writer, "Polar", options);
+                    return;
+            }
+            throw new Exception("Cannot marshal type AlignmentMode");
+        }
+
+        public static readonly AlignmentModeConverter Singleton = new AlignmentModeConverter();
+    }
+
+    internal class EpochConverter : JsonConverter<Epoch>
+    {
+        public override bool CanConvert(Type t) => t == typeof(Epoch);
+
+        public override Epoch Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var value = reader.GetString();
+            switch (value)
+            {
+                case "B1950":
+                    return Epoch.B1950;
+                case "J2000":
+                    return Epoch.J2000;
+                case "J2050":
+                    return Epoch.J2050;
+                case "JNOW":
+                    return Epoch.Jnow;
+            }
+            throw new Exception("Cannot unmarshal type Epoch");
+        }
+
+        public override void Write(Utf8JsonWriter writer, Epoch value, JsonSerializerOptions options)
+        {
+            switch (value)
+            {
+                case Epoch.B1950:
+                    JsonSerializer.Serialize(writer, "B1950", options);
+                    return;
+                case Epoch.J2000:
+                    JsonSerializer.Serialize(writer, "J2000", options);
+                    return;
+                case Epoch.J2050:
+                    JsonSerializer.Serialize(writer, "J2050", options);
+                    return;
+                case Epoch.Jnow:
+                    JsonSerializer.Serialize(writer, "JNOW", options);
+                    return;
+            }
+            throw new Exception("Cannot marshal type Epoch");
+        }
+
+        public static readonly EpochConverter Singleton = new EpochConverter();
+    }
+
+    internal class PierSideConverter : JsonConverter<PierSide>
+    {
+        public override bool CanConvert(Type t) => t == typeof(PierSide);
+
+        public override PierSide Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var value = reader.GetString();
+            switch (value)
+            {
+                case "East":
+                    return PierSide.East;
+                case "Unknown":
+                    return PierSide.Unknown;
+                case "West":
+                    return PierSide.West;
+            }
+            throw new Exception("Cannot unmarshal type PierSide");
+        }
+
+        public override void Write(Utf8JsonWriter writer, PierSide value, JsonSerializerOptions options)
+        {
+            switch (value)
+            {
+                case PierSide.East:
+                    JsonSerializer.Serialize(writer, "East", options);
+                    return;
+                case PierSide.Unknown:
+                    JsonSerializer.Serialize(writer, "Unknown", options);
+                    return;
+                case PierSide.West:
+                    JsonSerializer.Serialize(writer, "West", options);
+                    return;
+            }
+            throw new Exception("Cannot marshal type PierSide");
+        }
+
+        public static readonly PierSideConverter Singleton = new PierSideConverter();
+    }
+
+    internal class TrackingModeConverter : JsonConverter<TrackingMode>
+    {
+        public override bool CanConvert(Type t) => t == typeof(TrackingMode);
+
+        public override TrackingMode Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var value = reader.GetString();
+            switch (value)
+            {
+                case "Custom":
+                    return TrackingMode.Custom;
+                case "King":
+                    return TrackingMode.King;
+                case "Lunar":
+                    return TrackingMode.Lunar;
+                case "Sidereal":
+                    return TrackingMode.Sidereal;
+                case "Solar":
+                    return TrackingMode.Solar;
+                case "Stopped":
+                    return TrackingMode.Stopped;
+            }
+            throw new Exception("Cannot unmarshal type TrackingMode");
+        }
+
+        public override void Write(Utf8JsonWriter writer, TrackingMode value, JsonSerializerOptions options)
+        {
+            switch (value)
+            {
+                case TrackingMode.Custom:
+                    JsonSerializer.Serialize(writer, "Custom", options);
+                    return;
+                case TrackingMode.King:
+                    JsonSerializer.Serialize(writer, "King", options);
+                    return;
+                case TrackingMode.Lunar:
+                    JsonSerializer.Serialize(writer, "Lunar", options);
+                    return;
+                case TrackingMode.Sidereal:
+                    JsonSerializer.Serialize(writer, "Sidereal", options);
+                    return;
+                case TrackingMode.Solar:
+                    JsonSerializer.Serialize(writer, "Solar", options);
+                    return;
+                case TrackingMode.Stopped:
+                    JsonSerializer.Serialize(writer, "Stopped", options);
+                    return;
+            }
+            throw new Exception("Cannot marshal type TrackingMode");
+        }
+
+        public static readonly TrackingModeConverter Singleton = new TrackingModeConverter();
     }
     
     public class DateOnlyConverter : JsonConverter<DateOnly>

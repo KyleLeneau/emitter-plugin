@@ -282,7 +282,88 @@ export interface RMSUnit {
  * Periodic Mount event data
  */
 export interface MountDeviceInfoData {
-    connected: boolean;
+    alignment_mode?:                 AlignmentMode;
+    altitude?:                       number;
+    at_home?:                        boolean;
+    at_park?:                        boolean;
+    azimuth?:                        number;
+    can_find_home?:                  boolean;
+    can_move_primary_axis?:          boolean;
+    can_move_secondary_axis?:        boolean;
+    can_park?:                       boolean;
+    can_pulse_guide?:                boolean;
+    can_set_declination_rate?:       boolean;
+    can_set_park?:                   boolean;
+    can_set_pier_side?:              boolean;
+    can_set_right_ascension_rate?:   boolean;
+    can_set_tracking?:               boolean;
+    can_slew?:                       boolean;
+    can_slew_alt_az?:                boolean;
+    connected:                       boolean;
+    declination?:                    number;
+    equatorial_system?:              Epoch;
+    guide_rate_dec_arc_sec_per_sec?: number;
+    guide_rate_ra_arc_sec_per_sec?:  number;
+    has_unknown_epoch?:              boolean;
+    is_pulse_guiding?:               boolean;
+    primary_axis_rates?:             Array<number[]>;
+    right_ascension?:                number;
+    secondary_axis_rates?:           Array<number[]>;
+    side_of_pier?:                   PierSide;
+    sidereal_time?:                  number;
+    site_elevation?:                 number;
+    site_latitude?:                  number;
+    site_longitude?:                 number;
+    slewing?:                        boolean;
+    target_coordinates?:             Coordinates;
+    target_side_of_pier?:            PierSide;
+    time_to_meridian_flip?:          number;
+    tracking_enabled?:               boolean;
+    tracking_modes?:                 TrackingMode[];
+    tracking_rate?:                  TrackingRate;
+    utc_date?:                       Date;
+    [property: string]: any;
+}
+
+export enum AlignmentMode {
+    AltAz = "AltAz",
+    GermanPolar = "GermanPolar",
+    Polar = "Polar",
+}
+
+export enum Epoch {
+    B1950 = "B1950",
+    J2000 = "J2000",
+    J2050 = "J2050",
+    Jnow = "JNOW",
+}
+
+export enum PierSide {
+    East = "East",
+    Unknown = "Unknown",
+    West = "West",
+}
+
+export interface Coordinates {
+    dec_degrees?: number;
+    epoch?:       Epoch;
+    ra_degrees?:  number;
+    [property: string]: any;
+}
+
+export enum TrackingMode {
+    Custom = "Custom",
+    King = "King",
+    Lunar = "Lunar",
+    Sidereal = "Sidereal",
+    Solar = "Solar",
+    Stopped = "Stopped",
+}
+
+export interface TrackingRate {
+    custom_dec_rate?: number;
+    custom_ra_rate?:  number;
+    tracking_mode?:   TrackingMode;
     [property: string]: any;
 }
 
@@ -782,7 +863,56 @@ const typeMap: any = {
         { json: "pixel", js: "pixel", typ: 3.14 },
     ], "any"),
     "MountDeviceInfoData": o([
+        { json: "alignment_mode", js: "alignment_mode", typ: u(undefined, r("AlignmentMode")) },
+        { json: "altitude", js: "altitude", typ: u(undefined, 3.14) },
+        { json: "at_home", js: "at_home", typ: u(undefined, true) },
+        { json: "at_park", js: "at_park", typ: u(undefined, true) },
+        { json: "azimuth", js: "azimuth", typ: u(undefined, 3.14) },
+        { json: "can_find_home", js: "can_find_home", typ: u(undefined, true) },
+        { json: "can_move_primary_axis", js: "can_move_primary_axis", typ: u(undefined, true) },
+        { json: "can_move_secondary_axis", js: "can_move_secondary_axis", typ: u(undefined, true) },
+        { json: "can_park", js: "can_park", typ: u(undefined, true) },
+        { json: "can_pulse_guide", js: "can_pulse_guide", typ: u(undefined, true) },
+        { json: "can_set_declination_rate", js: "can_set_declination_rate", typ: u(undefined, true) },
+        { json: "can_set_park", js: "can_set_park", typ: u(undefined, true) },
+        { json: "can_set_pier_side", js: "can_set_pier_side", typ: u(undefined, true) },
+        { json: "can_set_right_ascension_rate", js: "can_set_right_ascension_rate", typ: u(undefined, true) },
+        { json: "can_set_tracking", js: "can_set_tracking", typ: u(undefined, true) },
+        { json: "can_slew", js: "can_slew", typ: u(undefined, true) },
+        { json: "can_slew_alt_az", js: "can_slew_alt_az", typ: u(undefined, true) },
         { json: "connected", js: "connected", typ: true },
+        { json: "declination", js: "declination", typ: u(undefined, 3.14) },
+        { json: "equatorial_system", js: "equatorial_system", typ: u(undefined, r("Epoch")) },
+        { json: "guide_rate_dec_arc_sec_per_sec", js: "guide_rate_dec_arc_sec_per_sec", typ: u(undefined, 3.14) },
+        { json: "guide_rate_ra_arc_sec_per_sec", js: "guide_rate_ra_arc_sec_per_sec", typ: u(undefined, 3.14) },
+        { json: "has_unknown_epoch", js: "has_unknown_epoch", typ: u(undefined, true) },
+        { json: "is_pulse_guiding", js: "is_pulse_guiding", typ: u(undefined, true) },
+        { json: "primary_axis_rates", js: "primary_axis_rates", typ: u(undefined, a(a(3.14))) },
+        { json: "right_ascension", js: "right_ascension", typ: u(undefined, 3.14) },
+        { json: "secondary_axis_rates", js: "secondary_axis_rates", typ: u(undefined, a(a(3.14))) },
+        { json: "side_of_pier", js: "side_of_pier", typ: u(undefined, r("PierSide")) },
+        { json: "sidereal_time", js: "sidereal_time", typ: u(undefined, 3.14) },
+        { json: "site_elevation", js: "site_elevation", typ: u(undefined, 3.14) },
+        { json: "site_latitude", js: "site_latitude", typ: u(undefined, 3.14) },
+        { json: "site_longitude", js: "site_longitude", typ: u(undefined, 3.14) },
+        { json: "slewing", js: "slewing", typ: u(undefined, true) },
+        { json: "target_coordinates", js: "target_coordinates", typ: u(undefined, r("Coordinates")) },
+        { json: "target_side_of_pier", js: "target_side_of_pier", typ: u(undefined, r("PierSide")) },
+        { json: "time_to_meridian_flip", js: "time_to_meridian_flip", typ: u(undefined, 3.14) },
+        { json: "tracking_enabled", js: "tracking_enabled", typ: u(undefined, true) },
+        { json: "tracking_modes", js: "tracking_modes", typ: u(undefined, a(r("TrackingMode"))) },
+        { json: "tracking_rate", js: "tracking_rate", typ: u(undefined, r("TrackingRate")) },
+        { json: "utc_date", js: "utc_date", typ: u(undefined, Date) },
+    ], "any"),
+    "Coordinates": o([
+        { json: "dec_degrees", js: "dec_degrees", typ: u(undefined, 3.14) },
+        { json: "epoch", js: "epoch", typ: u(undefined, r("Epoch")) },
+        { json: "ra_degrees", js: "ra_degrees", typ: u(undefined, 3.14) },
+    ], "any"),
+    "TrackingRate": o([
+        { json: "custom_dec_rate", js: "custom_dec_rate", typ: u(undefined, 3.14) },
+        { json: "custom_ra_rate", js: "custom_ra_rate", typ: u(undefined, 3.14) },
+        { json: "tracking_mode", js: "tracking_mode", typ: u(undefined, r("TrackingMode")) },
     ], "any"),
     "RotatorDeviceInfoData": o([
         { json: "connected", js: "connected", typ: true },
@@ -857,5 +987,29 @@ const typeMap: any = {
         "None",
         "Open",
         "Opening",
+    ],
+    "AlignmentMode": [
+        "AltAz",
+        "GermanPolar",
+        "Polar",
+    ],
+    "Epoch": [
+        "B1950",
+        "J2000",
+        "J2050",
+        "JNOW",
+    ],
+    "PierSide": [
+        "East",
+        "Unknown",
+        "West",
+    ],
+    "TrackingMode": [
+        "Custom",
+        "King",
+        "Lunar",
+        "Sidereal",
+        "Solar",
+        "Stopped",
     ],
 };

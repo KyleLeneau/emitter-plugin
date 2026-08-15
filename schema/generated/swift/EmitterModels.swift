@@ -958,7 +958,73 @@ extension RMSUnit {
 /// Periodic Mount event data
 // MARK: - MountDeviceInfoData
 struct MountDeviceInfoData: Codable {
+    let alignmentMode: AlignmentMode?
+    let altitude: Double?
+    let atHome, atPark: Bool?
+    let azimuth: Double?
+    let canFindHome, canMovePrimaryAxis, canMoveSecondaryAxis, canPark: Bool?
+    let canPulseGuide, canSetDeclinationRate, canSetPark, canSetPierSide: Bool?
+    let canSetRightAscensionRate, canSetTracking, canSlew, canSlewAltAz: Bool?
     let connected: Bool
+    let declination: Double?
+    let equatorialSystem: Epoch?
+    let guideRateDECArcSECPerSEC, guideRateRaArcSECPerSEC: Double?
+    let hasUnknownEpoch, isPulseGuiding: Bool?
+    let primaryAxisRates: [[Double]]?
+    let rightAscension: Double?
+    let secondaryAxisRates: [[Double]]?
+    let sideOfPier: PierSide?
+    let siderealTime, siteElevation, siteLatitude, siteLongitude: Double?
+    let slewing: Bool?
+    let targetCoordinates: Coordinates?
+    let targetSideOfPier: PierSide?
+    let timeToMeridianFlip: Double?
+    let trackingEnabled: Bool?
+    let trackingModes: [TrackingMode]?
+    let trackingRate: TrackingRate?
+    let utcDate: Date?
+
+    enum CodingKeys: String, CodingKey {
+        case alignmentMode = "alignment_mode"
+        case altitude
+        case atHome = "at_home"
+        case atPark = "at_park"
+        case azimuth
+        case canFindHome = "can_find_home"
+        case canMovePrimaryAxis = "can_move_primary_axis"
+        case canMoveSecondaryAxis = "can_move_secondary_axis"
+        case canPark = "can_park"
+        case canPulseGuide = "can_pulse_guide"
+        case canSetDeclinationRate = "can_set_declination_rate"
+        case canSetPark = "can_set_park"
+        case canSetPierSide = "can_set_pier_side"
+        case canSetRightAscensionRate = "can_set_right_ascension_rate"
+        case canSetTracking = "can_set_tracking"
+        case canSlew = "can_slew"
+        case canSlewAltAz = "can_slew_alt_az"
+        case connected, declination
+        case equatorialSystem = "equatorial_system"
+        case guideRateDECArcSECPerSEC = "guide_rate_dec_arc_sec_per_sec"
+        case guideRateRaArcSECPerSEC = "guide_rate_ra_arc_sec_per_sec"
+        case hasUnknownEpoch = "has_unknown_epoch"
+        case isPulseGuiding = "is_pulse_guiding"
+        case primaryAxisRates = "primary_axis_rates"
+        case rightAscension = "right_ascension"
+        case secondaryAxisRates = "secondary_axis_rates"
+        case sideOfPier = "side_of_pier"
+        case siderealTime = "sidereal_time"
+        case siteElevation = "site_elevation"
+        case siteLatitude = "site_latitude"
+        case siteLongitude = "site_longitude"
+        case slewing
+        case targetCoordinates = "target_coordinates"
+        case targetSideOfPier = "target_side_of_pier"
+        case timeToMeridianFlip = "time_to_meridian_flip"
+        case trackingEnabled = "tracking_enabled"
+        case trackingModes = "tracking_modes"
+        case trackingRate = "tracking_rate"
+        case utcDate = "utc_date"
+    }
 }
 
 // MARK: MountDeviceInfoData convenience initializers and mutators
@@ -980,10 +1046,219 @@ extension MountDeviceInfoData {
     }
 
     func with(
-        connected: Bool? = nil
+        alignmentMode: AlignmentMode?? = nil,
+        altitude: Double?? = nil,
+        atHome: Bool?? = nil,
+        atPark: Bool?? = nil,
+        azimuth: Double?? = nil,
+        canFindHome: Bool?? = nil,
+        canMovePrimaryAxis: Bool?? = nil,
+        canMoveSecondaryAxis: Bool?? = nil,
+        canPark: Bool?? = nil,
+        canPulseGuide: Bool?? = nil,
+        canSetDeclinationRate: Bool?? = nil,
+        canSetPark: Bool?? = nil,
+        canSetPierSide: Bool?? = nil,
+        canSetRightAscensionRate: Bool?? = nil,
+        canSetTracking: Bool?? = nil,
+        canSlew: Bool?? = nil,
+        canSlewAltAz: Bool?? = nil,
+        connected: Bool? = nil,
+        declination: Double?? = nil,
+        equatorialSystem: Epoch?? = nil,
+        guideRateDECArcSECPerSEC: Double?? = nil,
+        guideRateRaArcSECPerSEC: Double?? = nil,
+        hasUnknownEpoch: Bool?? = nil,
+        isPulseGuiding: Bool?? = nil,
+        primaryAxisRates: [[Double]]?? = nil,
+        rightAscension: Double?? = nil,
+        secondaryAxisRates: [[Double]]?? = nil,
+        sideOfPier: PierSide?? = nil,
+        siderealTime: Double?? = nil,
+        siteElevation: Double?? = nil,
+        siteLatitude: Double?? = nil,
+        siteLongitude: Double?? = nil,
+        slewing: Bool?? = nil,
+        targetCoordinates: Coordinates?? = nil,
+        targetSideOfPier: PierSide?? = nil,
+        timeToMeridianFlip: Double?? = nil,
+        trackingEnabled: Bool?? = nil,
+        trackingModes: [TrackingMode]?? = nil,
+        trackingRate: TrackingRate?? = nil,
+        utcDate: Date?? = nil
     ) -> MountDeviceInfoData {
         return MountDeviceInfoData(
-            connected: connected ?? self.connected
+            alignmentMode: alignmentMode ?? self.alignmentMode,
+            altitude: altitude ?? self.altitude,
+            atHome: atHome ?? self.atHome,
+            atPark: atPark ?? self.atPark,
+            azimuth: azimuth ?? self.azimuth,
+            canFindHome: canFindHome ?? self.canFindHome,
+            canMovePrimaryAxis: canMovePrimaryAxis ?? self.canMovePrimaryAxis,
+            canMoveSecondaryAxis: canMoveSecondaryAxis ?? self.canMoveSecondaryAxis,
+            canPark: canPark ?? self.canPark,
+            canPulseGuide: canPulseGuide ?? self.canPulseGuide,
+            canSetDeclinationRate: canSetDeclinationRate ?? self.canSetDeclinationRate,
+            canSetPark: canSetPark ?? self.canSetPark,
+            canSetPierSide: canSetPierSide ?? self.canSetPierSide,
+            canSetRightAscensionRate: canSetRightAscensionRate ?? self.canSetRightAscensionRate,
+            canSetTracking: canSetTracking ?? self.canSetTracking,
+            canSlew: canSlew ?? self.canSlew,
+            canSlewAltAz: canSlewAltAz ?? self.canSlewAltAz,
+            connected: connected ?? self.connected,
+            declination: declination ?? self.declination,
+            equatorialSystem: equatorialSystem ?? self.equatorialSystem,
+            guideRateDECArcSECPerSEC: guideRateDECArcSECPerSEC ?? self.guideRateDECArcSECPerSEC,
+            guideRateRaArcSECPerSEC: guideRateRaArcSECPerSEC ?? self.guideRateRaArcSECPerSEC,
+            hasUnknownEpoch: hasUnknownEpoch ?? self.hasUnknownEpoch,
+            isPulseGuiding: isPulseGuiding ?? self.isPulseGuiding,
+            primaryAxisRates: primaryAxisRates ?? self.primaryAxisRates,
+            rightAscension: rightAscension ?? self.rightAscension,
+            secondaryAxisRates: secondaryAxisRates ?? self.secondaryAxisRates,
+            sideOfPier: sideOfPier ?? self.sideOfPier,
+            siderealTime: siderealTime ?? self.siderealTime,
+            siteElevation: siteElevation ?? self.siteElevation,
+            siteLatitude: siteLatitude ?? self.siteLatitude,
+            siteLongitude: siteLongitude ?? self.siteLongitude,
+            slewing: slewing ?? self.slewing,
+            targetCoordinates: targetCoordinates ?? self.targetCoordinates,
+            targetSideOfPier: targetSideOfPier ?? self.targetSideOfPier,
+            timeToMeridianFlip: timeToMeridianFlip ?? self.timeToMeridianFlip,
+            trackingEnabled: trackingEnabled ?? self.trackingEnabled,
+            trackingModes: trackingModes ?? self.trackingModes,
+            trackingRate: trackingRate ?? self.trackingRate,
+            utcDate: utcDate ?? self.utcDate
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+enum AlignmentMode: String, Codable {
+    case altAz = "AltAz"
+    case germanPolar = "GermanPolar"
+    case polar = "Polar"
+}
+
+enum Epoch: String, Codable {
+    case b1950 = "B1950"
+    case j2000 = "J2000"
+    case j2050 = "J2050"
+    case jnow = "JNOW"
+}
+
+enum PierSide: String, Codable {
+    case east = "East"
+    case unknown = "Unknown"
+    case west = "West"
+}
+
+// MARK: - Coordinates
+struct Coordinates: Codable {
+    let decDegrees: Double?
+    let epoch: Epoch?
+    let raDegrees: Double?
+
+    enum CodingKeys: String, CodingKey {
+        case decDegrees = "dec_degrees"
+        case epoch
+        case raDegrees = "ra_degrees"
+    }
+}
+
+// MARK: Coordinates convenience initializers and mutators
+
+extension Coordinates {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(Coordinates.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        decDegrees: Double?? = nil,
+        epoch: Epoch?? = nil,
+        raDegrees: Double?? = nil
+    ) -> Coordinates {
+        return Coordinates(
+            decDegrees: decDegrees ?? self.decDegrees,
+            epoch: epoch ?? self.epoch,
+            raDegrees: raDegrees ?? self.raDegrees
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+enum TrackingMode: String, Codable {
+    case custom = "Custom"
+    case king = "King"
+    case lunar = "Lunar"
+    case sidereal = "Sidereal"
+    case solar = "Solar"
+    case stopped = "Stopped"
+}
+
+// MARK: - TrackingRate
+struct TrackingRate: Codable {
+    let customDECRate, customRaRate: Double?
+    let trackingMode: TrackingMode?
+
+    enum CodingKeys: String, CodingKey {
+        case customDECRate = "custom_dec_rate"
+        case customRaRate = "custom_ra_rate"
+        case trackingMode = "tracking_mode"
+    }
+}
+
+// MARK: TrackingRate convenience initializers and mutators
+
+extension TrackingRate {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(TrackingRate.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        customDECRate: Double?? = nil,
+        customRaRate: Double?? = nil,
+        trackingMode: TrackingMode?? = nil
+    ) -> TrackingRate {
+        return TrackingRate(
+            customDECRate: customDECRate ?? self.customDECRate,
+            customRaRate: customRaRate ?? self.customRaRate,
+            trackingMode: trackingMode ?? self.trackingMode
         )
     }
 
