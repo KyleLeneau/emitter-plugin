@@ -1274,7 +1274,21 @@ extension TrackingRate {
 /// Periodic Rotator event data
 // MARK: - RotatorDeviceInfoData
 struct RotatorDeviceInfoData: Codable {
-    let connected: Bool
+    let canReverse, connected, isMoving: Bool
+    let mechanicalPosition, position: Double?
+    let reverse: Bool
+    let stepSize: Double?
+    let synced: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case canReverse = "can_reverse"
+        case connected
+        case isMoving = "is_moving"
+        case mechanicalPosition = "mechanical_position"
+        case position, reverse
+        case stepSize = "step_size"
+        case synced
+    }
 }
 
 // MARK: RotatorDeviceInfoData convenience initializers and mutators
@@ -1296,10 +1310,24 @@ extension RotatorDeviceInfoData {
     }
 
     func with(
-        connected: Bool? = nil
+        canReverse: Bool? = nil,
+        connected: Bool? = nil,
+        isMoving: Bool? = nil,
+        mechanicalPosition: Double?? = nil,
+        position: Double?? = nil,
+        reverse: Bool? = nil,
+        stepSize: Double?? = nil,
+        synced: Bool? = nil
     ) -> RotatorDeviceInfoData {
         return RotatorDeviceInfoData(
-            connected: connected ?? self.connected
+            canReverse: canReverse ?? self.canReverse,
+            connected: connected ?? self.connected,
+            isMoving: isMoving ?? self.isMoving,
+            mechanicalPosition: mechanicalPosition ?? self.mechanicalPosition,
+            position: position ?? self.position,
+            reverse: reverse ?? self.reverse,
+            stepSize: stepSize ?? self.stepSize,
+            synced: synced ?? self.synced
         )
     }
 

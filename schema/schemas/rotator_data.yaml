@@ -5,5 +5,23 @@ description: Periodic Rotator event data
 properties:
   connected:
     type: boolean
+  can_reverse:
+    type: boolean
+  reverse:
+    type: boolean
+  mechanical_position:
+    type: number
+  position:
+    type: number
+  step_size:
+    type: number
+  is_moving:
+    type: boolean
+  synced:
+    type: boolean
 required:
   - connected
+  - can_reverse
+  - reverse
+  - is_moving
+  - synced

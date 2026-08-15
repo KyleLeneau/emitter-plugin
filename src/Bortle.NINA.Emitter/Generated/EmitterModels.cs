@@ -742,8 +742,32 @@ namespace Bortle.NINA.Emitter.Models
     /// </summary>
     public partial class RotatorDeviceInfoData
     {
+        [JsonPropertyName("can_reverse")]
+        public bool CanReverse { get; set; }
+
         [JsonPropertyName("connected")]
         public bool Connected { get; set; }
+
+        [JsonPropertyName("is_moving")]
+        public bool IsMoving { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("mechanical_position")]
+        public double? MechanicalPosition { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("position")]
+        public double? Position { get; set; }
+
+        [JsonPropertyName("reverse")]
+        public bool Reverse { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("step_size")]
+        public double? StepSize { get; set; }
+
+        [JsonPropertyName("synced")]
+        public bool Synced { get; set; }
     }
 
     /// <summary>

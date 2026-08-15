@@ -561,7 +561,21 @@ pub struct TrackingRate {
 /// Periodic Rotator event data
 #[derive(Serialize, Deserialize)]
 pub struct RotatorDeviceInfoData {
+    pub can_reverse: bool,
+
     pub connected: bool,
+
+    pub is_moving: bool,
+
+    pub mechanical_position: Option<f64>,
+
+    pub position: Option<f64>,
+
+    pub reverse: bool,
+
+    pub step_size: Option<f64>,
+
+    pub synced: bool,
 }
 
 /// Safety monitor event data

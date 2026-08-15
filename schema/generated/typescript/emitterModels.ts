@@ -371,7 +371,14 @@ export interface TrackingRate {
  * Periodic Rotator event data
  */
 export interface RotatorDeviceInfoData {
-    connected: boolean;
+    can_reverse:          boolean;
+    connected:            boolean;
+    is_moving:            boolean;
+    mechanical_position?: number;
+    position?:            number;
+    reverse:              boolean;
+    step_size?:           number;
+    synced:               boolean;
     [property: string]: any;
 }
 
@@ -915,7 +922,14 @@ const typeMap: any = {
         { json: "tracking_mode", js: "tracking_mode", typ: u(undefined, r("TrackingMode")) },
     ], "any"),
     "RotatorDeviceInfoData": o([
+        { json: "can_reverse", js: "can_reverse", typ: true },
         { json: "connected", js: "connected", typ: true },
+        { json: "is_moving", js: "is_moving", typ: true },
+        { json: "mechanical_position", js: "mechanical_position", typ: u(undefined, 3.14) },
+        { json: "position", js: "position", typ: u(undefined, 3.14) },
+        { json: "reverse", js: "reverse", typ: true },
+        { json: "step_size", js: "step_size", typ: u(undefined, 3.14) },
+        { json: "synced", js: "synced", typ: true },
     ], "any"),
     "SafetyDeviceInfoData": o([
         { json: "connected", js: "connected", typ: true },
