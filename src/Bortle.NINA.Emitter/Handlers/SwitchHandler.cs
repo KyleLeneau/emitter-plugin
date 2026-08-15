@@ -3,12 +3,14 @@ using Bortle.NINA.Emitter.Models;
 using NINA.Equipment.Equipment.MySwitch;
 using NINA.Equipment.Interfaces.Mediator;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Bortle.NINA.Emitter.Handlers {
     public class SwitchHandler : ISwitchConsumer {
         private readonly IEventEmitter emitter;
         private readonly ISwitchMediator mediator;
+        private SwitchInfo lastInfo;
 
         public SwitchHandler(IEventEmitter eventEmitter, ISwitchMediator switchMediator) {
             emitter = eventEmitter;
@@ -19,7 +21,26 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         public void UpdateDeviceInfo(SwitchInfo deviceInfo) {
-            // TODO: Implement event
+            // Skip duplicates from internal nina polling
+            if (deviceInfo.Equals(lastInfo)) return;
+
+            var data = new SwitchDeviceInfoData {
+                Connected = deviceInfo.Connected,
+                WriteableSwitches = deviceInfo.WritableSwitches.Select(w => new WriteableSwitch {
+                    Maximum = w.Maximum,
+                    Minimum = w.Minimum,
+                    StepSize = w.StepSize,
+                    TargetValue = w.TargetValue
+                }).ToList(),
+                ReadableSwitches = deviceInfo.ReadonlySwitches.Select(r => new ReadableSwitch {
+                    Id = r.Id,
+                    Name = r.Name,
+                    Description = r.Description,
+                    Value = r.Value
+                }).ToList()
+            };
+            emitter.Enqueue("switch", "device-info", data);
+            lastInfo = deviceInfo;
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {

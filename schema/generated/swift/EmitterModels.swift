@@ -1437,6 +1437,14 @@ extension SafetyChangeData {
 // MARK: - SwitchDeviceInfoData
 struct SwitchDeviceInfoData: Codable {
     let connected: Bool
+    let readableSwitches: [ReadableSwitch]?
+    let writeableSwitches: [WriteableSwitch]?
+
+    enum CodingKeys: String, CodingKey {
+        case connected
+        case readableSwitches = "readable_switches"
+        case writeableSwitches = "writeable_switches"
+    }
 }
 
 // MARK: SwitchDeviceInfoData convenience initializers and mutators
@@ -1458,10 +1466,115 @@ extension SwitchDeviceInfoData {
     }
 
     func with(
-        connected: Bool? = nil
+        connected: Bool? = nil,
+        readableSwitches: [ReadableSwitch]?? = nil,
+        writeableSwitches: [WriteableSwitch]?? = nil
     ) -> SwitchDeviceInfoData {
         return SwitchDeviceInfoData(
-            connected: connected ?? self.connected
+            connected: connected ?? self.connected,
+            readableSwitches: readableSwitches ?? self.readableSwitches,
+            writeableSwitches: writeableSwitches ?? self.writeableSwitches
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+// MARK: - ReadableSwitch
+struct ReadableSwitch: Codable {
+    let description: String?
+    let id: Int
+    let name: String?
+    let value: Double?
+}
+
+// MARK: ReadableSwitch convenience initializers and mutators
+
+extension ReadableSwitch {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(ReadableSwitch.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        description: String?? = nil,
+        id: Int? = nil,
+        name: String?? = nil,
+        value: Double?? = nil
+    ) -> ReadableSwitch {
+        return ReadableSwitch(
+            description: description ?? self.description,
+            id: id ?? self.id,
+            name: name ?? self.name,
+            value: value ?? self.value
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+// MARK: - WriteableSwitch
+struct WriteableSwitch: Codable {
+    let maximum, minimum, stepSize, targetValue: Double
+
+    enum CodingKeys: String, CodingKey {
+        case maximum, minimum
+        case stepSize = "step_size"
+        case targetValue = "target_value"
+    }
+}
+
+// MARK: WriteableSwitch convenience initializers and mutators
+
+extension WriteableSwitch {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(WriteableSwitch.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        maximum: Double? = nil,
+        minimum: Double? = nil,
+        stepSize: Double? = nil,
+        targetValue: Double? = nil
+    ) -> WriteableSwitch {
+        return WriteableSwitch(
+            maximum: maximum ?? self.maximum,
+            minimum: minimum ?? self.minimum,
+            stepSize: stepSize ?? self.stepSize,
+            targetValue: targetValue ?? self.targetValue
         )
     }
 

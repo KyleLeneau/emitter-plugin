@@ -798,6 +798,47 @@ namespace Bortle.NINA.Emitter.Models
     {
         [JsonPropertyName("connected")]
         public bool Connected { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("readable_switches")]
+        public List<ReadableSwitch> ReadableSwitches { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("writeable_switches")]
+        public List<WriteableSwitch> WriteableSwitches { get; set; }
+    }
+
+    public partial class ReadableSwitch
+    {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
+
+        [JsonPropertyName("id")]
+        public long Id { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("value")]
+        public double? Value { get; set; }
+    }
+
+    public partial class WriteableSwitch
+    {
+        [JsonPropertyName("maximum")]
+        public double Maximum { get; set; }
+
+        [JsonPropertyName("minimum")]
+        public double Minimum { get; set; }
+
+        [JsonPropertyName("step_size")]
+        public double StepSize { get; set; }
+
+        [JsonPropertyName("target_value")]
+        public double TargetValue { get; set; }
     }
 
     /// <summary>

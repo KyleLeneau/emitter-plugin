@@ -596,6 +596,32 @@ pub struct SafetyChangeData {
 #[derive(Serialize, Deserialize)]
 pub struct SwitchDeviceInfoData {
     pub connected: bool,
+
+    pub readable_switches: Option<Vec<ReadableSwitch>>,
+
+    pub writeable_switches: Option<Vec<WriteableSwitch>>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct ReadableSwitch {
+    pub description: Option<String>,
+
+    pub id: i64,
+
+    pub name: Option<String>,
+
+    pub value: Option<f64>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct WriteableSwitch {
+    pub maximum: f64,
+
+    pub minimum: f64,
+
+    pub step_size: f64,
+
+    pub target_value: f64,
 }
 
 /// Weather station sensor readings

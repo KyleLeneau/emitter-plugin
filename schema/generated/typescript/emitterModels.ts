@@ -403,7 +403,25 @@ export interface SafetyChangeData {
  * Periodic Switch event data
  */
 export interface SwitchDeviceInfoData {
-    connected: boolean;
+    connected:           boolean;
+    readable_switches?:  ReadableSwitch[];
+    writeable_switches?: WriteableSwitch[];
+    [property: string]: any;
+}
+
+export interface ReadableSwitch {
+    description?: string;
+    id:           number;
+    name?:        string;
+    value?:       number;
+    [property: string]: any;
+}
+
+export interface WriteableSwitch {
+    maximum:      number;
+    minimum:      number;
+    step_size:    number;
+    target_value: number;
     [property: string]: any;
 }
 
@@ -940,6 +958,20 @@ const typeMap: any = {
     ], "any"),
     "SwitchDeviceInfoData": o([
         { json: "connected", js: "connected", typ: true },
+        { json: "readable_switches", js: "readable_switches", typ: u(undefined, a(r("ReadableSwitch"))) },
+        { json: "writeable_switches", js: "writeable_switches", typ: u(undefined, a(r("WriteableSwitch"))) },
+    ], "any"),
+    "ReadableSwitch": o([
+        { json: "description", js: "description", typ: u(undefined, "") },
+        { json: "id", js: "id", typ: 0 },
+        { json: "name", js: "name", typ: u(undefined, "") },
+        { json: "value", js: "value", typ: u(undefined, 3.14) },
+    ], "any"),
+    "WriteableSwitch": o([
+        { json: "maximum", js: "maximum", typ: 3.14 },
+        { json: "minimum", js: "minimum", typ: 3.14 },
+        { json: "step_size", js: "step_size", typ: 3.14 },
+        { json: "target_value", js: "target_value", typ: 3.14 },
     ], "any"),
     "WeatherDeviceInfoData": o([
         { json: "cloud_cover", js: "cloud_cover", typ: u(undefined, u(3.14, null)) },

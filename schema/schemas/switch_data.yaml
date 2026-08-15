@@ -5,5 +5,38 @@ description: Periodic Switch event data
 properties:
   connected:
     type: boolean
+  writeable_switches:
+    type: array
+    items:
+      type: object
+      properties:
+        maximum:
+          type: number
+        minimum:
+          type: number
+        step_size:
+          type: number
+        target_value:
+          type: number
+      required:
+        - maximum
+        - minimum
+        - step_size
+        - target_value
+  readable_switches:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        value:
+          type: number
+      required:
+        - id
 required:
   - connected
