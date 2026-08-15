@@ -27,17 +27,16 @@ info:
     - **Tags** - Tags in the sidebar group related operations into a domain.
   tags:
     - name: "Device"
-      description: Common Device Operations
-    - name: "Switch"
     - name: "Camera"
-    - name: "Done"
+    - name: "Dome"
     - name: "FilterWheel"
-    - name: "Focuser"
     - name: "FlatPanel"
+    - name: "Focuser"
     - name: "Guider"
-    - name: "Rotator"
     - name: "Mount"
+    - name: "Rotator"
     - name: "SafetyMonitor"
+    - name: "Switch"
     - name: "Weather"
     - name: "Imaging"
     - name: "Profile"
@@ -58,16 +57,14 @@ channels:
       deviceConnectionEvent:
         $ref: "#/components/messages/DeviceConnectionEvent"
 
-  # Weather ─────────────────────────────────────────────────────────────────
-  weatherDeviceInfo:
-    address: "nina.{instanceId}.weather.device-info"
-    description: Periodic weather station sensor readings
-    parameters:
-      instanceId:
-        $ref: "#/components/parameters/InstanceId"
-    messages:
-      weatherDeviceInfoEvent:
-        $ref: "#/components/messages/WeatherDeviceInfoEvent"
+  # Camera ──────────────────────────────────────────────────────────────────
+  # Dome ────────────────────────────────────────────────────────────────────
+  # FilterWheel ─────────────────────────────────────────────────────────────
+  # FlatPanel ───────────────────────────────────────────────────────────────
+  # Focuser ─────────────────────────────────────────────────────────────────
+  # Guider ──────────────────────────────────────────────────────────────────
+  # Mount ───────────────────────────────────────────────────────────────────
+  # Rotator ─────────────────────────────────────────────────────────────────
 
   # Saftey -─────────────────────────────────────────────────────────────────
   safetyDeviceInfo:
@@ -90,14 +87,23 @@ channels:
       safetyChangeEvent:
         $ref: "#/components/messages/SafetyChangeEvent"
 
-  # Camera ──────────────────────────────────────────────────────────────────
+  # Switch ──────────────────────────────────────────────────────────────────
 
-
-  # Telescope ───────────────────────────────────────────────────────────────
-
+  # Weather ─────────────────────────────────────────────────────────────────
+  weatherDeviceInfo:
+    address: "nina.{instanceId}.weather.device-info"
+    description: Periodic weather station sensor readings
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      weatherDeviceInfoEvent:
+        $ref: "#/components/messages/WeatherDeviceInfoEvent"
 
   # Imaging ─────────────────────────────────────────────────────────────────
-
+  # Profile ─────────────────────────────────────────────────────────────────
+  # Sequence ────────────────────────────────────────────────────────────────
+  # TargetScheduler ─────────────────────────────────────────────────────────
 
 # ─── Operations (list of events pushed on topics) ───────────────────────────
 operations:
@@ -109,13 +115,14 @@ operations:
     tags:
       - name: "Device"
 
-  # Weather ─────────────────────────────────────────────────────────────────
-  publishWeatherDeviceInfoEvent:
-    action: send
-    channel:
-      $ref: "#/channels/weatherDeviceInfo"
-    tags:
-      - name: "Weather"
+  # Camera ──────────────────────────────────────────────────────────────────
+  # Dome ────────────────────────────────────────────────────────────────────
+  # FilterWheel ─────────────────────────────────────────────────────────────
+  # FlatPanel ───────────────────────────────────────────────────────────────
+  # Focuser ─────────────────────────────────────────────────────────────────
+  # Guider ──────────────────────────────────────────────────────────────────
+  # Mount ───────────────────────────────────────────────────────────────────
+  # Rotator ─────────────────────────────────────────────────────────────────
 
   # Safety ──────────────────────────────────────────────────────────────────
   publishSafetyDeviceInfoEvent:
@@ -132,7 +139,26 @@ operations:
     tags:
       - name: "Safety"
 
-# ─── Components ──────────────────────────────────────────────────────────────
+  # Switch ──────────────────────────────────────────────────────────────────
+
+  # Weather ─────────────────────────────────────────────────────────────────
+  publishWeatherDeviceInfoEvent:
+    action: send
+    channel:
+      $ref: "#/channels/weatherDeviceInfo"
+    tags:
+      - name: "Weather"
+
+  # Imaging ─────────────────────────────────────────────────────────────────
+
+  # Profile ─────────────────────────────────────────────────────────────────
+
+  # Sequence ────────────────────────────────────────────────────────────────
+
+  # TargetScheduler ─────────────────────────────────────────────────────────
+
+
+# ─── Components ────────────────────────────────────────────────────────────
 components:
 
   parameters:
@@ -154,20 +180,14 @@ components:
               data:
                 $ref: "./schemas/device_connect_data.yaml"
 
-    # Weather ─────────────────────────────────────────────────────────────────
-    WeatherDeviceInfoEvent:
-      title: WeatherDeviceInfoEvent
-      summary: Periodic weather station readings
-      payload:
-        allOf:
-          - $ref: "./schemas/cloudevents.json"
-          - type: object
-            properties:
-              type:
-                const: "io.nina.weather.device-info"
-              data:
-                $ref: "./schemas/weather_data.yaml"
-
+      # Camera ──────────────────────────────────────────────────────────────────
+    # Dome ────────────────────────────────────────────────────────────────────
+    # FilterWheel ─────────────────────────────────────────────────────────────
+    # FlatPanel ───────────────────────────────────────────────────────────────
+    # Focuser ─────────────────────────────────────────────────────────────────
+    # Guider ──────────────────────────────────────────────────────────────────
+    # Mount ───────────────────────────────────────────────────────────────────
+    # Rotator ─────────────────────────────────────────────────────────────────
     # Saftey -─────────────────────────────────────────────────────────────────
     SafetyDeviceInfoEvent:
       title: SafetyDeviceInfoEvent
@@ -194,6 +214,27 @@ components:
                 const: "io.nina.safety_monitor.is_safe"
               data:
                 $ref: "./schemas/safety_change_data.yaml"
+
+    # Switch ──────────────────────────────────────────────────────────────────
+
+    # Weather ─────────────────────────────────────────────────────────────────
+    WeatherDeviceInfoEvent:
+      title: WeatherDeviceInfoEvent
+      summary: Periodic weather station readings
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.weather.device-info"
+              data:
+                $ref: "./schemas/weather_data.yaml"
+
+    # Imaging ─────────────────────────────────────────────────────────────────
+    # Profile ─────────────────────────────────────────────────────────────────
+    # Sequence ────────────────────────────────────────────────────────────────
+    # TargetScheduler ─────────────────────────────────────────────────────────
 
     # CameraEvent:
     #   name: CameraEvent
