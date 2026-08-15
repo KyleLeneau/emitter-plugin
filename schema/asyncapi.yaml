@@ -54,10 +54,20 @@ channels:
       instanceId:
         $ref: "#/components/parameters/InstanceId"
     messages:
-      deviceConnectionEvent:
+      DeviceConnectionEvent:
         $ref: "#/components/messages/DeviceConnectionEvent"
 
   # Camera ──────────────────────────────────────────────────────────────────
+  cameraDeviceInfo:
+    address: "nina.{instanceId}.camera.device-info"
+    description: Periodic data about the camera
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      CameraDeviceInfoEvent:
+        $ref: "#/components/messages/CameraDeviceInfoEvent"
+
   # Dome ────────────────────────────────────────────────────────────────────
   domeDeviceInfo:
     address: "nina.{instanceId}.dome.device-info"
@@ -66,7 +76,7 @@ channels:
       instanceId:
         $ref: "#/components/parameters/InstanceId"
     messages:
-      flatPanelDeviceInfoEvent:
+      DomeDeviceInfoEvent:
         $ref: "#/components/messages/DomeDeviceInfoEvent"
 
   # FilterWheel ─────────────────────────────────────────────────────────────
@@ -77,7 +87,7 @@ channels:
       instanceId:
         $ref: "#/components/parameters/InstanceId"
     messages:
-      filterWheerDeviceInfoEvent:
+      FilterWheelDeviceInfoEvent:
         $ref: "#/components/messages/FilterWheelDeviceInfoEvent"
 
   # FlatPanel ───────────────────────────────────────────────────────────────
@@ -88,13 +98,52 @@ channels:
       instanceId:
         $ref: "#/components/parameters/InstanceId"
     messages:
-      flatPanelDeviceInfoEvent:
+      FlatPanelDeviceInfoEvent:
         $ref: "#/components/messages/FlatPanelDeviceInfoEvent"
 
   # Focuser ─────────────────────────────────────────────────────────────────
+  focuserDeviceInfo:
+    address: "nina.{instanceId}.focuser.device-info"
+    description: Periodic data about the Focuser
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      FocuserDeviceInfoEvent:
+        $ref: "#/components/messages/FocuserDeviceInfoEvent"
+
   # Guider ──────────────────────────────────────────────────────────────────
+  guiderDeviceInfo:
+    address: "nina.{instanceId}.guider.device-info"
+    description: Periodic data about the Guider
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      GuiderDeviceInfoEvent:
+        $ref: "#/components/messages/GuiderDeviceInfoEvent"
+
   # Mount ───────────────────────────────────────────────────────────────────
+  mountDeviceInfo:
+    address: "nina.{instanceId}.mount.device-info"
+    description: Periodic data about the Mount
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      MountDeviceInfoEvent:
+        $ref: "#/components/messages/MountDeviceInfoEvent"
+
   # Rotator ─────────────────────────────────────────────────────────────────
+  rotatorDeviceInfo:
+    address: "nina.{instanceId}.rotator.device-info"
+    description: Periodic data about the Roatator
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      RotatorDeviceInfoEvent:
+        $ref: "#/components/messages/RotatorDeviceInfoEvent"
 
   # Saftey -─────────────────────────────────────────────────────────────────
   safetyDeviceInfo:
@@ -118,6 +167,15 @@ channels:
         $ref: "#/components/messages/SafetyChangeEvent"
 
   # Switch ──────────────────────────────────────────────────────────────────
+  switchDeviceInfo:
+    address: "nina.{instanceId}.switch.device-info"
+    description: Periodic data about the Switch
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      SwitchDeviceInfoEvent:
+        $ref: "#/components/messages/SwitchDeviceInfoEvent"
 
   # Weather ─────────────────────────────────────────────────────────────────
   weatherDeviceInfo:
@@ -138,7 +196,7 @@ channels:
 # ─── Operations (list of events pushed on topics) ───────────────────────────
 operations:
   # Common Device ───────────────────────────────────────────────────────────
-  publishDeviceConnectionEvent:
+  sendDeviceConnectionEvent:
     action: send
     channel:
       $ref: "#/channels/deviceConnection"
@@ -146,8 +204,15 @@ operations:
       - name: "Device"
 
   # Camera ──────────────────────────────────────────────────────────────────
+  sendCameraDeviceInfoEvent:
+    action: send
+    channel:
+      $ref: "#/channels/cameraDeviceInfo"
+    tags:
+      - name: "Camera"
+
   # Dome ────────────────────────────────────────────────────────────────────
-  publishDomeDeviceInfoEvent:
+  sendDomeDeviceInfoEvent:
     action: send
     channel:
       $ref: "#/channels/domeDeviceInfo"
@@ -155,7 +220,7 @@ operations:
       - name: "Dome"
 
   # FilterWheel ─────────────────────────────────────────────────────────────
-  publishFilterWheelDeviceInfoEvent:
+  sendFilterWheelDeviceInfoEvent:
     action: send
     channel:
       $ref: "#/channels/filterWheelDeviceInfo"
@@ -163,7 +228,7 @@ operations:
       - name: "FilterWheel"
 
   # FlatPanel ───────────────────────────────────────────────────────────────
-  publishFlatPanelDeviceInfoEvent:
+  sendFlatPanelDeviceInfoEvent:
     action: send
     channel:
       $ref: "#/channels/flatPanelDeviceInfo"
@@ -171,19 +236,46 @@ operations:
       - name: "FlatPanel"
 
   # Focuser ─────────────────────────────────────────────────────────────────
+  sendFocuserDeviceInfoEvent:
+    action: send
+    channel:
+      $ref: "#/channels/focuserDeviceInfo"
+    tags:
+      - name: "Focuser"
+
   # Guider ──────────────────────────────────────────────────────────────────
+  sendGuiderDeviceInfoEvent:
+    action: send
+    channel:
+      $ref: "#/channels/guiderDeviceInfo"
+    tags:
+      - name: "Guider"
+
   # Mount ───────────────────────────────────────────────────────────────────
+  sendMountDeviceInfoEvent:
+    action: send
+    channel:
+      $ref: "#/channels/mountDeviceInfo"
+    tags:
+      - name: "Mount"
+
   # Rotator ─────────────────────────────────────────────────────────────────
+  sendRotatorDeviceInfoEvent:
+    action: send
+    channel:
+      $ref: "#/channels/rotatorDeviceInfo"
+    tags:
+      - name: "Rotator"
 
   # Safety ──────────────────────────────────────────────────────────────────
-  publishSafetyDeviceInfoEvent:
+  sendSafetyDeviceInfoEvent:
     action: send
     channel:
       $ref: "#/channels/safetyDeviceInfo"
     tags:
       - name: "Safety"
 
-  publishSafetyChangeEvent:
+  sendSafetyChangeEvent:
     action: send
     channel:
       $ref: "#/channels/safetyChange"
@@ -191,9 +283,15 @@ operations:
       - name: "Safety"
 
   # Switch ──────────────────────────────────────────────────────────────────
+  sendSwitchDeviceInfoEvent:
+    action: send
+    channel:
+      $ref: "#/channels/switchDeviceInfo"
+    tags:
+      - name: "Switch"
 
   # Weather ─────────────────────────────────────────────────────────────────
-  publishWeatherDeviceInfoEvent:
+  sendWeatherDeviceInfoEvent:
     action: send
     channel:
       $ref: "#/channels/weatherDeviceInfo"
@@ -232,6 +330,19 @@ components:
                 $ref: "./schemas/device_connect_data.yaml"
 
     # Camera ──────────────────────────────────────────────────────────────────
+    CameraDeviceInfoEvent:
+      title: CameraDeviceInfoEvent
+      summary: Periodic Camera device info
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.camera.device-info"
+              data:
+                $ref: "./schemas/camera_data.yaml"
+
     # Dome ────────────────────────────────────────────────────────────────────
     DomeDeviceInfoEvent:
       title: DomeDeviceInfoEvent
@@ -275,9 +386,61 @@ components:
                 $ref: "./schemas/flat_panel_data.yaml"
 
     # Focuser ─────────────────────────────────────────────────────────────────
+    FocuserDeviceInfoEvent:
+      title: FocuserDeviceInfoEvent
+      summary: Periodic focuser device info
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.focuser.device-info"
+              data:
+                $ref: "./schemas/focuser_data.yaml"
+
     # Guider ──────────────────────────────────────────────────────────────────
+    GuiderDeviceInfoEvent:
+      title: GuiderDeviceInfoEvent
+      summary: Periodic guider device info
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.guider.device-info"
+              data:
+                $ref: "./schemas/guider_data.yaml"
+
     # Mount ───────────────────────────────────────────────────────────────────
+    MountDeviceInfoEvent:
+      title: MountDeviceInfoEvent
+      summary: Periodic mount device info
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.mount.device-info"
+              data:
+                $ref: "./schemas/mount_data.yaml"
+
     # Rotator ─────────────────────────────────────────────────────────────────
+    RotatorDeviceInfoEvent:
+      title: RotatorDeviceInfoEvent
+      summary: Periodic rotator device info
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.rotator.device-info"
+              data:
+                $ref: "./schemas/rotator_data.yaml"
+
     # Saftey -─────────────────────────────────────────────────────────────────
     SafetyDeviceInfoEvent:
       title: SafetyDeviceInfoEvent
@@ -306,6 +469,18 @@ components:
                 $ref: "./schemas/safety_change_data.yaml"
 
     # Switch ──────────────────────────────────────────────────────────────────
+    SwitchDeviceInfoEvent:
+      title: SwitchDeviceInfoEvent
+      summary: Periodic switch device info
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.switch.device-info"
+              data:
+                $ref: "./schemas/switch_data.yaml"
 
     # Weather ─────────────────────────────────────────────────────────────────
     WeatherDeviceInfoEvent:

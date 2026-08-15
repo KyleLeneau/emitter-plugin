@@ -9,6 +9,7 @@ namespace Bortle.NINA.Emitter.Handlers {
     public class FocuserHandler : IFocuserConsumer {
         private readonly IEventEmitter emitter;
         private readonly IFocuserMediator mediator;
+        private FocuserInfo lastInfo;
 
         public FocuserHandler(IEventEmitter eventEmitter, IFocuserMediator focuserMediator) {
             emitter = eventEmitter;
@@ -19,7 +20,21 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         public void UpdateDeviceInfo(FocuserInfo deviceInfo) {
-            // TODO: Implement event
+            // Skip duplicates from internal nina polling
+            if (deviceInfo.Equals(lastInfo)) return;
+
+            var data = new FocuserDeviceInfoData {
+                Connected = deviceInfo.Connected,
+                Position = deviceInfo.Position,
+                StepSize = deviceInfo.StepSize,
+                Temperature = deviceInfo.Temperature,
+                IsMoving = deviceInfo.IsMoving,
+                IsSettling = deviceInfo.IsSettling,
+                TempComp = deviceInfo.TempComp,
+                TempCompAvailable = deviceInfo.TempCompAvailable,
+            };
+            emitter.Enqueue("focuser", "device-info", data);
+            lastInfo = deviceInfo;
         }
 
         public void UpdateEndAutoFocusRun(AutoFocusInfo info) {

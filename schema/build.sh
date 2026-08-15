@@ -19,11 +19,17 @@ DOCS_OUT="$SCRIPT_DIR/../build/docs"
 
 DATA_SCHEMAS=(
   "$SCHEMAS/device_connect_data.yaml"
+  "$SCHEMAS/camera_data.yaml"
   "$SCHEMAS/dome_data.yaml"
   "$SCHEMAS/filter_wheel_data.yaml"
   "$SCHEMAS/flat_panel_data.yaml"
+  "$SCHEMAS/focuser_data.yaml"
+  "$SCHEMAS/guider_data.yaml"
+  "$SCHEMAS/mount_data.yaml"
+  "$SCHEMAS/rotator_data.yaml"
   "$SCHEMAS/safety_data.yaml"
   "$SCHEMAS/safety_change_data.yaml"
+  "$SCHEMAS/switch_data.yaml"
   "$SCHEMAS/weather_data.yaml"
 )
 

@@ -67,6 +67,12 @@ pub enum DeviceType {
     Weather,
 }
 
+/// Periodic Camera event data
+#[derive(Serialize, Deserialize)]
+pub struct CameraDeviceInfoData {
+    pub connected: bool,
+}
+
 /// Dome device state
 #[derive(Serialize, Deserialize)]
 pub struct DomeDeviceInfoData {
@@ -170,6 +176,44 @@ pub struct FlatPanelDeviceInfoData {
     pub supports_open_close: Option<bool>,
 }
 
+/// Focuser device state
+#[derive(Serialize, Deserialize)]
+pub struct FocuserDeviceInfoData {
+    pub connected: bool,
+
+    pub is_moving: bool,
+
+    pub is_settling: bool,
+
+    pub position: Option<i64>,
+
+    pub step_size: Option<f64>,
+
+    pub temp_comp: Option<bool>,
+
+    pub temp_comp_available: Option<bool>,
+
+    pub temperature: Option<f64>,
+}
+
+/// Periodic Guider event data
+#[derive(Serialize, Deserialize)]
+pub struct GuiderDeviceInfoData {
+    pub connected: bool,
+}
+
+/// Periodic Mount event data
+#[derive(Serialize, Deserialize)]
+pub struct MountDeviceInfoData {
+    pub connected: bool,
+}
+
+/// Periodic Rotator event data
+#[derive(Serialize, Deserialize)]
+pub struct RotatorDeviceInfoData {
+    pub connected: bool,
+}
+
 /// Safety monitor event data
 #[derive(Serialize, Deserialize)]
 pub struct SafetyDeviceInfoData {
@@ -182,6 +226,12 @@ pub struct SafetyDeviceInfoData {
 #[derive(Serialize, Deserialize)]
 pub struct SafetyChangeData {
     pub is_safe: bool,
+}
+
+/// Periodic Switch event data
+#[derive(Serialize, Deserialize)]
+pub struct SwitchDeviceInfoData {
+    pub connected: bool,
 }
 
 /// Weather station sensor readings

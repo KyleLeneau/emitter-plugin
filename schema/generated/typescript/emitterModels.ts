@@ -1,13 +1,19 @@
 // To parse this data:
 //
-//   import { Convert, DeviceConnectionData, DomeDeviceInfoData, FilterWheelDeviceInfoData, FlatPanelDeviceInfoData, SafetyDeviceInfoData, SafetyChangeData, WeatherDeviceInfoData } from "./file";
+//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, DomeDeviceInfoData, FilterWheelDeviceInfoData, FlatPanelDeviceInfoData, FocuserDeviceInfoData, GuiderDeviceInfoData, MountDeviceInfoData, RotatorDeviceInfoData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData } from "./file";
 //
 //   const deviceConnectionData = Convert.toDeviceConnectionData(json);
+//   const cameraDeviceInfoData = Convert.toCameraDeviceInfoData(json);
 //   const domeDeviceInfoData = Convert.toDomeDeviceInfoData(json);
 //   const filterWheelDeviceInfoData = Convert.toFilterWheelDeviceInfoData(json);
 //   const flatPanelDeviceInfoData = Convert.toFlatPanelDeviceInfoData(json);
+//   const focuserDeviceInfoData = Convert.toFocuserDeviceInfoData(json);
+//   const guiderDeviceInfoData = Convert.toGuiderDeviceInfoData(json);
+//   const mountDeviceInfoData = Convert.toMountDeviceInfoData(json);
+//   const rotatorDeviceInfoData = Convert.toRotatorDeviceInfoData(json);
 //   const safetyDeviceInfoData = Convert.toSafetyDeviceInfoData(json);
 //   const safetyChangeData = Convert.toSafetyChangeData(json);
+//   const switchDeviceInfoData = Convert.toSwitchDeviceInfoData(json);
 //   const weatherDeviceInfoData = Convert.toWeatherDeviceInfoData(json);
 //
 // These functions will throw an error if the JSON doesn't
@@ -58,6 +64,14 @@ export enum DeviceType {
     SafetyMonitor = "SafetyMonitor",
     Switch = "Switch",
     Weather = "Weather",
+}
+
+/**
+ * Periodic Camera event data
+ */
+export interface CameraDeviceInfoData {
+    connected: boolean;
+    [property: string]: any;
 }
 
 /**
@@ -134,6 +148,45 @@ export interface FlatPanelDeviceInfoData {
 }
 
 /**
+ * Focuser device state
+ */
+export interface FocuserDeviceInfoData {
+    connected:            boolean;
+    is_moving:            boolean;
+    is_settling:          boolean;
+    position?:            number;
+    step_size?:           number;
+    temp_comp?:           boolean;
+    temp_comp_available?: boolean;
+    temperature?:         number;
+    [property: string]: any;
+}
+
+/**
+ * Periodic Guider event data
+ */
+export interface GuiderDeviceInfoData {
+    connected: boolean;
+    [property: string]: any;
+}
+
+/**
+ * Periodic Mount event data
+ */
+export interface MountDeviceInfoData {
+    connected: boolean;
+    [property: string]: any;
+}
+
+/**
+ * Periodic Rotator event data
+ */
+export interface RotatorDeviceInfoData {
+    connected: boolean;
+    [property: string]: any;
+}
+
+/**
  * Safety monitor event data
  */
 export interface SafetyDeviceInfoData {
@@ -147,6 +200,14 @@ export interface SafetyDeviceInfoData {
  */
 export interface SafetyChangeData {
     is_safe: boolean;
+    [property: string]: any;
+}
+
+/**
+ * Periodic Switch event data
+ */
+export interface SwitchDeviceInfoData {
+    connected: boolean;
     [property: string]: any;
 }
 
@@ -217,6 +278,14 @@ export class Convert {
         return JSON.stringify(uncast(value, r("DeviceConnectionData")), null, 2);
     }
 
+    public static toCameraDeviceInfoData(json: string): CameraDeviceInfoData {
+        return cast(JSON.parse(json), r("CameraDeviceInfoData"));
+    }
+
+    public static cameraDeviceInfoDataToJson(value: CameraDeviceInfoData): string {
+        return JSON.stringify(uncast(value, r("CameraDeviceInfoData")), null, 2);
+    }
+
     public static toDomeDeviceInfoData(json: string): DomeDeviceInfoData {
         return cast(JSON.parse(json), r("DomeDeviceInfoData"));
     }
@@ -241,6 +310,38 @@ export class Convert {
         return JSON.stringify(uncast(value, r("FlatPanelDeviceInfoData")), null, 2);
     }
 
+    public static toFocuserDeviceInfoData(json: string): FocuserDeviceInfoData {
+        return cast(JSON.parse(json), r("FocuserDeviceInfoData"));
+    }
+
+    public static focuserDeviceInfoDataToJson(value: FocuserDeviceInfoData): string {
+        return JSON.stringify(uncast(value, r("FocuserDeviceInfoData")), null, 2);
+    }
+
+    public static toGuiderDeviceInfoData(json: string): GuiderDeviceInfoData {
+        return cast(JSON.parse(json), r("GuiderDeviceInfoData"));
+    }
+
+    public static guiderDeviceInfoDataToJson(value: GuiderDeviceInfoData): string {
+        return JSON.stringify(uncast(value, r("GuiderDeviceInfoData")), null, 2);
+    }
+
+    public static toMountDeviceInfoData(json: string): MountDeviceInfoData {
+        return cast(JSON.parse(json), r("MountDeviceInfoData"));
+    }
+
+    public static mountDeviceInfoDataToJson(value: MountDeviceInfoData): string {
+        return JSON.stringify(uncast(value, r("MountDeviceInfoData")), null, 2);
+    }
+
+    public static toRotatorDeviceInfoData(json: string): RotatorDeviceInfoData {
+        return cast(JSON.parse(json), r("RotatorDeviceInfoData"));
+    }
+
+    public static rotatorDeviceInfoDataToJson(value: RotatorDeviceInfoData): string {
+        return JSON.stringify(uncast(value, r("RotatorDeviceInfoData")), null, 2);
+    }
+
     public static toSafetyDeviceInfoData(json: string): SafetyDeviceInfoData {
         return cast(JSON.parse(json), r("SafetyDeviceInfoData"));
     }
@@ -255,6 +356,14 @@ export class Convert {
 
     public static safetyChangeDataToJson(value: SafetyChangeData): string {
         return JSON.stringify(uncast(value, r("SafetyChangeData")), null, 2);
+    }
+
+    public static toSwitchDeviceInfoData(json: string): SwitchDeviceInfoData {
+        return cast(JSON.parse(json), r("SwitchDeviceInfoData"));
+    }
+
+    public static switchDeviceInfoDataToJson(value: SwitchDeviceInfoData): string {
+        return JSON.stringify(uncast(value, r("SwitchDeviceInfoData")), null, 2);
     }
 
     public static toWeatherDeviceInfoData(json: string): WeatherDeviceInfoData {
@@ -429,6 +538,9 @@ const typeMap: any = {
         { json: "driver_version", js: "driver_version", typ: u(undefined, u(null, "")) },
         { json: "name", js: "name", typ: u(undefined, u(null, "")) },
     ], "any"),
+    "CameraDeviceInfoData": o([
+        { json: "connected", js: "connected", typ: true },
+    ], "any"),
     "DomeDeviceInfoData": o([
         { json: "altitude_degrees", js: "altitude_degrees", typ: u(undefined, 3.14) },
         { json: "application_following", js: "application_following", typ: true },
@@ -473,12 +585,34 @@ const typeMap: any = {
         { json: "supports_on_off", js: "supports_on_off", typ: u(undefined, true) },
         { json: "supports_open_close", js: "supports_open_close", typ: u(undefined, true) },
     ], "any"),
+    "FocuserDeviceInfoData": o([
+        { json: "connected", js: "connected", typ: true },
+        { json: "is_moving", js: "is_moving", typ: true },
+        { json: "is_settling", js: "is_settling", typ: true },
+        { json: "position", js: "position", typ: u(undefined, 0) },
+        { json: "step_size", js: "step_size", typ: u(undefined, 3.14) },
+        { json: "temp_comp", js: "temp_comp", typ: u(undefined, true) },
+        { json: "temp_comp_available", js: "temp_comp_available", typ: u(undefined, true) },
+        { json: "temperature", js: "temperature", typ: u(undefined, 3.14) },
+    ], "any"),
+    "GuiderDeviceInfoData": o([
+        { json: "connected", js: "connected", typ: true },
+    ], "any"),
+    "MountDeviceInfoData": o([
+        { json: "connected", js: "connected", typ: true },
+    ], "any"),
+    "RotatorDeviceInfoData": o([
+        { json: "connected", js: "connected", typ: true },
+    ], "any"),
     "SafetyDeviceInfoData": o([
         { json: "connected", js: "connected", typ: true },
         { json: "is_safe", js: "is_safe", typ: true },
     ], "any"),
     "SafetyChangeData": o([
         { json: "is_safe", js: "is_safe", typ: true },
+    ], "any"),
+    "SwitchDeviceInfoData": o([
+        { json: "connected", js: "connected", typ: true },
     ], "any"),
     "WeatherDeviceInfoData": o([
         { json: "cloud_cover", js: "cloud_cover", typ: u(undefined, u(3.14, null)) },

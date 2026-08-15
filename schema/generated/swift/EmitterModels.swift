@@ -2,11 +2,17 @@
 // To parse the JSON, add this file to your project and do:
 //
 //   let deviceConnectionData = try DeviceConnectionData(json)
+//   let cameraDeviceInfoData = try CameraDeviceInfoData(json)
 //   let domeDeviceInfoData = try DomeDeviceInfoData(json)
 //   let filterWheelDeviceInfoData = try FilterWheelDeviceInfoData(json)
 //   let flatPanelDeviceInfoData = try FlatPanelDeviceInfoData(json)
+//   let focuserDeviceInfoData = try FocuserDeviceInfoData(json)
+//   let guiderDeviceInfoData = try GuiderDeviceInfoData(json)
+//   let mountDeviceInfoData = try MountDeviceInfoData(json)
+//   let rotatorDeviceInfoData = try RotatorDeviceInfoData(json)
 //   let safetyDeviceInfoData = try SafetyDeviceInfoData(json)
 //   let safetyChangeData = try SafetyChangeData(json)
+//   let switchDeviceInfoData = try SwitchDeviceInfoData(json)
 //   let weatherDeviceInfoData = try WeatherDeviceInfoData(json)
 
 import Foundation
@@ -101,6 +107,47 @@ enum DeviceType: String, Codable {
     case rotator = "Rotator"
     case safetyMonitor = "SafetyMonitor"
     case weather = "Weather"
+}
+
+/// Periodic Camera event data
+// MARK: - CameraDeviceInfoData
+struct CameraDeviceInfoData: Codable {
+    let connected: Bool
+}
+
+// MARK: CameraDeviceInfoData convenience initializers and mutators
+
+extension CameraDeviceInfoData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(CameraDeviceInfoData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        connected: Bool? = nil
+    ) -> CameraDeviceInfoData {
+        return CameraDeviceInfoData(
+            connected: connected ?? self.connected
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
 }
 
 /// Dome device state
@@ -403,6 +450,199 @@ extension FlatPanelDeviceInfoData {
     }
 }
 
+/// Focuser device state
+// MARK: - FocuserDeviceInfoData
+struct FocuserDeviceInfoData: Codable {
+    let connected, isMoving, isSettling: Bool
+    let position: Int?
+    let stepSize: Double?
+    let tempComp, tempCompAvailable: Bool?
+    let temperature: Double?
+
+    enum CodingKeys: String, CodingKey {
+        case connected
+        case isMoving = "is_moving"
+        case isSettling = "is_settling"
+        case position
+        case stepSize = "step_size"
+        case tempComp = "temp_comp"
+        case tempCompAvailable = "temp_comp_available"
+        case temperature
+    }
+}
+
+// MARK: FocuserDeviceInfoData convenience initializers and mutators
+
+extension FocuserDeviceInfoData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(FocuserDeviceInfoData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        connected: Bool? = nil,
+        isMoving: Bool? = nil,
+        isSettling: Bool? = nil,
+        position: Int?? = nil,
+        stepSize: Double?? = nil,
+        tempComp: Bool?? = nil,
+        tempCompAvailable: Bool?? = nil,
+        temperature: Double?? = nil
+    ) -> FocuserDeviceInfoData {
+        return FocuserDeviceInfoData(
+            connected: connected ?? self.connected,
+            isMoving: isMoving ?? self.isMoving,
+            isSettling: isSettling ?? self.isSettling,
+            position: position ?? self.position,
+            stepSize: stepSize ?? self.stepSize,
+            tempComp: tempComp ?? self.tempComp,
+            tempCompAvailable: tempCompAvailable ?? self.tempCompAvailable,
+            temperature: temperature ?? self.temperature
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Periodic Guider event data
+// MARK: - GuiderDeviceInfoData
+struct GuiderDeviceInfoData: Codable {
+    let connected: Bool
+}
+
+// MARK: GuiderDeviceInfoData convenience initializers and mutators
+
+extension GuiderDeviceInfoData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(GuiderDeviceInfoData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        connected: Bool? = nil
+    ) -> GuiderDeviceInfoData {
+        return GuiderDeviceInfoData(
+            connected: connected ?? self.connected
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Periodic Mount event data
+// MARK: - MountDeviceInfoData
+struct MountDeviceInfoData: Codable {
+    let connected: Bool
+}
+
+// MARK: MountDeviceInfoData convenience initializers and mutators
+
+extension MountDeviceInfoData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(MountDeviceInfoData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        connected: Bool? = nil
+    ) -> MountDeviceInfoData {
+        return MountDeviceInfoData(
+            connected: connected ?? self.connected
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Periodic Rotator event data
+// MARK: - RotatorDeviceInfoData
+struct RotatorDeviceInfoData: Codable {
+    let connected: Bool
+}
+
+// MARK: RotatorDeviceInfoData convenience initializers and mutators
+
+extension RotatorDeviceInfoData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(RotatorDeviceInfoData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        connected: Bool? = nil
+    ) -> RotatorDeviceInfoData {
+        return RotatorDeviceInfoData(
+            connected: connected ?? self.connected
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
 /// Safety monitor event data
 // MARK: - SafetyDeviceInfoData
 struct SafetyDeviceInfoData: Codable {
@@ -484,6 +724,47 @@ extension SafetyChangeData {
     ) -> SafetyChangeData {
         return SafetyChangeData(
             isSafe: isSafe ?? self.isSafe
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Periodic Switch event data
+// MARK: - SwitchDeviceInfoData
+struct SwitchDeviceInfoData: Codable {
+    let connected: Bool
+}
+
+// MARK: SwitchDeviceInfoData convenience initializers and mutators
+
+extension SwitchDeviceInfoData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(SwitchDeviceInfoData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        connected: Bool? = nil
+    ) -> SwitchDeviceInfoData {
+        return SwitchDeviceInfoData(
+            connected: connected ?? self.connected
         )
     }
 
