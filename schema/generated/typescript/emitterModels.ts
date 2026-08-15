@@ -1,6 +1,6 @@
 // To parse this data:
 //
-//   import { Convert, DeviceConnectionData, CameraData, TelescopeData, ImagingData, WeatherDeviceInfoData, SafetyDeviceInfoData, SafetyChangeData, FlatPanelData, FilterWheelData } from "./file";
+//   import { Convert, DeviceConnectionData, CameraData, TelescopeData, ImagingData, WeatherDeviceInfoData, SafetyDeviceInfoData, SafetyChangeData, FlatPanelData, FilterWheelDeviceInfoData } from "./file";
 //
 //   const deviceConnectionData = Convert.toDeviceConnectionData(json);
 //   const cameraData = Convert.toCameraData(json);
@@ -10,7 +10,7 @@
 //   const safetyDeviceInfoData = Convert.toSafetyDeviceInfoData(json);
 //   const safetyChangeData = Convert.toSafetyChangeData(json);
 //   const flatPanelData = Convert.toFlatPanelData(json);
-//   const filterWheelData = Convert.toFilterWheelData(json);
+//   const filterWheelDeviceInfoData = Convert.toFilterWheelDeviceInfoData(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
@@ -256,7 +256,7 @@ export interface FlatPanelData {
 /**
  * Filter Wheel device state
  */
-export interface FilterWheelData {
+export interface FilterWheelDeviceInfoData {
     connected:        boolean;
     is_moving:        boolean;
     selected_filter?: FilterInfo;
@@ -345,12 +345,12 @@ export class Convert {
         return JSON.stringify(uncast(value, r("FlatPanelData")), null, 2);
     }
 
-    public static toFilterWheelData(json: string): FilterWheelData {
-        return cast(JSON.parse(json), r("FilterWheelData"));
+    public static toFilterWheelDeviceInfoData(json: string): FilterWheelDeviceInfoData {
+        return cast(JSON.parse(json), r("FilterWheelDeviceInfoData"));
     }
 
-    public static filterWheelDataToJson(value: FilterWheelData): string {
-        return JSON.stringify(uncast(value, r("FilterWheelData")), null, 2);
+    public static filterWheelDeviceInfoDataToJson(value: FilterWheelDeviceInfoData): string {
+        return JSON.stringify(uncast(value, r("FilterWheelDeviceInfoData")), null, 2);
     }
 }
 
@@ -580,7 +580,7 @@ const typeMap: any = {
         { json: "supports_on_off", js: "supports_on_off", typ: u(undefined, true) },
         { json: "supports_open_close", js: "supports_open_close", typ: u(undefined, true) },
     ], "any"),
-    "FilterWheelData": o([
+    "FilterWheelDeviceInfoData": o([
         { json: "connected", js: "connected", typ: true },
         { json: "is_moving", js: "is_moving", typ: true },
         { json: "selected_filter", js: "selected_filter", typ: u(undefined, r("FilterInfo")) },

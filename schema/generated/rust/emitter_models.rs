@@ -226,7 +226,7 @@ pub struct FlatPanelData {
 
 /// Filter Wheel device state
 #[derive(Serialize, Deserialize)]
-pub struct FilterWheelData {
+pub struct FilterWheelDeviceInfoData {
     pub connected: bool,
 
     pub is_moving: bool,

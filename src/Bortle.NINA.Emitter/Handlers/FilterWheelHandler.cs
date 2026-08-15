@@ -25,12 +25,12 @@ namespace Bortle.NINA.Emitter.Handlers {
             // Skip duplicates from internal nina polling
             if (deviceInfo.Equals(lastInfo)) return;
 
-            var data = new FilterWheelData {
+            var data = new FilterWheelDeviceInfoData {
                 Connected = deviceInfo.Connected,
                 IsMoving = deviceInfo.IsMoving,
                 SelectedFilter = ToFilterInfo(deviceInfo.SelectedFilter)
             };
-            emitter.Enqueue("safety_monitor", "device-info", data);
+            emitter.Enqueue("filter-wheel", "device-info", data);
             lastInfo = deviceInfo;
         }
 

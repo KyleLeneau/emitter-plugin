@@ -9,7 +9,7 @@
 //   let safetyDeviceInfoData = try SafetyDeviceInfoData(json)
 //   let safetyChangeData = try SafetyChangeData(json)
 //   let flatPanelData = try FlatPanelData(json)
-//   let filterWheelData = try FilterWheelData(json)
+//   let filterWheelDeviceInfoData = try FilterWheelDeviceInfoData(json)
 
 import Foundation
 
@@ -609,8 +609,8 @@ extension FlatPanelData {
 }
 
 /// Filter Wheel device state
-// MARK: - FilterWheelData
-struct FilterWheelData: Codable {
+// MARK: - FilterWheelDeviceInfoData
+struct FilterWheelDeviceInfoData: Codable {
     let connected, isMoving: Bool
     let selectedFilter: FilterInfo?
 
@@ -621,11 +621,11 @@ struct FilterWheelData: Codable {
     }
 }
 
-// MARK: FilterWheelData convenience initializers and mutators
+// MARK: FilterWheelDeviceInfoData convenience initializers and mutators
 
-extension FilterWheelData {
+extension FilterWheelDeviceInfoData {
     init(data: Data) throws {
-        self = try newJSONDecoder().decode(FilterWheelData.self, from: data)
+        self = try newJSONDecoder().decode(FilterWheelDeviceInfoData.self, from: data)
     }
 
     init(_ json: String, using encoding: String.Encoding = .utf8) throws {
@@ -643,8 +643,8 @@ extension FilterWheelData {
         connected: Bool? = nil,
         isMoving: Bool? = nil,
         selectedFilter: FilterInfo?? = nil
-    ) -> FilterWheelData {
-        return FilterWheelData(
+    ) -> FilterWheelDeviceInfoData {
+        return FilterWheelDeviceInfoData(
             connected: connected ?? self.connected,
             isMoving: isMoving ?? self.isMoving,
             selectedFilter: selectedFilter ?? self.selectedFilter

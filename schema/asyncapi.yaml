@@ -59,7 +59,18 @@ channels:
 
   # Camera ──────────────────────────────────────────────────────────────────
   # Dome ────────────────────────────────────────────────────────────────────
+
   # FilterWheel ─────────────────────────────────────────────────────────────
+  filterWheelDeviceInfo:
+    address: "nina.{instanceId}.filter-wheel.device-info"
+    description: Periodic data about the filter wheel
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      filterWheerDeviceInfoEvent:
+        $ref: "#/components/messages/FilterWheelDeviceInfoEvent"
+
   # FlatPanel ───────────────────────────────────────────────────────────────
   # Focuser ─────────────────────────────────────────────────────────────────
   # Guider ──────────────────────────────────────────────────────────────────
@@ -117,7 +128,15 @@ operations:
 
   # Camera ──────────────────────────────────────────────────────────────────
   # Dome ────────────────────────────────────────────────────────────────────
+
   # FilterWheel ─────────────────────────────────────────────────────────────
+  publishFilterWheelDeviceInfoEvent:
+    action: send
+    channel:
+      $ref: "#/channels/filterWheelDeviceInfo"
+    tags:
+      - name: "FilterWheel"
+
   # FlatPanel ───────────────────────────────────────────────────────────────
   # Focuser ─────────────────────────────────────────────────────────────────
   # Guider ──────────────────────────────────────────────────────────────────
@@ -182,7 +201,21 @@ components:
 
       # Camera ──────────────────────────────────────────────────────────────────
     # Dome ────────────────────────────────────────────────────────────────────
+
     # FilterWheel ─────────────────────────────────────────────────────────────
+    FilterWheelDeviceInfoEvent:
+      title: FilterWheelDeviceInfoEvent
+      summary: Periodic filter wheel device info
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.filter-wheel.device-info"
+              data:
+                $ref: "./schemas/filter_wheel_data.yaml"
+
     # FlatPanel ───────────────────────────────────────────────────────────────
     # Focuser ─────────────────────────────────────────────────────────────────
     # Guider ──────────────────────────────────────────────────────────────────

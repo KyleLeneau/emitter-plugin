@@ -12,7 +12,7 @@
 //    var safetyDeviceInfoData = SafetyDeviceInfoData.FromJson(jsonString);
 //    var safetyChangeData = SafetyChangeData.FromJson(jsonString);
 //    var flatPanelData = FlatPanelData.FromJson(jsonString);
-//    var filterWheelData = FilterWheelData.FromJson(jsonString);
+//    var filterWheelDeviceInfoData = FilterWheelDeviceInfoData.FromJson(jsonString);
 #nullable enable
 #pragma warning disable CS8618
 #pragma warning disable CS8601
@@ -364,7 +364,7 @@ namespace Bortle.NINA.Emitter.Models
     /// <summary>
     /// Filter Wheel device state
     /// </summary>
-    public partial class FilterWheelData
+    public partial class FilterWheelDeviceInfoData
     {
         [JsonPropertyName("connected")]
         public bool Connected { get; set; }
@@ -450,9 +450,9 @@ namespace Bortle.NINA.Emitter.Models
         public static FlatPanelData FromJson(string json) => JsonSerializer.Deserialize<FlatPanelData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
-    public partial class FilterWheelData
+    public partial class FilterWheelDeviceInfoData
     {
-        public static FilterWheelData FromJson(string json) => JsonSerializer.Deserialize<FilterWheelData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static FilterWheelDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<FilterWheelDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
     public static class Serialize
@@ -465,7 +465,7 @@ namespace Bortle.NINA.Emitter.Models
         public static string ToJson(this SafetyDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this SafetyChangeData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this FlatPanelData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
-        public static string ToJson(this FilterWheelData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this FilterWheelDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
     internal static class Converter
