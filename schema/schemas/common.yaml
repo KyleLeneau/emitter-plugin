@@ -30,3 +30,69 @@ definitions:
       - "Opening"
       - "Closing"
       - "Error"
+  CameraState:
+    type: string
+    enum:
+      - "None"
+      - "Idle"
+      - "Waiting"
+      - "Exposing"
+      - "Reading"
+      - "Download"
+      - "Error"
+      - "LoadingFile"
+  SensorType:
+    type: string
+    enum:
+      - "Monochrome"
+      - "Color"
+      - "RGGB"
+      - "CMYG"
+      - "CMYG2"
+      - "LRGB"
+      - "BGGR"
+      - "GBRG"
+      - "GRBG"
+      - "GRGB"
+      - "GBGR"
+      - "RGBG"
+      - "BGRG"
+  BinningMode:
+    type: object
+    properties:
+      x:
+        type: integer
+      y:
+        type: integer
+    required:
+      - "x"
+      - "y"
+  RMSError:
+    type: object
+    properties:
+      ra:
+        $ref: "common.yaml#/definitions/RMSUnit"
+      dec:
+        $ref: "common.yaml#/definitions/RMSUnit"
+      total:
+        $ref: "common.yaml#/definitions/RMSUnit"
+      peak_ra:
+        $ref: "common.yaml#/definitions/RMSUnit"
+      peak_dec:
+        $ref: "common.yaml#/definitions/RMSUnit"
+    required:
+      - "ra"
+      - "dec"
+      - "total"
+      - "peak_ra"
+      - "peak_dec"
+  RMSUnit:
+    type: object
+    properties:
+      pixel:
+        type: number
+      arc_seconds:
+        type: number
+    required:
+      - "pixel"
+      - "arc_seconds"

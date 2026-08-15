@@ -84,8 +84,233 @@ namespace Bortle.NINA.Emitter.Models
     /// </summary>
     public partial class CameraDeviceInfoData
     {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("battery")]
+        public long? Battery { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("bayer_offset_x")]
+        public long? BayerOffsetX { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("bayer_offset_y")]
+        public long? BayerOffsetY { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("bin_x")]
+        public long? BinX { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("bin_y")]
+        public long? BinY { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("binning_modes")]
+        public List<BinningMode> BinningModes { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("bit_depth")]
+        public long? BitDepth { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("camera_state")]
+        public CameraState? CameraState { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("can_get_gain")]
+        public bool? CanGetGain { get; set; }
+
+        [JsonPropertyName("can_set_gain")]
+        public bool CanSetGain { get; set; }
+
+        [JsonPropertyName("can_set_offset")]
+        public bool CanSetOffset { get; set; }
+
+        [JsonPropertyName("can_set_temperature")]
+        public bool CanSetTemperature { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("can_set_usb_limit")]
+        public bool? CanSetUsbLimit { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("can_show_live_view")]
+        public bool? CanShowLiveView { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("can_sub_sample")]
+        public bool? CanSubSample { get; set; }
+
         [JsonPropertyName("connected")]
         public bool Connected { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("cooler_on")]
+        public bool? CoolerOn { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("cooler_power")]
+        public double? CoolerPower { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("default_gain")]
+        public long? DefaultGain { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("default_offset")]
+        public long? DefaultOffset { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("dew_heater_on")]
+        public bool? DewHeaterOn { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("electrons_per_adu")]
+        public double? ElectronsPerAdu { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("exposure_end_time")]
+        public DateTimeOffset? ExposureEndTime { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("exposure_max")]
+        public double? ExposureMax { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("exposure_min")]
+        public double? ExposureMin { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("gain")]
+        public long? Gain { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("gain_max")]
+        public long? GainMax { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("gain_min")]
+        public long? GainMin { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("gains")]
+        public List<long> Gains { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("has_battery")]
+        public bool? HasBattery { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("has_dew_heater")]
+        public bool? HasDewHeater { get; set; }
+
+        [JsonPropertyName("has_shutter")]
+        public bool HasShutter { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("is_exposing")]
+        public bool? IsExposing { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("is_sub_sample_enabled")]
+        public bool? IsSubSampleEnabled { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("last_download_time")]
+        public double? LastDownloadTime { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("live_view_enabled")]
+        public bool? LiveViewEnabled { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("normal_readout_mode")]
+        public long? NormalReadoutMode { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("offset")]
+        public long? Offset { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("offset_max")]
+        public long? OffsetMax { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("offset_min")]
+        public long? OffsetMin { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("pixel_size")]
+        public double? PixelSize { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("readout_mode")]
+        public long? ReadoutMode { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("readout_modes")]
+        public List<string> ReadoutModes { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("sensor_type")]
+        public SensorType? SensorType { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("snap_readout_mode")]
+        public long? SnapReadoutMode { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("sub_sample_height")]
+        public long? SubSampleHeight { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("sub_sample_width")]
+        public long? SubSampleWidth { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("sub_sample_x")]
+        public long? SubSampleX { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("sub_sample_y")]
+        public long? SubSampleY { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("temerature_set_point")]
+        public double? TemeratureSetPoint { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("temperature")]
+        public double? Temperature { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("usb_limit")]
+        public long? UsbLimit { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("usb_limit_max")]
+        public long? UsbLimitMax { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("usb_limit_min")]
+        public long? UsbLimitMin { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("x_size")]
+        public long? XSize { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("y_size")]
+        public long? YSize { get; set; }
+    }
+
+    public partial class BinningMode
+    {
+        [JsonPropertyName("x")]
+        public long X { get; set; }
+
+        [JsonPropertyName("y")]
+        public long Y { get; set; }
     }
 
     /// <summary>
@@ -269,8 +494,52 @@ namespace Bortle.NINA.Emitter.Models
     /// </summary>
     public partial class GuiderDeviceInfoData
     {
+        [JsonPropertyName("can_clear_calibration")]
+        public bool CanClearCalibration { get; set; }
+
+        [JsonPropertyName("can_get_lock_postion")]
+        public bool CanGetLockPostion { get; set; }
+
+        [JsonPropertyName("can_set_shift_rate")]
+        public bool CanSetShiftRate { get; set; }
+
         [JsonPropertyName("connected")]
         public bool Connected { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("pixel_scale")]
+        public double? PixelScale { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("rms_error")]
+        public RmsError RmsError { get; set; }
+    }
+
+    public partial class RmsError
+    {
+        [JsonPropertyName("dec")]
+        public RmsUnit Dec { get; set; }
+
+        [JsonPropertyName("peak_dec")]
+        public RmsUnit PeakDec { get; set; }
+
+        [JsonPropertyName("peak_ra")]
+        public RmsUnit PeakRa { get; set; }
+
+        [JsonPropertyName("ra")]
+        public RmsUnit Ra { get; set; }
+
+        [JsonPropertyName("total")]
+        public RmsUnit Total { get; set; }
+    }
+
+    public partial class RmsUnit
+    {
+        [JsonPropertyName("arc_seconds")]
+        public double ArcSeconds { get; set; }
+
+        [JsonPropertyName("pixel")]
+        public double Pixel { get; set; }
     }
 
     /// <summary>
@@ -404,6 +673,10 @@ namespace Bortle.NINA.Emitter.Models
 
     public enum DeviceType { Camera, Dome, FilterWheel, FlatPanel, Focuser, Guider, Mount, Rotator, SafetyMonitor, Switch, Weather };
 
+    public enum CameraState { Download, Error, Exposing, Idle, LoadingFile, None, Reading, Waiting };
+
+    public enum SensorType { Bggr, Bgrg, Cmyg, Cmyg2, Color, Gbgr, Gbrg, Grbg, Grgb, Lrgb, Monochrome, Rgbg, Rggb };
+
     public enum ShutterState { Closed, Closing, Error, None, Open, Opening };
 
     public partial class DeviceConnectionData
@@ -495,6 +768,8 @@ namespace Bortle.NINA.Emitter.Models
             Converters =
             {
                 DeviceTypeConverter.Singleton,
+                CameraStateConverter.Singleton,
+                SensorTypeConverter.Singleton,
                 ShutterStateConverter.Singleton,
                 new DateOnlyConverter(),
                 new TimeOnlyConverter(),
@@ -580,6 +855,159 @@ namespace Bortle.NINA.Emitter.Models
         }
 
         public static readonly DeviceTypeConverter Singleton = new DeviceTypeConverter();
+    }
+
+    internal class CameraStateConverter : JsonConverter<CameraState>
+    {
+        public override bool CanConvert(Type t) => t == typeof(CameraState);
+
+        public override CameraState Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var value = reader.GetString();
+            switch (value)
+            {
+                case "Download":
+                    return CameraState.Download;
+                case "Error":
+                    return CameraState.Error;
+                case "Exposing":
+                    return CameraState.Exposing;
+                case "Idle":
+                    return CameraState.Idle;
+                case "LoadingFile":
+                    return CameraState.LoadingFile;
+                case "None":
+                    return CameraState.None;
+                case "Reading":
+                    return CameraState.Reading;
+                case "Waiting":
+                    return CameraState.Waiting;
+            }
+            throw new Exception("Cannot unmarshal type CameraState");
+        }
+
+        public override void Write(Utf8JsonWriter writer, CameraState value, JsonSerializerOptions options)
+        {
+            switch (value)
+            {
+                case CameraState.Download:
+                    JsonSerializer.Serialize(writer, "Download", options);
+                    return;
+                case CameraState.Error:
+                    JsonSerializer.Serialize(writer, "Error", options);
+                    return;
+                case CameraState.Exposing:
+                    JsonSerializer.Serialize(writer, "Exposing", options);
+                    return;
+                case CameraState.Idle:
+                    JsonSerializer.Serialize(writer, "Idle", options);
+                    return;
+                case CameraState.LoadingFile:
+                    JsonSerializer.Serialize(writer, "LoadingFile", options);
+                    return;
+                case CameraState.None:
+                    JsonSerializer.Serialize(writer, "None", options);
+                    return;
+                case CameraState.Reading:
+                    JsonSerializer.Serialize(writer, "Reading", options);
+                    return;
+                case CameraState.Waiting:
+                    JsonSerializer.Serialize(writer, "Waiting", options);
+                    return;
+            }
+            throw new Exception("Cannot marshal type CameraState");
+        }
+
+        public static readonly CameraStateConverter Singleton = new CameraStateConverter();
+    }
+
+    internal class SensorTypeConverter : JsonConverter<SensorType>
+    {
+        public override bool CanConvert(Type t) => t == typeof(SensorType);
+
+        public override SensorType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var value = reader.GetString();
+            switch (value)
+            {
+                case "BGGR":
+                    return SensorType.Bggr;
+                case "BGRG":
+                    return SensorType.Bgrg;
+                case "CMYG":
+                    return SensorType.Cmyg;
+                case "CMYG2":
+                    return SensorType.Cmyg2;
+                case "Color":
+                    return SensorType.Color;
+                case "GBGR":
+                    return SensorType.Gbgr;
+                case "GBRG":
+                    return SensorType.Gbrg;
+                case "GRBG":
+                    return SensorType.Grbg;
+                case "GRGB":
+                    return SensorType.Grgb;
+                case "LRGB":
+                    return SensorType.Lrgb;
+                case "Monochrome":
+                    return SensorType.Monochrome;
+                case "RGBG":
+                    return SensorType.Rgbg;
+                case "RGGB":
+                    return SensorType.Rggb;
+            }
+            throw new Exception("Cannot unmarshal type SensorType");
+        }
+
+        public override void Write(Utf8JsonWriter writer, SensorType value, JsonSerializerOptions options)
+        {
+            switch (value)
+            {
+                case SensorType.Bggr:
+                    JsonSerializer.Serialize(writer, "BGGR", options);
+                    return;
+                case SensorType.Bgrg:
+                    JsonSerializer.Serialize(writer, "BGRG", options);
+                    return;
+                case SensorType.Cmyg:
+                    JsonSerializer.Serialize(writer, "CMYG", options);
+                    return;
+                case SensorType.Cmyg2:
+                    JsonSerializer.Serialize(writer, "CMYG2", options);
+                    return;
+                case SensorType.Color:
+                    JsonSerializer.Serialize(writer, "Color", options);
+                    return;
+                case SensorType.Gbgr:
+                    JsonSerializer.Serialize(writer, "GBGR", options);
+                    return;
+                case SensorType.Gbrg:
+                    JsonSerializer.Serialize(writer, "GBRG", options);
+                    return;
+                case SensorType.Grbg:
+                    JsonSerializer.Serialize(writer, "GRBG", options);
+                    return;
+                case SensorType.Grgb:
+                    JsonSerializer.Serialize(writer, "GRGB", options);
+                    return;
+                case SensorType.Lrgb:
+                    JsonSerializer.Serialize(writer, "LRGB", options);
+                    return;
+                case SensorType.Monochrome:
+                    JsonSerializer.Serialize(writer, "Monochrome", options);
+                    return;
+                case SensorType.Rgbg:
+                    JsonSerializer.Serialize(writer, "RGBG", options);
+                    return;
+                case SensorType.Rggb:
+                    JsonSerializer.Serialize(writer, "RGGB", options);
+                    return;
+            }
+            throw new Exception("Cannot marshal type SensorType");
+        }
+
+        public static readonly SensorTypeConverter Singleton = new SensorTypeConverter();
     }
 
     internal class ShutterStateConverter : JsonConverter<ShutterState>

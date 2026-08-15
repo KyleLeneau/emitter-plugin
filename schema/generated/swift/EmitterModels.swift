@@ -112,7 +112,98 @@ enum DeviceType: String, Codable {
 /// Periodic Camera event data
 // MARK: - CameraDeviceInfoData
 struct CameraDeviceInfoData: Codable {
+    let battery, bayerOffsetX, bayerOffsetY, binX: Int?
+    let binY: Int?
+    let binningModes: [BinningMode]?
+    let bitDepth: Int?
+    let cameraState: CameraState?
+    let canGetGain: Bool?
+    let canSetGain, canSetOffset, canSetTemperature: Bool
+    let canSetUSBLimit, canShowLiveView, canSubSample: Bool?
     let connected: Bool
+    let coolerOn: Bool?
+    let coolerPower: Double?
+    let defaultGain, defaultOffset: Int?
+    let dewHeaterOn: Bool?
+    let electronsPerAdu: Double?
+    let exposureEndTime: Date?
+    let exposureMax, exposureMin: Double?
+    let gain, gainMax, gainMin: Int?
+    let gains: [Int]?
+    let hasBattery, hasDewHeater: Bool?
+    let hasShutter: Bool
+    let isExposing, isSubSampleEnabled: Bool?
+    let lastDownloadTime: Double?
+    let liveViewEnabled: Bool?
+    let normalReadoutMode, offset, offsetMax, offsetMin: Int?
+    let pixelSize: Double?
+    let readoutMode: Int?
+    let readoutModes: [String]?
+    let sensorType: SensorType?
+    let snapReadoutMode, subSampleHeight, subSampleWidth, subSampleX: Int?
+    let subSampleY: Int?
+    let temeratureSetPoint, temperature: Double?
+    let usbLimit, usbLimitMax, usbLimitMin, xSize: Int?
+    let ySize: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case battery
+        case bayerOffsetX = "bayer_offset_x"
+        case bayerOffsetY = "bayer_offset_y"
+        case binX = "bin_x"
+        case binY = "bin_y"
+        case binningModes = "binning_modes"
+        case bitDepth = "bit_depth"
+        case cameraState = "camera_state"
+        case canGetGain = "can_get_gain"
+        case canSetGain = "can_set_gain"
+        case canSetOffset = "can_set_offset"
+        case canSetTemperature = "can_set_temperature"
+        case canSetUSBLimit = "can_set_usb_limit"
+        case canShowLiveView = "can_show_live_view"
+        case canSubSample = "can_sub_sample"
+        case connected
+        case coolerOn = "cooler_on"
+        case coolerPower = "cooler_power"
+        case defaultGain = "default_gain"
+        case defaultOffset = "default_offset"
+        case dewHeaterOn = "dew_heater_on"
+        case electronsPerAdu = "electrons_per_adu"
+        case exposureEndTime = "exposure_end_time"
+        case exposureMax = "exposure_max"
+        case exposureMin = "exposure_min"
+        case gain
+        case gainMax = "gain_max"
+        case gainMin = "gain_min"
+        case gains
+        case hasBattery = "has_battery"
+        case hasDewHeater = "has_dew_heater"
+        case hasShutter = "has_shutter"
+        case isExposing = "is_exposing"
+        case isSubSampleEnabled = "is_sub_sample_enabled"
+        case lastDownloadTime = "last_download_time"
+        case liveViewEnabled = "live_view_enabled"
+        case normalReadoutMode = "normal_readout_mode"
+        case offset
+        case offsetMax = "offset_max"
+        case offsetMin = "offset_min"
+        case pixelSize = "pixel_size"
+        case readoutMode = "readout_mode"
+        case readoutModes = "readout_modes"
+        case sensorType = "sensor_type"
+        case snapReadoutMode = "snap_readout_mode"
+        case subSampleHeight = "sub_sample_height"
+        case subSampleWidth = "sub_sample_width"
+        case subSampleX = "sub_sample_x"
+        case subSampleY = "sub_sample_y"
+        case temeratureSetPoint = "temerature_set_point"
+        case temperature
+        case usbLimit = "usb_limit"
+        case usbLimitMax = "usb_limit_max"
+        case usbLimitMin = "usb_limit_min"
+        case xSize = "x_size"
+        case ySize = "y_size"
+    }
 }
 
 // MARK: CameraDeviceInfoData convenience initializers and mutators
@@ -134,10 +225,120 @@ extension CameraDeviceInfoData {
     }
 
     func with(
-        connected: Bool? = nil
+        battery: Int?? = nil,
+        bayerOffsetX: Int?? = nil,
+        bayerOffsetY: Int?? = nil,
+        binX: Int?? = nil,
+        binY: Int?? = nil,
+        binningModes: [BinningMode]?? = nil,
+        bitDepth: Int?? = nil,
+        cameraState: CameraState?? = nil,
+        canGetGain: Bool?? = nil,
+        canSetGain: Bool? = nil,
+        canSetOffset: Bool? = nil,
+        canSetTemperature: Bool? = nil,
+        canSetUSBLimit: Bool?? = nil,
+        canShowLiveView: Bool?? = nil,
+        canSubSample: Bool?? = nil,
+        connected: Bool? = nil,
+        coolerOn: Bool?? = nil,
+        coolerPower: Double?? = nil,
+        defaultGain: Int?? = nil,
+        defaultOffset: Int?? = nil,
+        dewHeaterOn: Bool?? = nil,
+        electronsPerAdu: Double?? = nil,
+        exposureEndTime: Date?? = nil,
+        exposureMax: Double?? = nil,
+        exposureMin: Double?? = nil,
+        gain: Int?? = nil,
+        gainMax: Int?? = nil,
+        gainMin: Int?? = nil,
+        gains: [Int]?? = nil,
+        hasBattery: Bool?? = nil,
+        hasDewHeater: Bool?? = nil,
+        hasShutter: Bool? = nil,
+        isExposing: Bool?? = nil,
+        isSubSampleEnabled: Bool?? = nil,
+        lastDownloadTime: Double?? = nil,
+        liveViewEnabled: Bool?? = nil,
+        normalReadoutMode: Int?? = nil,
+        offset: Int?? = nil,
+        offsetMax: Int?? = nil,
+        offsetMin: Int?? = nil,
+        pixelSize: Double?? = nil,
+        readoutMode: Int?? = nil,
+        readoutModes: [String]?? = nil,
+        sensorType: SensorType?? = nil,
+        snapReadoutMode: Int?? = nil,
+        subSampleHeight: Int?? = nil,
+        subSampleWidth: Int?? = nil,
+        subSampleX: Int?? = nil,
+        subSampleY: Int?? = nil,
+        temeratureSetPoint: Double?? = nil,
+        temperature: Double?? = nil,
+        usbLimit: Int?? = nil,
+        usbLimitMax: Int?? = nil,
+        usbLimitMin: Int?? = nil,
+        xSize: Int?? = nil,
+        ySize: Int?? = nil
     ) -> CameraDeviceInfoData {
         return CameraDeviceInfoData(
-            connected: connected ?? self.connected
+            battery: battery ?? self.battery,
+            bayerOffsetX: bayerOffsetX ?? self.bayerOffsetX,
+            bayerOffsetY: bayerOffsetY ?? self.bayerOffsetY,
+            binX: binX ?? self.binX,
+            binY: binY ?? self.binY,
+            binningModes: binningModes ?? self.binningModes,
+            bitDepth: bitDepth ?? self.bitDepth,
+            cameraState: cameraState ?? self.cameraState,
+            canGetGain: canGetGain ?? self.canGetGain,
+            canSetGain: canSetGain ?? self.canSetGain,
+            canSetOffset: canSetOffset ?? self.canSetOffset,
+            canSetTemperature: canSetTemperature ?? self.canSetTemperature,
+            canSetUSBLimit: canSetUSBLimit ?? self.canSetUSBLimit,
+            canShowLiveView: canShowLiveView ?? self.canShowLiveView,
+            canSubSample: canSubSample ?? self.canSubSample,
+            connected: connected ?? self.connected,
+            coolerOn: coolerOn ?? self.coolerOn,
+            coolerPower: coolerPower ?? self.coolerPower,
+            defaultGain: defaultGain ?? self.defaultGain,
+            defaultOffset: defaultOffset ?? self.defaultOffset,
+            dewHeaterOn: dewHeaterOn ?? self.dewHeaterOn,
+            electronsPerAdu: electronsPerAdu ?? self.electronsPerAdu,
+            exposureEndTime: exposureEndTime ?? self.exposureEndTime,
+            exposureMax: exposureMax ?? self.exposureMax,
+            exposureMin: exposureMin ?? self.exposureMin,
+            gain: gain ?? self.gain,
+            gainMax: gainMax ?? self.gainMax,
+            gainMin: gainMin ?? self.gainMin,
+            gains: gains ?? self.gains,
+            hasBattery: hasBattery ?? self.hasBattery,
+            hasDewHeater: hasDewHeater ?? self.hasDewHeater,
+            hasShutter: hasShutter ?? self.hasShutter,
+            isExposing: isExposing ?? self.isExposing,
+            isSubSampleEnabled: isSubSampleEnabled ?? self.isSubSampleEnabled,
+            lastDownloadTime: lastDownloadTime ?? self.lastDownloadTime,
+            liveViewEnabled: liveViewEnabled ?? self.liveViewEnabled,
+            normalReadoutMode: normalReadoutMode ?? self.normalReadoutMode,
+            offset: offset ?? self.offset,
+            offsetMax: offsetMax ?? self.offsetMax,
+            offsetMin: offsetMin ?? self.offsetMin,
+            pixelSize: pixelSize ?? self.pixelSize,
+            readoutMode: readoutMode ?? self.readoutMode,
+            readoutModes: readoutModes ?? self.readoutModes,
+            sensorType: sensorType ?? self.sensorType,
+            snapReadoutMode: snapReadoutMode ?? self.snapReadoutMode,
+            subSampleHeight: subSampleHeight ?? self.subSampleHeight,
+            subSampleWidth: subSampleWidth ?? self.subSampleWidth,
+            subSampleX: subSampleX ?? self.subSampleX,
+            subSampleY: subSampleY ?? self.subSampleY,
+            temeratureSetPoint: temeratureSetPoint ?? self.temeratureSetPoint,
+            temperature: temperature ?? self.temperature,
+            usbLimit: usbLimit ?? self.usbLimit,
+            usbLimitMax: usbLimitMax ?? self.usbLimitMax,
+            usbLimitMin: usbLimitMin ?? self.usbLimitMin,
+            xSize: xSize ?? self.xSize,
+            ySize: ySize ?? self.ySize
         )
     }
 
@@ -148,6 +349,75 @@ extension CameraDeviceInfoData {
     func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
         return String(data: try self.jsonData(), encoding: encoding)
     }
+}
+
+// MARK: - BinningMode
+struct BinningMode: Codable {
+    let x, y: Int
+}
+
+// MARK: BinningMode convenience initializers and mutators
+
+extension BinningMode {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(BinningMode.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        x: Int? = nil,
+        y: Int? = nil
+    ) -> BinningMode {
+        return BinningMode(
+            x: x ?? self.x,
+            y: y ?? self.y
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+enum CameraState: String, Codable {
+    case download = "Download"
+    case error = "Error"
+    case exposing = "Exposing"
+    case idle = "Idle"
+    case loadingFile = "LoadingFile"
+    case none = "None"
+    case reading = "Reading"
+    case waiting = "Waiting"
+}
+
+enum SensorType: String, Codable {
+    case bggr = "BGGR"
+    case bgrg = "BGRG"
+    case cmyg = "CMYG"
+    case cmyg2 = "CMYG2"
+    case color = "Color"
+    case gbgr = "GBGR"
+    case gbrg = "GBRG"
+    case grbg = "GRBG"
+    case grgb = "GRGB"
+    case lrgb = "LRGB"
+    case monochrome = "Monochrome"
+    case rgbg = "RGBG"
+    case rggb = "RGGB"
 }
 
 /// Dome device state
@@ -523,7 +793,18 @@ extension FocuserDeviceInfoData {
 /// Periodic Guider event data
 // MARK: - GuiderDeviceInfoData
 struct GuiderDeviceInfoData: Codable {
-    let connected: Bool
+    let canClearCalibration, canGetLockPostion, canSetShiftRate, connected: Bool
+    let pixelScale: Double?
+    let rmsError: RMSError?
+
+    enum CodingKeys: String, CodingKey {
+        case canClearCalibration = "can_clear_calibration"
+        case canGetLockPostion = "can_get_lock_postion"
+        case canSetShiftRate = "can_set_shift_rate"
+        case connected
+        case pixelScale = "pixel_scale"
+        case rmsError = "rms_error"
+    }
 }
 
 // MARK: GuiderDeviceInfoData convenience initializers and mutators
@@ -545,10 +826,123 @@ extension GuiderDeviceInfoData {
     }
 
     func with(
-        connected: Bool? = nil
+        canClearCalibration: Bool? = nil,
+        canGetLockPostion: Bool? = nil,
+        canSetShiftRate: Bool? = nil,
+        connected: Bool? = nil,
+        pixelScale: Double?? = nil,
+        rmsError: RMSError?? = nil
     ) -> GuiderDeviceInfoData {
         return GuiderDeviceInfoData(
-            connected: connected ?? self.connected
+            canClearCalibration: canClearCalibration ?? self.canClearCalibration,
+            canGetLockPostion: canGetLockPostion ?? self.canGetLockPostion,
+            canSetShiftRate: canSetShiftRate ?? self.canSetShiftRate,
+            connected: connected ?? self.connected,
+            pixelScale: pixelScale ?? self.pixelScale,
+            rmsError: rmsError ?? self.rmsError
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+// MARK: - RMSError
+struct RMSError: Codable {
+    let dec, peakDEC, peakRa, ra: RMSUnit
+    let total: RMSUnit
+
+    enum CodingKeys: String, CodingKey {
+        case dec
+        case peakDEC = "peak_dec"
+        case peakRa = "peak_ra"
+        case ra, total
+    }
+}
+
+// MARK: RMSError convenience initializers and mutators
+
+extension RMSError {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(RMSError.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        dec: RMSUnit? = nil,
+        peakDEC: RMSUnit? = nil,
+        peakRa: RMSUnit? = nil,
+        ra: RMSUnit? = nil,
+        total: RMSUnit? = nil
+    ) -> RMSError {
+        return RMSError(
+            dec: dec ?? self.dec,
+            peakDEC: peakDEC ?? self.peakDEC,
+            peakRa: peakRa ?? self.peakRa,
+            ra: ra ?? self.ra,
+            total: total ?? self.total
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+// MARK: - RMSUnit
+struct RMSUnit: Codable {
+    let arcSeconds, pixel: Double
+
+    enum CodingKeys: String, CodingKey {
+        case arcSeconds = "arc_seconds"
+        case pixel
+    }
+}
+
+// MARK: RMSUnit convenience initializers and mutators
+
+extension RMSUnit {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(RMSUnit.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        arcSeconds: Double? = nil,
+        pixel: Double? = nil
+    ) -> RMSUnit {
+        return RMSUnit(
+            arcSeconds: arcSeconds ?? self.arcSeconds,
+            pixel: pixel ?? self.pixel
         )
     }
 

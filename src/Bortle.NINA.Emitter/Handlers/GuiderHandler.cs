@@ -10,6 +10,7 @@ namespace Bortle.NINA.Emitter.Handlers {
     public class GuiderHandler : IGuiderConsumer {
         private readonly IEventEmitter emitter;
         private readonly IGuiderMediator mediator;
+        private GuiderInfo lastInfo;
 
         public GuiderHandler(IEventEmitter eventEmitter, IGuiderMediator guiderMediator) {
             emitter = eventEmitter;
@@ -24,7 +25,19 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         public void UpdateDeviceInfo(GuiderInfo deviceInfo) {
-            // TODO: Implement event
+            // Skip duplicates from internal nina polling
+            if (deviceInfo.Equals(lastInfo)) return;
+
+            var data = new GuiderDeviceInfoData {
+                Connected = deviceInfo.Connected,
+                CanClearCalibration = deviceInfo.CanClearCalibration,
+                CanSetShiftRate = deviceInfo.CanSetShiftRate,
+                CanGetLockPostion = deviceInfo.CanGetLockPosition,
+                RmsError = ToRmsError(deviceInfo.RMSError),
+                PixelScale = deviceInfo.PixelScale,
+            };
+            emitter.Enqueue("guider", "device-info", data);
+            lastInfo = deviceInfo;
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {
@@ -75,6 +88,20 @@ namespace Bortle.NINA.Emitter.Handlers {
             mediator.Disconnected -= MediatorOnDisconnected;
             mediator.Connected -= MediatorOnConnected;
             mediator.RemoveConsumer(this);
+        }
+
+        private RmsError ToRmsError(RMSError rmsError) {
+            return new RmsError {
+                Ra = ToRmsUnit(rmsError.RA),
+                Dec = ToRmsUnit(rmsError.Dec),
+                Total = ToRmsUnit(rmsError.Total),
+                PeakRa = ToRmsUnit(rmsError.PeakRA),
+                PeakDec = ToRmsUnit(rmsError.PeakDec),
+            };
+        }
+
+        private RmsUnit ToRmsUnit(RMSUnit unit) {
+            return new RmsUnit { Pixel = unit.Pixel, ArcSeconds = unit.Arcseconds };
         }
     }
 }

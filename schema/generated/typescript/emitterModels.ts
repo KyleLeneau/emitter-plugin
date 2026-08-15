@@ -70,8 +70,96 @@ export enum DeviceType {
  * Periodic Camera event data
  */
 export interface CameraDeviceInfoData {
-    connected: boolean;
+    battery?:               number;
+    bayer_offset_x?:        number;
+    bayer_offset_y?:        number;
+    bin_x?:                 number;
+    bin_y?:                 number;
+    binning_modes?:         BinningMode[];
+    bit_depth?:             number;
+    camera_state?:          CameraState;
+    can_get_gain?:          boolean;
+    can_set_gain:           boolean;
+    can_set_offset:         boolean;
+    can_set_temperature:    boolean;
+    can_set_usb_limit?:     boolean;
+    can_show_live_view?:    boolean;
+    can_sub_sample?:        boolean;
+    connected:              boolean;
+    cooler_on?:             boolean;
+    cooler_power?:          number;
+    default_gain?:          number;
+    default_offset?:        number;
+    dew_heater_on?:         boolean;
+    electrons_per_adu?:     number;
+    exposure_end_time?:     Date;
+    exposure_max?:          number;
+    exposure_min?:          number;
+    gain?:                  number;
+    gain_max?:              number;
+    gain_min?:              number;
+    gains?:                 number[];
+    has_battery?:           boolean;
+    has_dew_heater?:        boolean;
+    has_shutter:            boolean;
+    is_exposing?:           boolean;
+    is_sub_sample_enabled?: boolean;
+    last_download_time?:    number;
+    live_view_enabled?:     boolean;
+    normal_readout_mode?:   number;
+    offset?:                number;
+    offset_max?:            number;
+    offset_min?:            number;
+    pixel_size?:            number;
+    readout_mode?:          number;
+    readout_modes?:         string[];
+    sensor_type?:           SensorType;
+    snap_readout_mode?:     number;
+    sub_sample_height?:     number;
+    sub_sample_width?:      number;
+    sub_sample_x?:          number;
+    sub_sample_y?:          number;
+    temerature_set_point?:  number;
+    temperature?:           number;
+    usb_limit?:             number;
+    usb_limit_max?:         number;
+    usb_limit_min?:         number;
+    x_size?:                number;
+    y_size?:                number;
     [property: string]: any;
+}
+
+export interface BinningMode {
+    x: number;
+    y: number;
+    [property: string]: any;
+}
+
+export enum CameraState {
+    Download = "Download",
+    Error = "Error",
+    Exposing = "Exposing",
+    Idle = "Idle",
+    LoadingFile = "LoadingFile",
+    None = "None",
+    Reading = "Reading",
+    Waiting = "Waiting",
+}
+
+export enum SensorType {
+    Bggr = "BGGR",
+    Bgrg = "BGRG",
+    Cmyg = "CMYG",
+    Cmyg2 = "CMYG2",
+    Color = "Color",
+    Gbgr = "GBGR",
+    Gbrg = "GBRG",
+    Grbg = "GRBG",
+    Grgb = "GRGB",
+    Lrgb = "LRGB",
+    Monochrome = "Monochrome",
+    Rgbg = "RGBG",
+    Rggb = "RGGB",
 }
 
 /**
@@ -166,7 +254,27 @@ export interface FocuserDeviceInfoData {
  * Periodic Guider event data
  */
 export interface GuiderDeviceInfoData {
-    connected: boolean;
+    can_clear_calibration: boolean;
+    can_get_lock_postion:  boolean;
+    can_set_shift_rate:    boolean;
+    connected:             boolean;
+    pixel_scale?:          number;
+    rms_error?:            RMSError;
+    [property: string]: any;
+}
+
+export interface RMSError {
+    dec:      RMSUnit;
+    peak_dec: RMSUnit;
+    peak_ra:  RMSUnit;
+    ra:       RMSUnit;
+    total:    RMSUnit;
+    [property: string]: any;
+}
+
+export interface RMSUnit {
+    arc_seconds: number;
+    pixel:       number;
     [property: string]: any;
 }
 
@@ -539,7 +647,66 @@ const typeMap: any = {
         { json: "name", js: "name", typ: u(undefined, u(null, "")) },
     ], "any"),
     "CameraDeviceInfoData": o([
+        { json: "battery", js: "battery", typ: u(undefined, 0) },
+        { json: "bayer_offset_x", js: "bayer_offset_x", typ: u(undefined, 0) },
+        { json: "bayer_offset_y", js: "bayer_offset_y", typ: u(undefined, 0) },
+        { json: "bin_x", js: "bin_x", typ: u(undefined, 0) },
+        { json: "bin_y", js: "bin_y", typ: u(undefined, 0) },
+        { json: "binning_modes", js: "binning_modes", typ: u(undefined, a(r("BinningMode"))) },
+        { json: "bit_depth", js: "bit_depth", typ: u(undefined, 0) },
+        { json: "camera_state", js: "camera_state", typ: u(undefined, r("CameraState")) },
+        { json: "can_get_gain", js: "can_get_gain", typ: u(undefined, true) },
+        { json: "can_set_gain", js: "can_set_gain", typ: true },
+        { json: "can_set_offset", js: "can_set_offset", typ: true },
+        { json: "can_set_temperature", js: "can_set_temperature", typ: true },
+        { json: "can_set_usb_limit", js: "can_set_usb_limit", typ: u(undefined, true) },
+        { json: "can_show_live_view", js: "can_show_live_view", typ: u(undefined, true) },
+        { json: "can_sub_sample", js: "can_sub_sample", typ: u(undefined, true) },
         { json: "connected", js: "connected", typ: true },
+        { json: "cooler_on", js: "cooler_on", typ: u(undefined, true) },
+        { json: "cooler_power", js: "cooler_power", typ: u(undefined, 3.14) },
+        { json: "default_gain", js: "default_gain", typ: u(undefined, 0) },
+        { json: "default_offset", js: "default_offset", typ: u(undefined, 0) },
+        { json: "dew_heater_on", js: "dew_heater_on", typ: u(undefined, true) },
+        { json: "electrons_per_adu", js: "electrons_per_adu", typ: u(undefined, 3.14) },
+        { json: "exposure_end_time", js: "exposure_end_time", typ: u(undefined, Date) },
+        { json: "exposure_max", js: "exposure_max", typ: u(undefined, 3.14) },
+        { json: "exposure_min", js: "exposure_min", typ: u(undefined, 3.14) },
+        { json: "gain", js: "gain", typ: u(undefined, 0) },
+        { json: "gain_max", js: "gain_max", typ: u(undefined, 0) },
+        { json: "gain_min", js: "gain_min", typ: u(undefined, 0) },
+        { json: "gains", js: "gains", typ: u(undefined, a(0)) },
+        { json: "has_battery", js: "has_battery", typ: u(undefined, true) },
+        { json: "has_dew_heater", js: "has_dew_heater", typ: u(undefined, true) },
+        { json: "has_shutter", js: "has_shutter", typ: true },
+        { json: "is_exposing", js: "is_exposing", typ: u(undefined, true) },
+        { json: "is_sub_sample_enabled", js: "is_sub_sample_enabled", typ: u(undefined, true) },
+        { json: "last_download_time", js: "last_download_time", typ: u(undefined, 3.14) },
+        { json: "live_view_enabled", js: "live_view_enabled", typ: u(undefined, true) },
+        { json: "normal_readout_mode", js: "normal_readout_mode", typ: u(undefined, 0) },
+        { json: "offset", js: "offset", typ: u(undefined, 0) },
+        { json: "offset_max", js: "offset_max", typ: u(undefined, 0) },
+        { json: "offset_min", js: "offset_min", typ: u(undefined, 0) },
+        { json: "pixel_size", js: "pixel_size", typ: u(undefined, 3.14) },
+        { json: "readout_mode", js: "readout_mode", typ: u(undefined, 0) },
+        { json: "readout_modes", js: "readout_modes", typ: u(undefined, a("")) },
+        { json: "sensor_type", js: "sensor_type", typ: u(undefined, r("SensorType")) },
+        { json: "snap_readout_mode", js: "snap_readout_mode", typ: u(undefined, 0) },
+        { json: "sub_sample_height", js: "sub_sample_height", typ: u(undefined, 0) },
+        { json: "sub_sample_width", js: "sub_sample_width", typ: u(undefined, 0) },
+        { json: "sub_sample_x", js: "sub_sample_x", typ: u(undefined, 0) },
+        { json: "sub_sample_y", js: "sub_sample_y", typ: u(undefined, 0) },
+        { json: "temerature_set_point", js: "temerature_set_point", typ: u(undefined, 3.14) },
+        { json: "temperature", js: "temperature", typ: u(undefined, 3.14) },
+        { json: "usb_limit", js: "usb_limit", typ: u(undefined, 0) },
+        { json: "usb_limit_max", js: "usb_limit_max", typ: u(undefined, 0) },
+        { json: "usb_limit_min", js: "usb_limit_min", typ: u(undefined, 0) },
+        { json: "x_size", js: "x_size", typ: u(undefined, 0) },
+        { json: "y_size", js: "y_size", typ: u(undefined, 0) },
+    ], "any"),
+    "BinningMode": o([
+        { json: "x", js: "x", typ: 0 },
+        { json: "y", js: "y", typ: 0 },
     ], "any"),
     "DomeDeviceInfoData": o([
         { json: "altitude_degrees", js: "altitude_degrees", typ: u(undefined, 3.14) },
@@ -596,7 +763,23 @@ const typeMap: any = {
         { json: "temperature", js: "temperature", typ: u(undefined, 3.14) },
     ], "any"),
     "GuiderDeviceInfoData": o([
+        { json: "can_clear_calibration", js: "can_clear_calibration", typ: true },
+        { json: "can_get_lock_postion", js: "can_get_lock_postion", typ: true },
+        { json: "can_set_shift_rate", js: "can_set_shift_rate", typ: true },
         { json: "connected", js: "connected", typ: true },
+        { json: "pixel_scale", js: "pixel_scale", typ: u(undefined, 3.14) },
+        { json: "rms_error", js: "rms_error", typ: u(undefined, r("RMSError")) },
+    ], "any"),
+    "RMSError": o([
+        { json: "dec", js: "dec", typ: r("RMSUnit") },
+        { json: "peak_dec", js: "peak_dec", typ: r("RMSUnit") },
+        { json: "peak_ra", js: "peak_ra", typ: r("RMSUnit") },
+        { json: "ra", js: "ra", typ: r("RMSUnit") },
+        { json: "total", js: "total", typ: r("RMSUnit") },
+    ], "any"),
+    "RMSUnit": o([
+        { json: "arc_seconds", js: "arc_seconds", typ: 3.14 },
+        { json: "pixel", js: "pixel", typ: 3.14 },
     ], "any"),
     "MountDeviceInfoData": o([
         { json: "connected", js: "connected", typ: true },
@@ -641,6 +824,31 @@ const typeMap: any = {
         "SafetyMonitor",
         "Switch",
         "Weather",
+    ],
+    "CameraState": [
+        "Download",
+        "Error",
+        "Exposing",
+        "Idle",
+        "LoadingFile",
+        "None",
+        "Reading",
+        "Waiting",
+    ],
+    "SensorType": [
+        "BGGR",
+        "BGRG",
+        "CMYG",
+        "CMYG2",
+        "Color",
+        "GBGR",
+        "GBRG",
+        "GRBG",
+        "GRGB",
+        "LRGB",
+        "Monochrome",
+        "RGBG",
+        "RGGB",
     ],
     "ShutterState": [
         "Closed",

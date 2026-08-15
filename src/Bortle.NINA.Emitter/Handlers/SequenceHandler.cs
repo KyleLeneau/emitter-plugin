@@ -12,7 +12,7 @@ namespace Bortle.NINA.Emitter.Handlers {
         public SequenceHandler(IEventEmitter eventEmitter, ISequenceMediator sequenceMediator) {
             emitter = eventEmitter;
             service = sequenceMediator;
-            
+
             // All plugins need to load before this handler can start
             Task.Run(async () => {
                 while (!service.Initialized) {

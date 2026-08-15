@@ -5,5 +5,126 @@ description: Periodic Camera event data
 properties:
   connected:
     type: boolean
+  can_set_temperature:
+    type: boolean
+  has_shutter:
+    type: boolean
+  temperature:
+    type: number
+  gain:
+    type: integer
+  default_gain:
+    type: integer
+  electrons_per_adu:
+    type: number
+  bin_x:
+    type: integer
+  bin_y:
+    type: integer
+  bit_depth:
+    type: integer
+  can_set_offset:
+    type: boolean
+  offset_min:
+    type: integer
+  offset_max:
+    type: integer
+  offset:
+    type: integer
+  default_offset:
+    type: integer
+  usb_limit:
+    type: integer
+  is_sub_sample_enabled:
+    type: boolean
+  camera_state:
+    $ref: "common.yaml#/definitions/CameraState"
+  x_size:
+    type: integer
+  y_size:
+    type: integer
+  pixel_size:
+    type: number
+  has_battery:
+    type: boolean
+  battery:
+    type: integer
+  gain_min:
+    type: integer
+  gain_max:
+    type: integer
+  can_set_gain:
+    type: boolean
+  can_get_gain:
+    type: boolean
+  gains:
+    type: array
+    items:
+      type: integer
+  cooler_on:
+    type: boolean
+  cooler_power:
+    type: number
+  has_dew_heater:
+    type: boolean
+  dew_heater_on:
+    type: boolean
+  can_sub_sample:
+    type: boolean
+  sub_sample_x:
+    type: integer
+  sub_sample_y:
+    type: integer
+  sub_sample_width:
+    type: integer
+  sub_sample_height:
+    type: integer
+  temerature_set_point:
+    type: number
+  readout_modes:
+    type: array
+    items:
+      type: string
+  readout_mode:
+    type: integer
+  snap_readout_mode:
+    type: integer
+  normal_readout_mode:
+    type: integer
+  is_exposing:
+    type: boolean
+  exposure_end_time:
+    type: string
+    format: "date-time"
+  last_download_time:
+    type: number
+  sensor_type:
+    $ref: "common.yaml#/definitions/SensorType"
+  bayer_offset_x:
+    type: integer
+  bayer_offset_y:
+    type: integer
+  binning_modes:
+    type: array
+    items:
+      $ref: "common.yaml#/definitions/BinningMode"
+  exposure_max:
+    type: number
+  exposure_min:
+    type: number
+  live_view_enabled:
+    type: boolean
+  can_show_live_view:
+    type: boolean
+  can_set_usb_limit:
+    type: boolean
+  usb_limit_min:
+    type: integer
+  usb_limit_max:
+    type: integer
 required:
   - connected
+  - can_set_temperature
+  - has_shutter
+  - can_set_offset
+  - can_set_gain

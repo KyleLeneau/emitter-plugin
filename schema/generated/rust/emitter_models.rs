@@ -70,7 +70,184 @@ pub enum DeviceType {
 /// Periodic Camera event data
 #[derive(Serialize, Deserialize)]
 pub struct CameraDeviceInfoData {
+    pub battery: Option<i64>,
+
+    pub bayer_offset_x: Option<i64>,
+
+    pub bayer_offset_y: Option<i64>,
+
+    pub bin_x: Option<i64>,
+
+    pub bin_y: Option<i64>,
+
+    pub binning_modes: Option<Vec<BinningMode>>,
+
+    pub bit_depth: Option<i64>,
+
+    pub camera_state: Option<CameraState>,
+
+    pub can_get_gain: Option<bool>,
+
+    pub can_set_gain: bool,
+
+    pub can_set_offset: bool,
+
+    pub can_set_temperature: bool,
+
+    pub can_set_usb_limit: Option<bool>,
+
+    pub can_show_live_view: Option<bool>,
+
+    pub can_sub_sample: Option<bool>,
+
     pub connected: bool,
+
+    pub cooler_on: Option<bool>,
+
+    pub cooler_power: Option<f64>,
+
+    pub default_gain: Option<i64>,
+
+    pub default_offset: Option<i64>,
+
+    pub dew_heater_on: Option<bool>,
+
+    pub electrons_per_adu: Option<f64>,
+
+    pub exposure_end_time: Option<String>,
+
+    pub exposure_max: Option<f64>,
+
+    pub exposure_min: Option<f64>,
+
+    pub gain: Option<i64>,
+
+    pub gain_max: Option<i64>,
+
+    pub gain_min: Option<i64>,
+
+    pub gains: Option<Vec<i64>>,
+
+    pub has_battery: Option<bool>,
+
+    pub has_dew_heater: Option<bool>,
+
+    pub has_shutter: bool,
+
+    pub is_exposing: Option<bool>,
+
+    pub is_sub_sample_enabled: Option<bool>,
+
+    pub last_download_time: Option<f64>,
+
+    pub live_view_enabled: Option<bool>,
+
+    pub normal_readout_mode: Option<i64>,
+
+    pub offset: Option<i64>,
+
+    pub offset_max: Option<i64>,
+
+    pub offset_min: Option<i64>,
+
+    pub pixel_size: Option<f64>,
+
+    pub readout_mode: Option<i64>,
+
+    pub readout_modes: Option<Vec<String>>,
+
+    pub sensor_type: Option<SensorType>,
+
+    pub snap_readout_mode: Option<i64>,
+
+    pub sub_sample_height: Option<i64>,
+
+    pub sub_sample_width: Option<i64>,
+
+    pub sub_sample_x: Option<i64>,
+
+    pub sub_sample_y: Option<i64>,
+
+    pub temerature_set_point: Option<f64>,
+
+    pub temperature: Option<f64>,
+
+    pub usb_limit: Option<i64>,
+
+    pub usb_limit_max: Option<i64>,
+
+    pub usb_limit_min: Option<i64>,
+
+    pub x_size: Option<i64>,
+
+    pub y_size: Option<i64>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct BinningMode {
+    pub x: i64,
+
+    pub y: i64,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum CameraState {
+    Download,
+
+    Error,
+
+    Exposing,
+
+    Idle,
+
+    #[serde(rename = "LoadingFile")]
+    LoadingFile,
+
+    None,
+
+    Reading,
+
+    Waiting,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum SensorType {
+    #[serde(rename = "BGGR")]
+    Bggr,
+
+    #[serde(rename = "BGRG")]
+    Bgrg,
+
+    #[serde(rename = "CMYG")]
+    Cmyg,
+
+    #[serde(rename = "CMYG2")]
+    Cmyg2,
+
+    Color,
+
+    #[serde(rename = "GBGR")]
+    Gbgr,
+
+    #[serde(rename = "GBRG")]
+    Gbrg,
+
+    #[serde(rename = "GRBG")]
+    Grbg,
+
+    #[serde(rename = "GRGB")]
+    Grgb,
+
+    #[serde(rename = "LRGB")]
+    Lrgb,
+
+    Monochrome,
+
+    #[serde(rename = "RGBG")]
+    Rgbg,
+
+    #[serde(rename = "RGGB")]
+    Rggb,
 }
 
 /// Dome device state
@@ -199,7 +376,37 @@ pub struct FocuserDeviceInfoData {
 /// Periodic Guider event data
 #[derive(Serialize, Deserialize)]
 pub struct GuiderDeviceInfoData {
+    pub can_clear_calibration: bool,
+
+    pub can_get_lock_postion: bool,
+
+    pub can_set_shift_rate: bool,
+
     pub connected: bool,
+
+    pub pixel_scale: Option<f64>,
+
+    pub rms_error: Option<RmsError>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct RmsError {
+    pub dec: RmsUnit,
+
+    pub peak_dec: RmsUnit,
+
+    pub peak_ra: RmsUnit,
+
+    pub ra: RmsUnit,
+
+    pub total: RmsUnit,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct RmsUnit {
+    pub arc_seconds: f64,
+
+    pub pixel: f64,
 }
 
 /// Periodic Mount event data

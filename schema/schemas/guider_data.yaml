@@ -5,5 +5,18 @@ description: Periodic Guider event data
 properties:
   connected:
     type: boolean
+  can_clear_calibration:
+    type: boolean
+  can_set_shift_rate:
+    type: boolean
+  can_get_lock_postion:
+    type: boolean
+  rms_error:
+    $ref: "common.yaml#/definitions/RMSError"
+  pixel_scale:
+    type: number
 required:
   - connected
+  - can_clear_calibration
+  - can_set_shift_rate
+  - can_get_lock_postion

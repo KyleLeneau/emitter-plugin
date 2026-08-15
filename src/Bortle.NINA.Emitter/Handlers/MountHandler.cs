@@ -9,6 +9,7 @@ namespace Bortle.NINA.Emitter.Handlers {
     public class MountHandler : ITelescopeConsumer {
         private readonly IEventEmitter emitter;
         private readonly ITelescopeMediator mediator;
+        private TelescopeInfo lastInfo;
 
         public MountHandler(IEventEmitter eventEmitter, ITelescopeMediator telescopeMediator) {
             emitter = eventEmitter;
@@ -25,7 +26,15 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         public void UpdateDeviceInfo(TelescopeInfo deviceInfo) {
-            // TODO: Implement event
+            // Skip duplicates from internal nina polling
+            if (deviceInfo.Equals(lastInfo)) return;
+
+            var data = new MountDeviceInfoData {
+                Connected = deviceInfo.Connected,
+                
+            };
+            emitter.Enqueue("mount", "device-info", data);
+            lastInfo = deviceInfo;
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {
