@@ -29,13 +29,13 @@ namespace Bortle.NINA.Emitter.Handlers {
                 Connected = deviceInfo.Connected,
                 IsSafe = deviceInfo.IsSafe
             };
-            emitter.Enqueue("safety_monitor", "device-info", data);
+            emitter.Enqueue("safety-monitor", "device-info", data);
             lastInfo = deviceInfo;
         }
 
         private void MediatorOnIsSafeChanged(object sender, IsSafeEventArgs e) {
             var data = new SafetyChangeData { IsSafe = e.IsSafe };
-            emitter.Enqueue("safety_monitor", "is_safe", data);
+            emitter.Enqueue("safety-monitor", "is-safe", data);
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {

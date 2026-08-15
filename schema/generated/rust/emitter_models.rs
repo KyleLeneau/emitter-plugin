@@ -67,85 +67,68 @@ pub enum DeviceType {
     Weather,
 }
 
-/// Camera device state snapshot
+/// Filter Wheel device state
 #[derive(Serialize, Deserialize)]
-pub struct CameraData {
+pub struct FilterWheelDeviceInfoData {
     pub connected: bool,
 
-    pub cooler_on: bool,
+    pub is_moving: bool,
 
-    /// Cooler power as a percentage (0–100); null if unsupported by the device
-    pub cooler_power: Option<f64>,
-
-    /// UTC time when the current or last exposure ends; null if none
-    pub exposure_end_time: Option<String>,
-
-    pub is_exposing: bool,
-
-    /// Duration of last image download in seconds
-    pub last_download_time: f64,
-
-    /// Sensor temperature in degrees Celsius; null if unsupported by the device
-    pub temperature: Option<f64>,
-
-    /// Target cooler temperature in degrees Celsius; null if unsupported by the device
-    pub temperature_set_point: Option<f64>,
+    pub selected_filter: Option<FilterInfo>,
 }
 
-/// Telescope mount state snapshot
+/// Info on a specific filter
 #[derive(Serialize, Deserialize)]
-pub struct TelescopeData {
-    /// Current altitude in decimal degrees; null if unsupported by the device
-    pub altitude: Option<f64>,
+pub struct FilterInfo {
+    pub auto_focus_binning: Option<String>,
 
-    /// Current azimuth in decimal degrees (0–360); null if unsupported by the device
-    pub azimuth: Option<f64>,
+    pub auto_focus_gain: Option<f64>,
+
+    pub auto_focus_offset: Option<f64>,
+
+    pub auto_focus_time: Option<f64>,
+
+    pub is_af_filter: Option<bool>,
+
+    pub name: Option<String>,
+
+    pub offset: Option<f64>,
+
+    pub postion: Option<f64>,
+}
+
+/// Flat Panel device state
+#[derive(Serialize, Deserialize)]
+pub struct FlatPanelDeviceInfoData {
+    pub brightness: i64,
 
     pub connected: bool,
 
-    /// Current Dec in decimal degrees (−90 to +90); null if unsupported by the device
-    pub declination: Option<f64>,
+    pub cover_state: String,
 
-    /// Current RA in decimal hours (0–24); null if unsupported by the device
-    pub right_ascension: Option<f64>,
+    pub light_on: bool,
 
-    /// Observer elevation in meters above sea level; null if unsupported by the device
-    pub site_elevation: Option<f64>,
+    pub max_brightness: Option<i64>,
 
-    /// Observer latitude in decimal degrees; null if unsupported by the device
-    pub site_latitude: Option<f64>,
+    pub min_brightness: Option<i64>,
 
-    /// Observer longitude in decimal degrees; null if unsupported by the device
-    pub site_longitude: Option<f64>,
+    pub supports_on_off: Option<bool>,
 
-    pub slewing: bool,
-
-    pub tracking_enabled: bool,
+    pub supports_open_close: Option<bool>,
 }
 
-/// Image capture metadata at the time of save
+/// Safety monitor event data
 #[derive(Serialize, Deserialize)]
-pub struct ImagingData {
-    /// Sequential exposure number within the sequence
-    pub exposure_number: i64,
+pub struct SafetyDeviceInfoData {
+    pub connected: bool,
 
-    /// Exposure duration in seconds
-    pub exposure_time: f64,
+    pub is_safe: bool,
+}
 
-    /// Filter wheel filter name; null if no filter wheel
-    pub filter: Option<String>,
-
-    /// Camera gain; −1 if not applicable
-    pub gain: i64,
-
-    /// Image type — LIGHT, DARK, FLAT, BIAS, etc.; null if unknown
-    pub image_type: Option<String>,
-
-    /// Camera offset; −1 if not applicable
-    pub offset: i64,
-
-    /// Imaging target name from the sequence; null if not set
-    pub target_name: Option<String>,
+/// Safety monitor is_safe changed
+#[derive(Serialize, Deserialize)]
+pub struct SafetyChangeData {
+    pub is_safe: bool,
 }
 
 /// Weather station sensor readings
@@ -188,68 +171,4 @@ pub struct WeatherDeviceInfoData {
 
     /// Wind speed in m/s; null if unsupported by the device
     pub wind_speed: Option<f64>,
-}
-
-/// Safety monitor event data
-#[derive(Serialize, Deserialize)]
-pub struct SafetyDeviceInfoData {
-    pub connected: bool,
-
-    pub is_safe: bool,
-}
-
-/// Safety monitor is_safe changed
-#[derive(Serialize, Deserialize)]
-pub struct SafetyChangeData {
-    pub is_safe: bool,
-}
-
-/// Flat Panel device state
-#[derive(Serialize, Deserialize)]
-pub struct FlatPanelData {
-    pub brightness: i64,
-
-    pub connected: bool,
-
-    pub cover_state: String,
-
-    pub light_on: bool,
-
-    pub max_brightness: Option<i64>,
-
-    pub min_brightness: Option<i64>,
-
-    pub supports_on_off: Option<bool>,
-
-    pub supports_open_close: Option<bool>,
-}
-
-/// Filter Wheel device state
-#[derive(Serialize, Deserialize)]
-pub struct FilterWheelDeviceInfoData {
-    pub connected: bool,
-
-    pub is_moving: bool,
-
-    pub selected_filter: Option<FilterInfo>,
-}
-
-/// Info on a specific filter
-#[derive(Serialize, Deserialize)]
-pub struct FilterInfo {
-    pub auto_focus_binning: Option<String>,
-
-    pub auto_focus_gain: Option<f64>,
-
-    pub auto_focus_offset: Option<f64>,
-
-    pub auto_focus_time: Option<f64>,
-
-    pub is_af_filter: Option<bool>,
-
-    pub name: Option<String>,
-
-    pub offset: Option<f64>,
-
-    pub postion: Option<f64>,
 }

@@ -5,14 +5,11 @@
 //    using Bortle.NINA.Emitter.Models;
 //
 //    var deviceConnectionData = DeviceConnectionData.FromJson(jsonString);
-//    var cameraData = CameraData.FromJson(jsonString);
-//    var telescopeData = TelescopeData.FromJson(jsonString);
-//    var imagingData = ImagingData.FromJson(jsonString);
-//    var weatherDeviceInfoData = WeatherDeviceInfoData.FromJson(jsonString);
+//    var filterWheelDeviceInfoData = FilterWheelDeviceInfoData.FromJson(jsonString);
+//    var flatPanelDeviceInfoData = FlatPanelDeviceInfoData.FromJson(jsonString);
 //    var safetyDeviceInfoData = SafetyDeviceInfoData.FromJson(jsonString);
 //    var safetyChangeData = SafetyChangeData.FromJson(jsonString);
-//    var flatPanelData = FlatPanelData.FromJson(jsonString);
-//    var filterWheelDeviceInfoData = FilterWheelDeviceInfoData.FromJson(jsonString);
+//    var weatherDeviceInfoData = WeatherDeviceInfoData.FromJson(jsonString);
 #nullable enable
 #pragma warning disable CS8618
 #pragma warning disable CS8601
@@ -76,153 +73,105 @@ namespace Bortle.NINA.Emitter.Models
     }
 
     /// <summary>
-    /// Camera device state snapshot
+    /// Filter Wheel device state
     /// </summary>
-    public partial class CameraData
+    public partial class FilterWheelDeviceInfoData
     {
         [JsonPropertyName("connected")]
         public bool Connected { get; set; }
 
-        [JsonPropertyName("cooler_on")]
-        public bool CoolerOn { get; set; }
+        [JsonPropertyName("is_moving")]
+        public bool IsMoving { get; set; }
 
-        /// <summary>
-        /// Cooler power as a percentage (0–100); null if unsupported by the device
-        /// </summary>
-        [JsonPropertyName("cooler_power")]
-        public double? CoolerPower { get; set; }
-
-        /// <summary>
-        /// UTC time when the current or last exposure ends; null if none
-        /// </summary>
-        [JsonPropertyName("exposure_end_time")]
-        public DateTimeOffset? ExposureEndTime { get; set; }
-
-        [JsonPropertyName("is_exposing")]
-        public bool IsExposing { get; set; }
-
-        /// <summary>
-        /// Duration of last image download in seconds
-        /// </summary>
-        [JsonPropertyName("last_download_time")]
-        public double LastDownloadTime { get; set; }
-
-        /// <summary>
-        /// Sensor temperature in degrees Celsius; null if unsupported by the device
-        /// </summary>
-        [JsonPropertyName("temperature")]
-        public double? Temperature { get; set; }
-
-        /// <summary>
-        /// Target cooler temperature in degrees Celsius; null if unsupported by the device
-        /// </summary>
-        [JsonPropertyName("temperature_set_point")]
-        public double? TemperatureSetPoint { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("selected_filter")]
+        public FilterInfo SelectedFilter { get; set; }
     }
 
     /// <summary>
-    /// Telescope mount state snapshot
+    /// Info on a specific filter
     /// </summary>
-    public partial class TelescopeData
+    public partial class FilterInfo
     {
-        /// <summary>
-        /// Current altitude in decimal degrees; null if unsupported by the device
-        /// </summary>
-        [JsonPropertyName("altitude")]
-        public double? Altitude { get; set; }
+        [JsonPropertyName("auto_focus_binning")]
+        public string AutoFocusBinning { get; set; }
 
-        /// <summary>
-        /// Current azimuth in decimal degrees (0–360); null if unsupported by the device
-        /// </summary>
-        [JsonPropertyName("azimuth")]
-        public double? Azimuth { get; set; }
+        [JsonPropertyName("auto_focus_gain")]
+        public double? AutoFocusGain { get; set; }
 
-        [JsonPropertyName("connected")]
-        public bool Connected { get; set; }
+        [JsonPropertyName("auto_focus_offset")]
+        public double? AutoFocusOffset { get; set; }
 
-        /// <summary>
-        /// Current Dec in decimal degrees (−90 to +90); null if unsupported by the device
-        /// </summary>
-        [JsonPropertyName("declination")]
-        public double? Declination { get; set; }
+        [JsonPropertyName("auto_focus_time")]
+        public double? AutoFocusTime { get; set; }
 
-        /// <summary>
-        /// Current RA in decimal hours (0–24); null if unsupported by the device
-        /// </summary>
-        [JsonPropertyName("right_ascension")]
-        public double? RightAscension { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("is_af_filter")]
+        public bool? IsAfFilter { get; set; }
 
-        /// <summary>
-        /// Observer elevation in meters above sea level; null if unsupported by the device
-        /// </summary>
-        [JsonPropertyName("site_elevation")]
-        public double? SiteElevation { get; set; }
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
 
-        /// <summary>
-        /// Observer latitude in decimal degrees; null if unsupported by the device
-        /// </summary>
-        [JsonPropertyName("site_latitude")]
-        public double? SiteLatitude { get; set; }
-
-        /// <summary>
-        /// Observer longitude in decimal degrees; null if unsupported by the device
-        /// </summary>
-        [JsonPropertyName("site_longitude")]
-        public double? SiteLongitude { get; set; }
-
-        [JsonPropertyName("slewing")]
-        public bool Slewing { get; set; }
-
-        [JsonPropertyName("tracking_enabled")]
-        public bool TrackingEnabled { get; set; }
-    }
-
-    /// <summary>
-    /// Image capture metadata at the time of save
-    /// </summary>
-    public partial class ImagingData
-    {
-        /// <summary>
-        /// Sequential exposure number within the sequence
-        /// </summary>
-        [JsonPropertyName("exposure_number")]
-        public long ExposureNumber { get; set; }
-
-        /// <summary>
-        /// Exposure duration in seconds
-        /// </summary>
-        [JsonPropertyName("exposure_time")]
-        public double ExposureTime { get; set; }
-
-        /// <summary>
-        /// Filter wheel filter name; null if no filter wheel
-        /// </summary>
-        [JsonPropertyName("filter")]
-        public string Filter { get; set; }
-
-        /// <summary>
-        /// Camera gain; −1 if not applicable
-        /// </summary>
-        [JsonPropertyName("gain")]
-        public long Gain { get; set; }
-
-        /// <summary>
-        /// Image type — LIGHT, DARK, FLAT, BIAS, etc.; null if unknown
-        /// </summary>
-        [JsonPropertyName("image_type")]
-        public string ImageType { get; set; }
-
-        /// <summary>
-        /// Camera offset; −1 if not applicable
-        /// </summary>
         [JsonPropertyName("offset")]
-        public long Offset { get; set; }
+        public double? Offset { get; set; }
 
-        /// <summary>
-        /// Imaging target name from the sequence; null if not set
-        /// </summary>
-        [JsonPropertyName("target_name")]
-        public string TargetName { get; set; }
+        [JsonPropertyName("postion")]
+        public double? Postion { get; set; }
+    }
+
+    /// <summary>
+    /// Flat Panel device state
+    /// </summary>
+    public partial class FlatPanelDeviceInfoData
+    {
+        [JsonPropertyName("brightness")]
+        public long Brightness { get; set; }
+
+        [JsonPropertyName("connected")]
+        public bool Connected { get; set; }
+
+        [JsonPropertyName("cover_state")]
+        public string CoverState { get; set; }
+
+        [JsonPropertyName("light_on")]
+        public bool LightOn { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("max_brightness")]
+        public long? MaxBrightness { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("min_brightness")]
+        public long? MinBrightness { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("supports_on_off")]
+        public bool? SupportsOnOff { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("supports_open_close")]
+        public bool? SupportsOpenClose { get; set; }
+    }
+
+    /// <summary>
+    /// Safety monitor event data
+    /// </summary>
+    public partial class SafetyDeviceInfoData
+    {
+        [JsonPropertyName("connected")]
+        public bool Connected { get; set; }
+
+        [JsonPropertyName("is_safe")]
+        public bool IsSafe { get; set; }
+    }
+
+    /// <summary>
+    /// Safety monitor is_safe changed
+    /// </summary>
+    public partial class SafetyChangeData
+    {
+        [JsonPropertyName("is_safe")]
+        public bool IsSafe { get; set; }
     }
 
     /// <summary>
@@ -306,108 +255,6 @@ namespace Bortle.NINA.Emitter.Models
         public double? WindSpeed { get; set; }
     }
 
-    /// <summary>
-    /// Safety monitor event data
-    /// </summary>
-    public partial class SafetyDeviceInfoData
-    {
-        [JsonPropertyName("connected")]
-        public bool Connected { get; set; }
-
-        [JsonPropertyName("is_safe")]
-        public bool IsSafe { get; set; }
-    }
-
-    /// <summary>
-    /// Safety monitor is_safe changed
-    /// </summary>
-    public partial class SafetyChangeData
-    {
-        [JsonPropertyName("is_safe")]
-        public bool IsSafe { get; set; }
-    }
-
-    /// <summary>
-    /// Flat Panel device state
-    /// </summary>
-    public partial class FlatPanelData
-    {
-        [JsonPropertyName("brightness")]
-        public long Brightness { get; set; }
-
-        [JsonPropertyName("connected")]
-        public bool Connected { get; set; }
-
-        [JsonPropertyName("cover_state")]
-        public string CoverState { get; set; }
-
-        [JsonPropertyName("light_on")]
-        public bool LightOn { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        [JsonPropertyName("max_brightness")]
-        public long? MaxBrightness { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        [JsonPropertyName("min_brightness")]
-        public long? MinBrightness { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        [JsonPropertyName("supports_on_off")]
-        public bool? SupportsOnOff { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        [JsonPropertyName("supports_open_close")]
-        public bool? SupportsOpenClose { get; set; }
-    }
-
-    /// <summary>
-    /// Filter Wheel device state
-    /// </summary>
-    public partial class FilterWheelDeviceInfoData
-    {
-        [JsonPropertyName("connected")]
-        public bool Connected { get; set; }
-
-        [JsonPropertyName("is_moving")]
-        public bool IsMoving { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        [JsonPropertyName("selected_filter")]
-        public FilterInfo SelectedFilter { get; set; }
-    }
-
-    /// <summary>
-    /// Info on a specific filter
-    /// </summary>
-    public partial class FilterInfo
-    {
-        [JsonPropertyName("auto_focus_binning")]
-        public string AutoFocusBinning { get; set; }
-
-        [JsonPropertyName("auto_focus_gain")]
-        public double? AutoFocusGain { get; set; }
-
-        [JsonPropertyName("auto_focus_offset")]
-        public double? AutoFocusOffset { get; set; }
-
-        [JsonPropertyName("auto_focus_time")]
-        public double? AutoFocusTime { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        [JsonPropertyName("is_af_filter")]
-        public bool? IsAfFilter { get; set; }
-
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-
-        [JsonPropertyName("offset")]
-        public double? Offset { get; set; }
-
-        [JsonPropertyName("postion")]
-        public double? Postion { get; set; }
-    }
-
     public enum DeviceType { Camera, Dome, FilterWheel, FlatPanel, Focuser, Guider, Mount, Rotator, SafetyMonitor, Switch, Weather };
 
     public partial class DeviceConnectionData
@@ -415,24 +262,14 @@ namespace Bortle.NINA.Emitter.Models
         public static DeviceConnectionData FromJson(string json) => JsonSerializer.Deserialize<DeviceConnectionData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
-    public partial class CameraData
+    public partial class FilterWheelDeviceInfoData
     {
-        public static CameraData FromJson(string json) => JsonSerializer.Deserialize<CameraData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static FilterWheelDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<FilterWheelDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
-    public partial class TelescopeData
+    public partial class FlatPanelDeviceInfoData
     {
-        public static TelescopeData FromJson(string json) => JsonSerializer.Deserialize<TelescopeData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
-    }
-
-    public partial class ImagingData
-    {
-        public static ImagingData FromJson(string json) => JsonSerializer.Deserialize<ImagingData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
-    }
-
-    public partial class WeatherDeviceInfoData
-    {
-        public static WeatherDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<WeatherDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static FlatPanelDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<FlatPanelDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
     public partial class SafetyDeviceInfoData
@@ -445,27 +282,19 @@ namespace Bortle.NINA.Emitter.Models
         public static SafetyChangeData FromJson(string json) => JsonSerializer.Deserialize<SafetyChangeData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
-    public partial class FlatPanelData
+    public partial class WeatherDeviceInfoData
     {
-        public static FlatPanelData FromJson(string json) => JsonSerializer.Deserialize<FlatPanelData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
-    }
-
-    public partial class FilterWheelDeviceInfoData
-    {
-        public static FilterWheelDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<FilterWheelDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static WeatherDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<WeatherDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
     public static class Serialize
     {
         public static string ToJson(this DeviceConnectionData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
-        public static string ToJson(this CameraData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
-        public static string ToJson(this TelescopeData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
-        public static string ToJson(this ImagingData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
-        public static string ToJson(this WeatherDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this FilterWheelDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this FlatPanelDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this SafetyDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this SafetyChangeData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
-        public static string ToJson(this FlatPanelData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
-        public static string ToJson(this FilterWheelDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this WeatherDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
     internal static class Converter

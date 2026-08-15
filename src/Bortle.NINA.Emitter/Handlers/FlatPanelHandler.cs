@@ -27,7 +27,7 @@ namespace Bortle.NINA.Emitter.Handlers {
             // Skip duplicates from internal nina polling
             if (deviceInfo.Equals(lastInfo)) return;
 
-            var data = new FlatPanelData {
+            var data = new FlatPanelDeviceInfoData {
                 Connected = deviceInfo.Connected,
                 Brightness = deviceInfo.Brightness,
                 CoverState = deviceInfo.CoverState.ToString(),
@@ -38,7 +38,7 @@ namespace Bortle.NINA.Emitter.Handlers {
                 SupportsOpenClose = deviceInfo.SupportsOpenClose,
             };
 
-            emitter.Enqueue("flat_panel", "device-info", data);
+            emitter.Enqueue("flat-panel", "device-info", data);
             lastInfo = deviceInfo;
         }
 

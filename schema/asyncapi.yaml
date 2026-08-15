@@ -72,6 +72,16 @@ channels:
         $ref: "#/components/messages/FilterWheelDeviceInfoEvent"
 
   # FlatPanel ───────────────────────────────────────────────────────────────
+  flatPanelDeviceInfo:
+    address: "nina.{instanceId}.flat-panel.device-info"
+    description: Periodic data about the flat panel
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      flatPanelDeviceInfoEvent:
+        $ref: "#/components/messages/FlatPanelDeviceInfoEvent"
+
   # Focuser ─────────────────────────────────────────────────────────────────
   # Guider ──────────────────────────────────────────────────────────────────
   # Mount ───────────────────────────────────────────────────────────────────
@@ -79,7 +89,7 @@ channels:
 
   # Saftey -─────────────────────────────────────────────────────────────────
   safetyDeviceInfo:
-    address: "nina.{instanceId}.safety_monitor.device-info"
+    address: "nina.{instanceId}.safety-monitor.device-info"
     description: Periodic data about the safety monitor
     parameters:
       instanceId:
@@ -89,7 +99,7 @@ channels:
         $ref: "#/components/messages/SafetyDeviceInfoEvent"
 
   safetyChange:
-    address: "nina.{instanceId}.safety_monitor.is_safe"
+    address: "nina.{instanceId}.safety-monitor.is-safe"
     description: Updates with the saftey monitor value changes
     parameters:
       instanceId:
@@ -138,6 +148,13 @@ operations:
       - name: "FilterWheel"
 
   # FlatPanel ───────────────────────────────────────────────────────────────
+  publishFlatPanelDeviceInfoEvent:
+    action: send
+    channel:
+      $ref: "#/channels/flatPanelDeviceInfo"
+    tags:
+      - name: "FlatPanel"
+
   # Focuser ─────────────────────────────────────────────────────────────────
   # Guider ──────────────────────────────────────────────────────────────────
   # Mount ───────────────────────────────────────────────────────────────────
@@ -217,6 +234,19 @@ components:
                 $ref: "./schemas/filter_wheel_data.yaml"
 
     # FlatPanel ───────────────────────────────────────────────────────────────
+    FlatPanelDeviceInfoEvent:
+      title: FlatPanelDeviceInfoEvent
+      summary: Periodic flat panel device info
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.flat-panel.device-info"
+              data:
+                $ref: "./schemas/flat_panel_data.yaml"
+
     # Focuser ─────────────────────────────────────────────────────────────────
     # Guider ──────────────────────────────────────────────────────────────────
     # Mount ───────────────────────────────────────────────────────────────────
@@ -231,7 +261,7 @@ components:
           - type: object
             properties:
               type:
-                const: "io.nina.safety_monitor.device-info"
+                const: "io.nina.safety-monitor.device-info"
               data:
                 $ref: "./schemas/safety_data.yaml"
 
@@ -244,7 +274,7 @@ components:
           - type: object
             properties:
               type:
-                const: "io.nina.safety_monitor.is_safe"
+                const: "io.nina.safety-monitor.is-safe"
               data:
                 $ref: "./schemas/safety_change_data.yaml"
 
@@ -268,40 +298,6 @@ components:
     # Profile ─────────────────────────────────────────────────────────────────
     # Sequence ────────────────────────────────────────────────────────────────
     # TargetScheduler ─────────────────────────────────────────────────────────
-
-    # CameraEvent:
-    #   name: CameraEvent
-    #   title: Camera Event
-    #   summary: Camera state change — CloudEvent type io.nina.camera.{eventType}
-    #   contentType: application/cloudevents+json
-    #   payload:
-    #     schemaFormat: application/schema+json;version=draft-07
-    #     schema:
-    #       allOf:
-    #         - $ref: "./schemas/cloudevents.json"
-    #         - type: object
-    #           properties:
-    #             type:
-    #               pattern: "^io\\.nina\\.camera\\..+"
-    #             data:
-    #               $ref: "./schemas/camera_data.yaml"
-
-    # TelescopeEvent:
-    #   name: TelescopeEvent
-    #   title: Telescope Event
-    #   summary: Mount state change — CloudEvent type io.nina.telescope.{eventType}
-    #   contentType: application/cloudevents+json
-    #   payload:
-    #     schemaFormat: application/schema+json;version=draft-07
-    #     schema:
-    #       allOf:
-    #         - $ref: "./schemas/cloudevents.json"
-    #         - type: object
-    #           properties:
-    #             type:
-    #               pattern: "^io\\.nina\\.telescope\\..+"
-    #             data:
-    #               $ref: "./schemas/telescope_data.yaml"
 
     # ImagingEvent:
     #   name: ImagingEvent

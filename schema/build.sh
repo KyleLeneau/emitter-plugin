@@ -19,14 +19,11 @@ DOCS_OUT="$SCRIPT_DIR/../build/docs"
 
 DATA_SCHEMAS=(
   "$SCHEMAS/device_connect_data.yaml"
-  "$SCHEMAS/camera_data.yaml"
-  "$SCHEMAS/telescope_data.yaml"
-  "$SCHEMAS/imaging_data.yaml"
-  "$SCHEMAS/weather_data.yaml"
+  "$SCHEMAS/filter_wheel_data.yaml"
+  "$SCHEMAS/flat_panel_data.yaml"
   "$SCHEMAS/safety_data.yaml"
   "$SCHEMAS/safety_change_data.yaml"
-  "$SCHEMAS/flat_panel_data.yaml"
-  "$SCHEMAS/filter_wheel_data.yaml"
+  "$SCHEMAS/weather_data.yaml"
 )
 
 generate() {
