@@ -30,20 +30,20 @@
 * [x] setup release process
 * [x] create and deploy logo/image github pages
 * [x] generate asyncapi website / docs
+* [x] not sure device info skipping and equality is working
 * [ ] implement kafka backend
-* [ ] not sure device info skipping and equality is working
 
 ### Events
 * [x] Device connection
 * [x] Safety info
 * [x] weather info
-* [ ] camera info
+* [x] camera info
 * [x] dome info
 * [x] filter wheel info
 * [x] flat panel info
 * [x] focuser info
-* [ ] guider info
-* [ ] mount info
+* [x] guider info
+* [x] mount info
 * [x] rotator info
 * [x] switch info
 

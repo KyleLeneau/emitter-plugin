@@ -86,7 +86,7 @@ namespace Bortle.NINA.Emitter {
             _ = eventEmitter.StartAsync();
 
             // Setup event handlers
-            registry.Add(new CameraHandler(eventEmitter, cameraDataMediator)); // ISSUE
+            registry.Add(new CameraHandler(eventEmitter, cameraDataMediator));
             registry.Add(new DomeHandler(eventEmitter, domeMediator));
             registry.Add(new FilterWheelHandler(eventEmitter, filterWheelMediator));
             registry.Add(new FlatPanelHandler(eventEmitter, flatMediator));
