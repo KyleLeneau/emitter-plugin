@@ -95,7 +95,7 @@ namespace Bortle.NINA.Emitter {
             // registry.Add(new MountHandler(eventEmitter, telescopeMediator)); // ISSUE
             registry.Add(new RotatorHandler(eventEmitter, rotatorMediator));
             registry.Add(new SafetyHandler(eventEmitter, safetyMonitorMediator));
-            // registry.Add(new SwitchHandler(eventEmitter, switchMediator)); // ISSUE
+            registry.Add(new SwitchHandler(eventEmitter, switchMediator)); // ISSUE - check?
             registry.Add(new WeatherHandler(eventEmitter, weatherDataMediator));
             registry.Add(new ImageSaveHandler(eventEmitter, imageSaveMediator));
             registry.Add(new ProfileHandler(eventEmitter, profileService));

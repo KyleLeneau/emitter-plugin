@@ -31,6 +31,21 @@
 * [x] create and deploy logo/image github pages
 * [x] generate asyncapi website / docs
 * [ ] implement kafka backend
+* [ ] not sure device info skipping and equality is working
+
+### Events
+* [ ] Device connection
+* [x] Safety info
+* [x] weather info
+* [ ] camera info
+* [ ] dome info
+* [ ] filter wheel info
+* [ ] flat panel info
+* [ ] focuser info
+* [ ] guider info
+* [ ] mount info
+* [ ] rotator info
+* [ ] switch info
 
 ### Bugs
 

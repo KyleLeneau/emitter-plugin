@@ -1,5 +1,6 @@
 using Bortle.NINA.Emitter.Events;
 using Bortle.NINA.Emitter.Models;
+using Bortle.NINA.Emitter.Utils;
 using NINA.Equipment.Equipment.MyFocuser;
 using NINA.Equipment.Interfaces.Mediator;
 using System;
@@ -26,8 +27,8 @@ namespace Bortle.NINA.Emitter.Handlers {
             var data = new FocuserDeviceInfoData {
                 Connected = deviceInfo.Connected,
                 Position = deviceInfo.Position,
-                StepSize = deviceInfo.StepSize,
-                Temperature = deviceInfo.Temperature,
+                StepSize = deviceInfo.StepSize.Optional(),
+                Temperature = deviceInfo.Temperature.Optional(),
                 IsMoving = deviceInfo.IsMoving,
                 IsSettling = deviceInfo.IsSettling,
                 TempComp = deviceInfo.TempComp,

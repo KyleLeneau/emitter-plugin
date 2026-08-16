@@ -1,8 +1,11 @@
 using Bortle.NINA.Emitter.Events;
 using Bortle.NINA.Emitter.Models;
 using NINA.Equipment.Equipment.MySwitch;
+using NINA.Equipment.Interfaces;
 using NINA.Equipment.Interfaces.Mediator;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,18 +29,18 @@ namespace Bortle.NINA.Emitter.Handlers {
 
             var data = new SwitchDeviceInfoData {
                 Connected = deviceInfo.Connected,
-                WriteableSwitches = deviceInfo.WritableSwitches.Select(w => new WriteableSwitch {
+                WriteableSwitches = deviceInfo.WritableSwitches != null ? deviceInfo.WritableSwitches.Select(w => new WriteableSwitch {
                     Maximum = w.Maximum,
                     Minimum = w.Minimum,
                     StepSize = w.StepSize,
                     TargetValue = w.TargetValue
-                }).ToList(),
-                ReadableSwitches = deviceInfo.ReadonlySwitches.Select(r => new ReadableSwitch {
+                }).ToList() : [],
+                ReadableSwitches = deviceInfo.ReadonlySwitches != null ? deviceInfo.ReadonlySwitches.Select(r => new ReadableSwitch {
                     Id = r.Id,
                     Name = r.Name,
                     Description = r.Description,
                     Value = r.Value
-                }).ToList()
+                }).ToList() : []
             };
             emitter.Enqueue("switch", "device-info", data);
             lastInfo = deviceInfo;
