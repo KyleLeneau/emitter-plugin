@@ -41,7 +41,7 @@
 * [x] camera info
 * [ ] download timeout
 * [x] dome info
-* [ ] dome shutter event
+* [x] dome shutter event
 * [x] filter wheel info
 * [ ] filter wheel changed
 * [x] flat panel info

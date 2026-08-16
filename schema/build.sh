@@ -21,7 +21,7 @@ DATA_SCHEMAS=(
   "$SCHEMAS/device_connect_data.yaml"
   "$SCHEMAS/camera_data.yaml"
   "$SCHEMAS/dome_data.yaml"
-  "$SCHEMAS/done_shutter_data.yaml"
+  "$SCHEMAS/dome_shutter_data.yaml"
   "$SCHEMAS/filter_wheel_data.yaml"
   "$SCHEMAS/flat_panel_data.yaml"
   "$SCHEMAS/focuser_data.yaml"
