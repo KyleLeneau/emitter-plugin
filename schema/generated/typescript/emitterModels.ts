@@ -1,6 +1,6 @@
 // To parse this data:
 //
-//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FlatPanelDeviceInfoData, FocuserDeviceInfoData, GuiderDeviceInfoData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData } from "./file";
+//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FlatPanelDeviceInfoData, FocuserDeviceInfoData, GuiderDeviceInfoData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, RotatorMovedData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData } from "./file";
 //
 //   const deviceConnectionData = Convert.toDeviceConnectionData(json);
 //   const cameraDeviceInfoData = Convert.toCameraDeviceInfoData(json);
@@ -14,6 +14,7 @@
 //   const mountFlipData = Convert.toMountFlipData(json);
 //   const mountMovedData = Convert.toMountMovedData(json);
 //   const rotatorDeviceInfoData = Convert.toRotatorDeviceInfoData(json);
+//   const rotatorMovedData = Convert.toRotatorMovedData(json);
 //   const safetyDeviceInfoData = Convert.toSafetyDeviceInfoData(json);
 //   const safetyChangeData = Convert.toSafetyChangeData(json);
 //   const switchDeviceInfoData = Convert.toSwitchDeviceInfoData(json);
@@ -435,6 +436,22 @@ export interface RotatorDeviceInfoData {
 }
 
 /**
+ * Event after the rotator has moved
+ */
+export interface RotatorMovedData {
+    event: Event;
+    from:  number;
+    to:    number;
+    [property: string]: any;
+}
+
+export enum Event {
+    Moved = "moved",
+    MovedMechanical = "moved_mechanical",
+    Synced = "synced",
+}
+
+/**
  * Safety monitor event data
  */
 export interface SafetyDeviceInfoData {
@@ -634,6 +651,14 @@ export class Convert {
 
     public static rotatorDeviceInfoDataToJson(value: RotatorDeviceInfoData): string {
         return JSON.stringify(uncast(value, r("RotatorDeviceInfoData")), null, 2);
+    }
+
+    public static toRotatorMovedData(json: string): RotatorMovedData {
+        return cast(JSON.parse(json), r("RotatorMovedData"));
+    }
+
+    public static rotatorMovedDataToJson(value: RotatorMovedData): string {
+        return JSON.stringify(uncast(value, r("RotatorMovedData")), null, 2);
     }
 
     public static toSafetyDeviceInfoData(json: string): SafetyDeviceInfoData {
@@ -1042,6 +1067,11 @@ const typeMap: any = {
         { json: "step_size", js: "step_size", typ: u(undefined, 3.14) },
         { json: "synced", js: "synced", typ: true },
     ], "any"),
+    "RotatorMovedData": o([
+        { json: "event", js: "event", typ: r("Event") },
+        { json: "from", js: "from", typ: 3.14 },
+        { json: "to", js: "to", typ: 3.14 },
+    ], "any"),
     "SafetyDeviceInfoData": o([
         { json: "connected", js: "connected", typ: true },
         { json: "is_safe", js: "is_safe", typ: true },
@@ -1172,5 +1202,10 @@ const typeMap: any = {
         "parked",
         "slewed",
         "unparked",
+    ],
+    "Event": [
+        "moved",
+        "moved_mechanical",
+        "synced",
     ],
 };

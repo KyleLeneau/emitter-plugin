@@ -63,17 +63,20 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private Task MediatorOnMoved(object arg1, RotatorEventArgs arg2) {
-            // TODO: Implement event
+            var data = new RotatorMovedData { Event = Event.Moved, From = arg2.From, To = arg2.To };
+            emitter.Enqueue("rotator", "move", data);
             return Task.CompletedTask;
         }
 
         private Task MediatorOnMovedMechanical(object arg1, RotatorEventArgs arg2) {
-            // TODO: Implement event
+            var data = new RotatorMovedData { Event = Event.MovedMechanical, From = arg2.From, To = arg2.To };
+            emitter.Enqueue("rotator", "move", data);
             return Task.CompletedTask;
         }
 
         private void MediatorOnSynced(object sender, RotatorEventArgs e) {
-            // TODO: Implement event
+            var data = new RotatorMovedData { Event = Event.Synced, From = e.From, To = e.To };
+            emitter.Enqueue("rotator", "move", data);
         }
 
         public void Dispose() {

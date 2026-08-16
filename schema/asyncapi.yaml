@@ -171,6 +171,15 @@ channels:
     messages:
       RotatorDeviceInfoEvent:
         $ref: "#/components/messages/RotatorDeviceInfoEvent"
+  rotatorMove:
+    address: "nina.{instanceId}.rotator.move"
+    description: Events when the rotator moves
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      RotatorDeviceInfoEvent:
+        $ref: "#/components/messages/RotatorMoveEvent"
 
   # Saftey -─────────────────────────────────────────────────────────────────
   safetyDeviceInfo:
@@ -311,6 +320,12 @@ operations:
       $ref: "#/channels/rotatorDeviceInfo"
     tags:
       - name: "Rotator"
+  sendRotatorMoveEvent:
+    action: send
+    channel:
+      $ref: "#/channels/rotatorMove"
+    tags:
+      - name: "Roatator"
 
   # Safety ──────────────────────────────────────────────────────────────────
   sendSafetyDeviceInfoEvent:
@@ -521,6 +536,18 @@ components:
                 const: "io.nina.rotator.device-info"
               data:
                 $ref: "./schemas/rotator_data.yaml"
+    RotatorMoveEvent:
+      title: RotatorMoveEvent
+      summary: Event when the rotator moves
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.rotator.move"
+              data:
+                $ref: "./schemas/rotator_move_data.yaml"
 
     # Saftey -─────────────────────────────────────────────────────────────────
     SafetyDeviceInfoEvent:

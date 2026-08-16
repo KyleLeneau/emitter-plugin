@@ -30,6 +30,7 @@ DATA_SCHEMAS=(
   "$SCHEMAS/mount_flip_data.yaml"
   "$SCHEMAS/mount_move_data.yaml"
   "$SCHEMAS/rotator_data.yaml"
+  "$SCHEMAS/rotator_move_data.yaml"
   "$SCHEMAS/safety_data.yaml"
   "$SCHEMAS/safety_change_data.yaml"
   "$SCHEMAS/switch_data.yaml"

@@ -58,9 +58,9 @@
 * [x] mount info
 * [x] mount flip
 * [x] rotator info
-* [ ] rotator moved
-* [ ] rotator moved mechanical
-* [ ] rotator synced
+* [x] rotator moved
+* [x] rotator moved mechanical
+* [x] rotator synced
 * [x] switch info
 
 ### Bugs

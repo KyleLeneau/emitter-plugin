@@ -640,6 +640,27 @@ pub struct RotatorDeviceInfoData {
     pub synced: bool,
 }
 
+/// Event after the rotator has moved
+#[derive(Serialize, Deserialize)]
+pub struct RotatorMovedData {
+    pub event: Event,
+
+    pub from: f64,
+
+    pub to: f64,
+}
+
+#[derive(Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum Event {
+    Moved,
+
+    #[serde(rename = "moved_mechanical")]
+    MovedMechanical,
+
+    Synced,
+}
+
 /// Safety monitor event data
 #[derive(Serialize, Deserialize)]
 pub struct SafetyDeviceInfoData {

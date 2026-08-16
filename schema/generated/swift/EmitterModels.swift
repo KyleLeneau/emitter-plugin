@@ -13,6 +13,7 @@
 //   let mountFlipData = try MountFlipData(json)
 //   let mountMovedData = try MountMovedData(json)
 //   let rotatorDeviceInfoData = try RotatorDeviceInfoData(json)
+//   let rotatorMovedData = try RotatorMovedData(json)
 //   let safetyDeviceInfoData = try SafetyDeviceInfoData(json)
 //   let safetyChangeData = try SafetyChangeData(json)
 //   let switchDeviceInfoData = try SwitchDeviceInfoData(json)
@@ -1509,6 +1510,58 @@ extension RotatorDeviceInfoData {
     func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
         return String(data: try self.jsonData(), encoding: encoding)
     }
+}
+
+/// Event after the rotator has moved
+// MARK: - RotatorMovedData
+struct RotatorMovedData: Codable {
+    let event: Event
+    let from, to: Double
+}
+
+// MARK: RotatorMovedData convenience initializers and mutators
+
+extension RotatorMovedData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(RotatorMovedData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        event: Event? = nil,
+        from: Double? = nil,
+        to: Double? = nil
+    ) -> RotatorMovedData {
+        return RotatorMovedData(
+            event: event ?? self.event,
+            from: from ?? self.from,
+            to: to ?? self.to
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+enum Event: String, Codable {
+    case moved = "moved"
+    case movedMechanical = "moved_mechanical"
+    case synced = "synced"
 }
 
 /// Safety monitor event data
