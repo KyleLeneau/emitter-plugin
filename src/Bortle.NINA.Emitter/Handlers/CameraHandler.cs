@@ -12,7 +12,7 @@ namespace Bortle.NINA.Emitter.Handlers {
     public class CameraHandler : ICameraConsumer {
         private readonly IEventEmitter emitter;
         private readonly ICameraMediator mediator;
-        private CameraInfo lastInfo;
+        private CameraDeviceInfoData lastData;
 
         public CameraHandler(IEventEmitter eventEmitter, ICameraMediator cameraMediator) {
             emitter = eventEmitter;
@@ -24,9 +24,6 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         public void UpdateDeviceInfo(CameraInfo deviceInfo) {
-            // Skip duplicates from internal nina polling
-            if (deviceInfo.Equals(lastInfo)) return;
-
             var data = new CameraDeviceInfoData {
                 Connected = deviceInfo.Connected,
                 CanSetTemperature = deviceInfo.CanSetTemperature,
@@ -85,8 +82,12 @@ namespace Bortle.NINA.Emitter.Handlers {
                 UsbLimitMin = deviceInfo.USBLimitMin,
                 UsbLimitMax = deviceInfo.USBLimitMax
             };
+
+            // Skip duplicates from internal nina polling
+            if (data.Equals(lastData)) return;
+
             emitter.Enqueue("camera", "device-info", data);
-            lastInfo = deviceInfo;
+            lastData = data;
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {

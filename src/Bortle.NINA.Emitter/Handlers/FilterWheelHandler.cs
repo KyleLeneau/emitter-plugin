@@ -10,7 +10,7 @@ namespace Bortle.NINA.Emitter.Handlers {
     public class FilterWheelHandler : IFilterWheelConsumer {
         private readonly IEventEmitter emitter;
         private readonly IFilterWheelMediator mediator;
-        private FilterWheelInfo lastInfo;
+        private FilterWheelDeviceInfoData lastData;
 
         public FilterWheelHandler(IEventEmitter eventEmitter, IFilterWheelMediator filterWheelMediator) {
             emitter = eventEmitter;
@@ -22,16 +22,17 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         public void UpdateDeviceInfo(FilterWheelInfo deviceInfo) {
-            // Skip duplicates from internal nina polling
-            if (deviceInfo.Equals(lastInfo)) return;
-
             var data = new FilterWheelDeviceInfoData {
                 Connected = deviceInfo.Connected,
                 IsMoving = deviceInfo.IsMoving,
                 SelectedFilter = ToFilterInfo(deviceInfo.SelectedFilter)
             };
+
+            // Skip duplicates from internal nina polling
+            if (data.Equals(lastData)) return;
+
             emitter.Enqueue("filter-wheel", "device-info", data);
-            lastInfo = deviceInfo;
+            lastData = data;
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {

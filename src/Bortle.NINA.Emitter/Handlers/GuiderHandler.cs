@@ -10,7 +10,7 @@ namespace Bortle.NINA.Emitter.Handlers {
     public class GuiderHandler : IGuiderConsumer {
         private readonly IEventEmitter emitter;
         private readonly IGuiderMediator mediator;
-        private GuiderInfo lastInfo;
+        private GuiderDeviceInfoData lastData;
 
         public GuiderHandler(IEventEmitter eventEmitter, IGuiderMediator guiderMediator) {
             emitter = eventEmitter;
@@ -25,9 +25,6 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         public void UpdateDeviceInfo(GuiderInfo deviceInfo) {
-            // Skip duplicates from internal nina polling
-            if (deviceInfo.Equals(lastInfo)) return;
-
             var data = new GuiderDeviceInfoData {
                 Connected = deviceInfo.Connected,
                 CanClearCalibration = deviceInfo.CanClearCalibration,
@@ -36,8 +33,12 @@ namespace Bortle.NINA.Emitter.Handlers {
                 RmsError = ToRmsError(deviceInfo.RMSError),
                 PixelScale = deviceInfo.PixelScale,
             };
+
+            // Skip duplicates from internal nina polling
+            if (data.Equals(lastData)) return;
+
             emitter.Enqueue("guider", "device-info", data);
-            lastInfo = deviceInfo;
+            lastData = data;
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {

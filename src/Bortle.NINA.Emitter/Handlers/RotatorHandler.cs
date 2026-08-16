@@ -9,7 +9,7 @@ namespace Bortle.NINA.Emitter.Handlers {
     public class RotatorHandler : IRotatorConsumer {
         private readonly IEventEmitter emitter;
         private readonly IRotatorMediator mediator;
-        private RotatorInfo lastInfo;
+        private RotatorDeviceInfoData lastData;
 
         public RotatorHandler(IEventEmitter eventEmitter, IRotatorMediator rotatorMediator) {
             emitter = eventEmitter;
@@ -23,9 +23,6 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         public void UpdateDeviceInfo(RotatorInfo deviceInfo) {
-            // Skip duplicates from internal nina polling
-            if (deviceInfo.Equals(lastInfo)) return;
-
             var data = new RotatorDeviceInfoData {
                 Connected = deviceInfo.Connected,
                 CanReverse = deviceInfo.CanReverse,
@@ -36,8 +33,12 @@ namespace Bortle.NINA.Emitter.Handlers {
                 IsMoving = deviceInfo.IsMoving,
                 Synced = deviceInfo.Synced,
             };
+
+            // Skip duplicates from internal nina polling
+            if (data.Equals(lastData)) return;
+
             emitter.Enqueue("rotator", "device-info", data);
-            lastInfo = deviceInfo;
+            lastData = data;
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {

@@ -9,7 +9,7 @@ namespace Bortle.NINA.Emitter.Handlers {
     public class FlatPanelHandler : IFlatDeviceConsumer {
         private readonly IEventEmitter emitter;
         private readonly IFlatDeviceMediator mediator;
-        private FlatDeviceInfo lastInfo;
+        private FlatPanelDeviceInfoData lastData;
 
         public FlatPanelHandler(IEventEmitter eventEmitter, IFlatDeviceMediator flatDeviceMediator) {
             emitter = eventEmitter;
@@ -24,9 +24,6 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         public void UpdateDeviceInfo(FlatDeviceInfo deviceInfo) {
-            // Skip duplicates from internal nina polling
-            if (deviceInfo.Equals(lastInfo)) return;
-
             var data = new FlatPanelDeviceInfoData {
                 Connected = deviceInfo.Connected,
                 Brightness = deviceInfo.Brightness,
@@ -38,8 +35,11 @@ namespace Bortle.NINA.Emitter.Handlers {
                 SupportsOpenClose = deviceInfo.SupportsOpenClose,
             };
 
+            // Skip duplicates from internal nina polling
+            if (data.Equals(lastData)) return;
+
             emitter.Enqueue("flat-panel", "device-info", data);
-            lastInfo = deviceInfo;
+            lastData = data;
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {

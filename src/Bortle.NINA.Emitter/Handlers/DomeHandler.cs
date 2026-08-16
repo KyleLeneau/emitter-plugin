@@ -10,7 +10,7 @@ namespace Bortle.NINA.Emitter.Handlers {
     public class DomeHandler : IDomeConsumer {
         private readonly IEventEmitter emitter;
         private readonly IDomeMediator mediator;
-        private DomeInfo lastInfo;
+        private DomeDeviceInfoData lastData;
 
         public DomeHandler(IEventEmitter eventEmitter, IDomeMediator domeMediator) {
             emitter = eventEmitter;
@@ -27,9 +27,6 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         public void UpdateDeviceInfo(DomeInfo deviceInfo) {
-            // Skip duplicates from internal nina polling
-            if (deviceInfo.Equals(lastInfo)) return;
-
             var data = new DomeDeviceInfoData {
                 Connected = deviceInfo.Connected,
                 ShutterState = ToShutterState(deviceInfo.ShutterStatus),
@@ -49,8 +46,12 @@ namespace Bortle.NINA.Emitter.Handlers {
                 AzimuthDegrees = deviceInfo.Azimuth,
                 AltitudeDegrees = deviceInfo.Altitude,
             };
+
+            // Skip duplicates from internal nina polling
+            if (data.Equals(lastData)) return;
+
             emitter.Enqueue("dome", "device-info", data);
-            lastInfo = deviceInfo;
+            lastData = data;
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {
