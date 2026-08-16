@@ -45,9 +45,9 @@
 * [x] filter wheel info
 * [ ] filter wheel changed
 * [x] flat panel info
-* [ ] flat panel brightness change
-* [ ] flat panel led toggle
-* [ ] flat panel open/close
+* [x] flat panel brightness change
+* [x] flat panel led toggle
+* [x] flat panel open/close
 * [x] focuser info
 * [ ] focuser auto focus done
 * [ ] focuser user manual focus

@@ -64,22 +64,27 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private Task MediatorOnBrightnessChanged(object arg1, FlatDeviceBrightnessChangedEventArgs arg2) {
-            // TODO: Implement event
+            var data = new FlatPanelValueData { From = arg2.From, To = arg2.To };
+            emitter.Enqueue("flat-panel", "value", data);
             return Task.CompletedTask;
         }
 
         private Task MediatorOnClosed(object arg1, EventArgs arg2) {
-            // TODO: Implement event
+            var data = new FlatPanelStateData { State = State.Closed };
+            emitter.Enqueue("flat-panel", "state", data);
             return Task.CompletedTask;
         }
 
         private Task MediatorOnOpened(object arg1, EventArgs arg2) {
-            // TODO: Implement event
+            var data = new FlatPanelStateData { State = State.Opened };
+            emitter.Enqueue("flat-panel", "state", data);
             return Task.CompletedTask;
         }
 
         private Task MediatorOnLightToggled(object arg1, EventArgs arg2) {
-            // TODO: Implement event
+            var isOn = mediator.GetInfo().LightOn;
+            var data = new FlatPanelLedData { LightOn = isOn };
+            emitter.Enqueue("flat-panel", "light", data);
             return Task.CompletedTask;
         }
 

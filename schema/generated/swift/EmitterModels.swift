@@ -7,6 +7,9 @@
 //   let domeShutterData = try DomeShutterData(json)
 //   let filterWheelDeviceInfoData = try FilterWheelDeviceInfoData(json)
 //   let flatPanelDeviceInfoData = try FlatPanelDeviceInfoData(json)
+//   let flatPanelLEDData = try FlatPanelLEDData(json)
+//   let flatPanelStateData = try FlatPanelStateData(json)
+//   let flatPanelValueData = try FlatPanelValueData(json)
 //   let focuserDeviceInfoData = try FocuserDeviceInfoData(json)
 //   let guiderDeviceInfoData = try GuiderDeviceInfoData(json)
 //   let guiderDitherData = try GuiderDitherData(json)
@@ -765,6 +768,140 @@ extension FlatPanelDeviceInfoData {
             minBrightness: minBrightness ?? self.minBrightness,
             supportsOnOff: supportsOnOff ?? self.supportsOnOff,
             supportsOpenClose: supportsOpenClose ?? self.supportsOpenClose
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Event data for when the led toggles
+// MARK: - FlatPanelLEDData
+struct FlatPanelLEDData: Codable {
+    let lightOn: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case lightOn = "light_on"
+    }
+}
+
+// MARK: FlatPanelLEDData convenience initializers and mutators
+
+extension FlatPanelLEDData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(FlatPanelLEDData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        lightOn: Bool? = nil
+    ) -> FlatPanelLEDData {
+        return FlatPanelLEDData(
+            lightOn: lightOn ?? self.lightOn
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Event data for when the panel opens or closes
+// MARK: - FlatPanelStateData
+struct FlatPanelStateData: Codable {
+    let state: State
+}
+
+// MARK: FlatPanelStateData convenience initializers and mutators
+
+extension FlatPanelStateData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(FlatPanelStateData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        state: State? = nil
+    ) -> FlatPanelStateData {
+        return FlatPanelStateData(
+            state: state ?? self.state
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+enum State: String, Codable {
+    case closed = "Closed"
+    case opened = "Opened"
+}
+
+/// Event data for when the brightness changes
+// MARK: - FlatPanelValueData
+struct FlatPanelValueData: Codable {
+    let from, to: Double
+}
+
+// MARK: FlatPanelValueData convenience initializers and mutators
+
+extension FlatPanelValueData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(FlatPanelValueData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        from: Double? = nil,
+        to: Double? = nil
+    ) -> FlatPanelValueData {
+        return FlatPanelValueData(
+            from: from ?? self.from,
+            to: to ?? self.to
         )
     }
 

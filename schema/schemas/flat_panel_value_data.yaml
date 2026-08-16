@@ -1,0 +1,12 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: FlatPanelValueData
+type: object
+description: Event data for when the brightness changes
+properties:
+  from:
+    type: number
+  to:
+    type: number
+required:
+  - from
+  - to

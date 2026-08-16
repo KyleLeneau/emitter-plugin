@@ -1,6 +1,6 @@
 // To parse this data:
 //
-//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FlatPanelDeviceInfoData, FocuserDeviceInfoData, GuiderDeviceInfoData, GuiderDitherData, GuiderStartData, GuiderStepData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, RotatorMovedData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData } from "./file";
+//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FlatPanelDeviceInfoData, FlatPanelLEDData, FlatPanelStateData, FlatPanelValueData, FocuserDeviceInfoData, GuiderDeviceInfoData, GuiderDitherData, GuiderStartData, GuiderStepData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, RotatorMovedData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData } from "./file";
 //
 //   const deviceConnectionData = Convert.toDeviceConnectionData(json);
 //   const cameraDeviceInfoData = Convert.toCameraDeviceInfoData(json);
@@ -8,6 +8,9 @@
 //   const domeShutterData = Convert.toDomeShutterData(json);
 //   const filterWheelDeviceInfoData = Convert.toFilterWheelDeviceInfoData(json);
 //   const flatPanelDeviceInfoData = Convert.toFlatPanelDeviceInfoData(json);
+//   const flatPanelLEDData = Convert.toFlatPanelLEDData(json);
+//   const flatPanelStateData = Convert.toFlatPanelStateData(json);
+//   const flatPanelValueData = Convert.toFlatPanelValueData(json);
 //   const focuserDeviceInfoData = Convert.toFocuserDeviceInfoData(json);
 //   const guiderDeviceInfoData = Convert.toGuiderDeviceInfoData(json);
 //   const guiderDitherData = Convert.toGuiderDitherData(json);
@@ -256,6 +259,36 @@ export interface FlatPanelDeviceInfoData {
     min_brightness?:      number;
     supports_on_off?:     boolean;
     supports_open_close?: boolean;
+    [property: string]: any;
+}
+
+/**
+ * Event data for when the led toggles
+ */
+export interface FlatPanelLEDData {
+    light_on: boolean;
+    [property: string]: any;
+}
+
+/**
+ * Event data for when the panel opens or closes
+ */
+export interface FlatPanelStateData {
+    state: State;
+    [property: string]: any;
+}
+
+export enum State {
+    Closed = "Closed",
+    Opened = "Opened",
+}
+
+/**
+ * Event data for when the brightness changes
+ */
+export interface FlatPanelValueData {
+    from: number;
+    to:   number;
     [property: string]: any;
 }
 
@@ -646,6 +679,30 @@ export class Convert {
         return JSON.stringify(uncast(value, r("FlatPanelDeviceInfoData")), null, 2);
     }
 
+    public static toFlatPanelLEDData(json: string): FlatPanelLEDData {
+        return cast(JSON.parse(json), r("FlatPanelLEDData"));
+    }
+
+    public static flatPanelLEDDataToJson(value: FlatPanelLEDData): string {
+        return JSON.stringify(uncast(value, r("FlatPanelLEDData")), null, 2);
+    }
+
+    public static toFlatPanelStateData(json: string): FlatPanelStateData {
+        return cast(JSON.parse(json), r("FlatPanelStateData"));
+    }
+
+    public static flatPanelStateDataToJson(value: FlatPanelStateData): string {
+        return JSON.stringify(uncast(value, r("FlatPanelStateData")), null, 2);
+    }
+
+    public static toFlatPanelValueData(json: string): FlatPanelValueData {
+        return cast(JSON.parse(json), r("FlatPanelValueData"));
+    }
+
+    public static flatPanelValueDataToJson(value: FlatPanelValueData): string {
+        return JSON.stringify(uncast(value, r("FlatPanelValueData")), null, 2);
+    }
+
     public static toFocuserDeviceInfoData(json: string): FocuserDeviceInfoData {
         return cast(JSON.parse(json), r("FocuserDeviceInfoData"));
     }
@@ -1031,6 +1088,16 @@ const typeMap: any = {
         { json: "supports_on_off", js: "supports_on_off", typ: u(undefined, true) },
         { json: "supports_open_close", js: "supports_open_close", typ: u(undefined, true) },
     ], "any"),
+    "FlatPanelLEDData": o([
+        { json: "light_on", js: "light_on", typ: true },
+    ], "any"),
+    "FlatPanelStateData": o([
+        { json: "state", js: "state", typ: r("State") },
+    ], "any"),
+    "FlatPanelValueData": o([
+        { json: "from", js: "from", typ: 3.14 },
+        { json: "to", js: "to", typ: 3.14 },
+    ], "any"),
     "FocuserDeviceInfoData": o([
         { json: "connected", js: "connected", typ: true },
         { json: "is_moving", js: "is_moving", typ: true },
@@ -1247,6 +1314,10 @@ const typeMap: any = {
         "parked",
         "slewed",
         "synced",
+    ],
+    "State": [
+        "Closed",
+        "Opened",
     ],
     "GuiderDitherDataStage": [
         "After",

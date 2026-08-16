@@ -109,6 +109,33 @@ channels:
     messages:
       FlatPanelDeviceInfoEvent:
         $ref: "#/components/messages/FlatPanelDeviceInfoEvent"
+  flatPanelLED:
+    address: "nina.{instanceId}.flat-panel.light"
+    description: Events when led toggles
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      FlatPanelLEDEvent:
+        $ref: "#/components/messages/FlatPanelLEDEvent"
+  flatPanelState:
+    address: "nina.{instanceId}.flat-panel.state"
+    description: Events when panel opens or closes
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      FlatPanelStateEvent:
+        $ref: "#/components/messages/FlatPanelStateEvent"
+  flatPanelValue:
+    address: "nina.{instanceId}.flat-panel.value"
+    description: Events when panel changes brightness
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      FlatPanelValueEvent:
+        $ref: "#/components/messages/FlatPanelValueEvent"
 
   # Focuser ─────────────────────────────────────────────────────────────────
   focuserDeviceInfo:
@@ -300,6 +327,24 @@ operations:
     action: send
     channel:
       $ref: "#/channels/flatPanelDeviceInfo"
+    tags:
+      - name: "FlatPanel"
+  sendFlatPanelLEDEvent:
+    action: send
+    channel:
+      $ref: "#/channels/flatPanelLED"
+    tags:
+      - name: "FlatPanel"
+  sendFlatPanelStateEvent:
+    action: send
+    channel:
+      $ref: "#/channels/flatPanelState"
+    tags:
+      - name: "FlatPanel"
+  sendFlatPanelValueEvent:
+    action: send
+    channel:
+      $ref: "#/channels/flatPanelValue"
     tags:
       - name: "FlatPanel"
 
@@ -500,6 +545,42 @@ components:
                 const: "io.nina.flat-panel.device-info"
               data:
                 $ref: "./schemas/flat_panel_data.yaml"
+    FlatPanelLEDEvent:
+      title: FlatPanelLEDEvent
+      summary: Event when the flat panel led toggles
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.flat-panel.light"
+              data:
+                $ref: "./schemas/flat_panel_led_data.yaml"
+    FlatPanelStateEvent:
+      title: FlatPanelStateEvent
+      summary: Event when the flat panel opens or closes
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.flat-panel.state"
+              data:
+                $ref: "./schemas/flat_panel_state_data.yaml"
+    FlatPanelValueEvent:
+      title: FlatPanelValueEvent
+      summary: Event when the flat panel changes brightness
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.flat-panel.value"
+              data:
+                $ref: "./schemas/flat_panel_value_data.yaml"
 
     # Focuser ─────────────────────────────────────────────────────────────────
     FocuserDeviceInfoEvent:

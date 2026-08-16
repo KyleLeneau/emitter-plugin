@@ -375,6 +375,33 @@ pub struct FlatPanelDeviceInfoData {
     pub supports_open_close: Option<bool>,
 }
 
+/// Event data for when the led toggles
+#[derive(Serialize, Deserialize)]
+pub struct FlatPanelLedData {
+    pub light_on: bool,
+}
+
+/// Event data for when the panel opens or closes
+#[derive(Serialize, Deserialize)]
+pub struct FlatPanelStateData {
+    pub state: State,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum State {
+    Closed,
+
+    Opened,
+}
+
+/// Event data for when the brightness changes
+#[derive(Serialize, Deserialize)]
+pub struct FlatPanelValueData {
+    pub from: f64,
+
+    pub to: f64,
+}
+
 /// Focuser device state
 #[derive(Serialize, Deserialize)]
 pub struct FocuserDeviceInfoData {

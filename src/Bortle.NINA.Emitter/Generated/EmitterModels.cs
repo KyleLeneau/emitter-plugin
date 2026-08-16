@@ -10,6 +10,9 @@
 //    var domeShutterData = DomeShutterData.FromJson(jsonString);
 //    var filterWheelDeviceInfoData = FilterWheelDeviceInfoData.FromJson(jsonString);
 //    var flatPanelDeviceInfoData = FlatPanelDeviceInfoData.FromJson(jsonString);
+//    var flatPanelLedData = FlatPanelLedData.FromJson(jsonString);
+//    var flatPanelStateData = FlatPanelStateData.FromJson(jsonString);
+//    var flatPanelValueData = FlatPanelValueData.FromJson(jsonString);
 //    var focuserDeviceInfoData = FocuserDeviceInfoData.FromJson(jsonString);
 //    var guiderDeviceInfoData = GuiderDeviceInfoData.FromJson(jsonString);
 //    var guiderDitherData = GuiderDitherData.FromJson(jsonString);
@@ -468,6 +471,36 @@ namespace Bortle.NINA.Emitter.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("supports_open_close")]
         public bool? SupportsOpenClose { get; set; }
+    }
+
+    /// <summary>
+    /// Event data for when the led toggles
+    /// </summary>
+    public partial class FlatPanelLedData
+    {
+        [JsonPropertyName("light_on")]
+        public bool LightOn { get; set; }
+    }
+
+    /// <summary>
+    /// Event data for when the panel opens or closes
+    /// </summary>
+    public partial class FlatPanelStateData
+    {
+        [JsonPropertyName("state")]
+        public State State { get; set; }
+    }
+
+    /// <summary>
+    /// Event data for when the brightness changes
+    /// </summary>
+    public partial class FlatPanelValueData
+    {
+        [JsonPropertyName("from")]
+        public double From { get; set; }
+
+        [JsonPropertyName("to")]
+        public double To { get; set; }
     }
 
     /// <summary>
@@ -1053,6 +1086,8 @@ namespace Bortle.NINA.Emitter.Models
 
     public enum Position { Closed, Homed, Opened, Parked, Slewed, Synced };
 
+    public enum State { Closed, Opened };
+
     public enum GuiderDitherDataStage { After };
 
     public enum GuiderStartDataStage { Started, Stopped };
@@ -1099,6 +1134,21 @@ namespace Bortle.NINA.Emitter.Models
     public partial class FlatPanelDeviceInfoData
     {
         public static FlatPanelDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<FlatPanelDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class FlatPanelLedData
+    {
+        public static FlatPanelLedData FromJson(string json) => JsonSerializer.Deserialize<FlatPanelLedData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class FlatPanelStateData
+    {
+        public static FlatPanelStateData FromJson(string json) => JsonSerializer.Deserialize<FlatPanelStateData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class FlatPanelValueData
+    {
+        public static FlatPanelValueData FromJson(string json) => JsonSerializer.Deserialize<FlatPanelValueData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
     public partial class FocuserDeviceInfoData
@@ -1179,6 +1229,9 @@ namespace Bortle.NINA.Emitter.Models
         public static string ToJson(this DomeShutterData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this FilterWheelDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this FlatPanelDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this FlatPanelLedData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this FlatPanelStateData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this FlatPanelValueData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this FocuserDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this GuiderDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this GuiderDitherData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -1206,6 +1259,7 @@ namespace Bortle.NINA.Emitter.Models
                 SensorTypeConverter.Singleton,
                 ShutterStateConverter.Singleton,
                 PositionConverter.Singleton,
+                StateConverter.Singleton,
                 GuiderDitherDataStageConverter.Singleton,
                 GuiderStartDataStageConverter.Singleton,
                 AlignmentModeConverter.Singleton,
@@ -1560,6 +1614,40 @@ namespace Bortle.NINA.Emitter.Models
         }
 
         public static readonly PositionConverter Singleton = new PositionConverter();
+    }
+
+    internal class StateConverter : JsonConverter<State>
+    {
+        public override bool CanConvert(Type t) => t == typeof(State);
+
+        public override State Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var value = reader.GetString();
+            switch (value)
+            {
+                case "Closed":
+                    return State.Closed;
+                case "Opened":
+                    return State.Opened;
+            }
+            throw new Exception("Cannot unmarshal type State");
+        }
+
+        public override void Write(Utf8JsonWriter writer, State value, JsonSerializerOptions options)
+        {
+            switch (value)
+            {
+                case State.Closed:
+                    JsonSerializer.Serialize(writer, "Closed", options);
+                    return;
+                case State.Opened:
+                    JsonSerializer.Serialize(writer, "Opened", options);
+                    return;
+            }
+            throw new Exception("Cannot marshal type State");
+        }
+
+        public static readonly StateConverter Singleton = new StateConverter();
     }
 
     internal class GuiderDitherDataStageConverter : JsonConverter<GuiderDitherDataStage>

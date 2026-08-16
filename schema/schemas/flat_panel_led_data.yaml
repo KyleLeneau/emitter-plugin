@@ -1,0 +1,9 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: FlatPanelLedData
+type: object
+description: Event data for when the led toggles
+properties:
+  light_on:
+    type: boolean
+required:
+  - light_on
