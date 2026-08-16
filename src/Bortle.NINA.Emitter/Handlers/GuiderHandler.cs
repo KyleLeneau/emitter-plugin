@@ -63,21 +63,32 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private Task MediatorOnAfterDither(object arg1, EventArgs arg2) {
-            // TODO: Implement event
+            var data = new GuiderDitherData { Stage = GuiderDitherDataStage.After };
+            emitter.Enqueue("guider", "dither", data);
             return Task.CompletedTask;
         }
 
         private void MediatorOnGuideEvent(object sender, IGuideStep e) {
-            // TODO: Implement event
+            var data = new GuiderStepData {
+                Frame = e.Frame,
+                Time = e.Time,
+                RaDistanceRaw = e.RADistanceRaw,
+                DecDistianceRaw = e.DECDistanceRaw,
+                RaDuration = e.RADuration,
+                DecDuration = e.DECDuration
+            };
+            emitter.Enqueue("guider", "step", data);
         }
 
         private Task MediatorOnGuidingStarted(object arg1, EventArgs arg2) {
-            // TODO: Implement event
+            var data = new GuiderStartData { Stage = GuiderStartDataStage.Started };
+            emitter.Enqueue("guider", "state", data);
             return Task.CompletedTask;
         }
 
         private Task MediatorOnGuidingStopped(object arg1, EventArgs arg2) {
-            // TODO: Implement event
+            var data = new GuiderStartData { Stage = GuiderStartDataStage.Stopped };
+            emitter.Enqueue("guider", "state", data);
             return Task.CompletedTask;
         }
 

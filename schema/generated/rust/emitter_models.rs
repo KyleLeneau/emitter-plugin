@@ -431,6 +431,46 @@ pub struct RmsUnit {
     pub pixel: f64,
 }
 
+/// Event after the guider has dithered
+#[derive(Serialize, Deserialize)]
+pub struct GuiderDitherData {
+    pub stage: GuiderDitherDataStage,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum GuiderDitherDataStage {
+    After,
+}
+
+/// Event after the guider has started or stopped
+#[derive(Serialize, Deserialize)]
+pub struct GuiderStartData {
+    pub stage: GuiderStartDataStage,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum GuiderStartDataStage {
+    Started,
+
+    Stopped,
+}
+
+/// Event after the guider has started or stopped
+#[derive(Serialize, Deserialize)]
+pub struct GuiderStepData {
+    pub dec_distiance_raw: f64,
+
+    pub dec_duration: f64,
+
+    pub frame: f64,
+
+    pub ra_distance_raw: f64,
+
+    pub ra_duration: f64,
+
+    pub time: f64,
+}
+
 /// Periodic Mount event data
 #[derive(Serialize, Deserialize)]
 pub struct MountDeviceInfoData {

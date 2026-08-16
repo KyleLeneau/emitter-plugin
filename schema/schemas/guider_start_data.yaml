@@ -1,0 +1,12 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: GuiderStartData
+type: object
+description: Event after the guider has started or stopped
+properties:
+  stage:
+    type: string
+    enum:
+      - Started
+      - Stopped
+required:
+  - stage

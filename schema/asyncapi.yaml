@@ -131,6 +131,33 @@ channels:
     messages:
       GuiderDeviceInfoEvent:
         $ref: "#/components/messages/GuiderDeviceInfoEvent"
+  guiderDither:
+    address: "nina.{instanceId}.guider.dither"
+    description: Event when the guider dithers
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      GuiderDitherEvent:
+        $ref: "#/components/messages/GuiderDitherEvent"
+  guiderStart:
+    address: "nina.{instanceId}.guider.state"
+    description: Event when the guider starts or stops
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      GuiderStartEvent:
+        $ref: "#/components/messages/GuiderStartEvent"
+  guiderStep:
+    address: "nina.{instanceId}.guider.step"
+    description: Event when the guider steps
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      GuiderStepEvent:
+        $ref: "#/components/messages/GuiderStepEvent"
 
   # Mount ───────────────────────────────────────────────────────────────────
   mountDeviceInfo:
@@ -191,7 +218,6 @@ channels:
     messages:
       safetyDeviceInfoEvent:
         $ref: "#/components/messages/SafetyDeviceInfoEvent"
-
   safetyChange:
     address: "nina.{instanceId}.safety-monitor.is-safe"
     description: Updates with the saftey monitor value changes
@@ -290,6 +316,24 @@ operations:
     action: send
     channel:
       $ref: "#/channels/guiderDeviceInfo"
+    tags:
+      - name: "Guider"
+  sendGuiderDitherEvent:
+    action: send
+    channel:
+      $ref: "#/channels/guiderDither"
+    tags:
+      - name: "Guider"
+  sendGuiderStartEvent:
+    action: send
+    channel:
+      $ref: "#/channels/guiderStart"
+    tags:
+      - name: "Guider"
+  sendGuiderStepEvent:
+    action: send
+    channel:
+      $ref: "#/channels/guiderStep"
     tags:
       - name: "Guider"
 
@@ -484,6 +528,42 @@ components:
                 const: "io.nina.guider.device-info"
               data:
                 $ref: "./schemas/guider_data.yaml"
+    GuiderDitherEvent:
+      title: GuiderDitherEvent
+      summary: Event the fires around dither events
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.guider.dither"
+              data:
+                $ref: "./schemas/guider_dither_data.yaml"
+    GuiderStartEvent:
+      title: GuiderStartEvent
+      summary: Event the fires when guiding starts and stops
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.guider.state"
+              data:
+                $ref: "./schemas/guider_start_data.yaml"
+    GuiderStepEvent:
+      title: GuiderStepEvent
+      summary: Event the fires on each guiding step
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.guider.step"
+              data:
+                $ref: "./schemas/guider_step_data.yaml"
 
     # Mount ───────────────────────────────────────────────────────────────────
     MountDeviceInfoEvent:

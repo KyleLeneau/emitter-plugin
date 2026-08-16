@@ -9,6 +9,9 @@
 //   let flatPanelDeviceInfoData = try FlatPanelDeviceInfoData(json)
 //   let focuserDeviceInfoData = try FocuserDeviceInfoData(json)
 //   let guiderDeviceInfoData = try GuiderDeviceInfoData(json)
+//   let guiderDitherData = try GuiderDitherData(json)
+//   let guiderStartData = try GuiderStartData(json)
+//   let guiderStepData = try GuiderStepData(json)
 //   let mountDeviceInfoData = try MountDeviceInfoData(json)
 //   let mountFlipData = try MountFlipData(json)
 //   let mountMovedData = try MountMovedData(json)
@@ -997,6 +1000,158 @@ extension RMSUnit {
         return RMSUnit(
             arcSeconds: arcSeconds ?? self.arcSeconds,
             pixel: pixel ?? self.pixel
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Event after the guider has dithered
+// MARK: - GuiderDitherData
+struct GuiderDitherData: Codable {
+    let stage: GuiderDitherDataStage
+}
+
+// MARK: GuiderDitherData convenience initializers and mutators
+
+extension GuiderDitherData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(GuiderDitherData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        stage: GuiderDitherDataStage? = nil
+    ) -> GuiderDitherData {
+        return GuiderDitherData(
+            stage: stage ?? self.stage
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+enum GuiderDitherDataStage: String, Codable {
+    case after = "After"
+}
+
+/// Event after the guider has started or stopped
+// MARK: - GuiderStartData
+struct GuiderStartData: Codable {
+    let stage: GuiderStartDataStage
+}
+
+// MARK: GuiderStartData convenience initializers and mutators
+
+extension GuiderStartData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(GuiderStartData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        stage: GuiderStartDataStage? = nil
+    ) -> GuiderStartData {
+        return GuiderStartData(
+            stage: stage ?? self.stage
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+enum GuiderStartDataStage: String, Codable {
+    case started = "Started"
+    case stopped = "Stopped"
+}
+
+/// Event after the guider has started or stopped
+// MARK: - GuiderStepData
+struct GuiderStepData: Codable {
+    let decDistianceRaw, decDuration, frame, raDistanceRaw: Double
+    let raDuration, time: Double
+
+    enum CodingKeys: String, CodingKey {
+        case decDistianceRaw = "dec_distiance_raw"
+        case decDuration = "dec_duration"
+        case frame
+        case raDistanceRaw = "ra_distance_raw"
+        case raDuration = "ra_duration"
+        case time
+    }
+}
+
+// MARK: GuiderStepData convenience initializers and mutators
+
+extension GuiderStepData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(GuiderStepData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        decDistianceRaw: Double? = nil,
+        decDuration: Double? = nil,
+        frame: Double? = nil,
+        raDistanceRaw: Double? = nil,
+        raDuration: Double? = nil,
+        time: Double? = nil
+    ) -> GuiderStepData {
+        return GuiderStepData(
+            decDistianceRaw: decDistianceRaw ?? self.decDistianceRaw,
+            decDuration: decDuration ?? self.decDuration,
+            frame: frame ?? self.frame,
+            raDistanceRaw: raDistanceRaw ?? self.raDistanceRaw,
+            raDuration: raDuration ?? self.raDuration,
+            time: time ?? self.time
         )
     }
 

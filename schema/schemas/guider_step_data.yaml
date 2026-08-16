@@ -1,0 +1,24 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: GuiderStepData
+type: object
+description: Event after the guider has started or stopped
+properties:
+  frame:
+    type: number
+  time:
+    type: number
+  ra_distance_raw:
+    type: number
+  dec_distiance_raw:
+    type: number
+  ra_duration:
+    type: number
+  dec_duration:
+    type: number
+required:
+  - frame
+  - time
+  - ra_distance_raw
+  - dec_distiance_raw
+  - ra_duration
+  - dec_duration

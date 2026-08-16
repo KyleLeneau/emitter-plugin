@@ -1,6 +1,6 @@
 // To parse this data:
 //
-//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FlatPanelDeviceInfoData, FocuserDeviceInfoData, GuiderDeviceInfoData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, RotatorMovedData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData } from "./file";
+//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FlatPanelDeviceInfoData, FocuserDeviceInfoData, GuiderDeviceInfoData, GuiderDitherData, GuiderStartData, GuiderStepData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, RotatorMovedData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData } from "./file";
 //
 //   const deviceConnectionData = Convert.toDeviceConnectionData(json);
 //   const cameraDeviceInfoData = Convert.toCameraDeviceInfoData(json);
@@ -10,6 +10,9 @@
 //   const flatPanelDeviceInfoData = Convert.toFlatPanelDeviceInfoData(json);
 //   const focuserDeviceInfoData = Convert.toFocuserDeviceInfoData(json);
 //   const guiderDeviceInfoData = Convert.toGuiderDeviceInfoData(json);
+//   const guiderDitherData = Convert.toGuiderDitherData(json);
+//   const guiderStartData = Convert.toGuiderStartData(json);
+//   const guiderStepData = Convert.toGuiderStepData(json);
 //   const mountDeviceInfoData = Convert.toMountDeviceInfoData(json);
 //   const mountFlipData = Convert.toMountFlipData(json);
 //   const mountMovedData = Convert.toMountMovedData(json);
@@ -296,6 +299,44 @@ export interface RMSError {
 export interface RMSUnit {
     arc_seconds: number;
     pixel:       number;
+    [property: string]: any;
+}
+
+/**
+ * Event after the guider has dithered
+ */
+export interface GuiderDitherData {
+    stage: GuiderDitherDataStage;
+    [property: string]: any;
+}
+
+export enum GuiderDitherDataStage {
+    After = "After",
+}
+
+/**
+ * Event after the guider has started or stopped
+ */
+export interface GuiderStartData {
+    stage: GuiderStartDataStage;
+    [property: string]: any;
+}
+
+export enum GuiderStartDataStage {
+    Started = "Started",
+    Stopped = "Stopped",
+}
+
+/**
+ * Event after the guider has started or stopped
+ */
+export interface GuiderStepData {
+    dec_distiance_raw: number;
+    dec_duration:      number;
+    frame:             number;
+    ra_distance_raw:   number;
+    ra_duration:       number;
+    time:              number;
     [property: string]: any;
 }
 
@@ -619,6 +660,30 @@ export class Convert {
 
     public static guiderDeviceInfoDataToJson(value: GuiderDeviceInfoData): string {
         return JSON.stringify(uncast(value, r("GuiderDeviceInfoData")), null, 2);
+    }
+
+    public static toGuiderDitherData(json: string): GuiderDitherData {
+        return cast(JSON.parse(json), r("GuiderDitherData"));
+    }
+
+    public static guiderDitherDataToJson(value: GuiderDitherData): string {
+        return JSON.stringify(uncast(value, r("GuiderDitherData")), null, 2);
+    }
+
+    public static toGuiderStartData(json: string): GuiderStartData {
+        return cast(JSON.parse(json), r("GuiderStartData"));
+    }
+
+    public static guiderStartDataToJson(value: GuiderStartData): string {
+        return JSON.stringify(uncast(value, r("GuiderStartData")), null, 2);
+    }
+
+    public static toGuiderStepData(json: string): GuiderStepData {
+        return cast(JSON.parse(json), r("GuiderStepData"));
+    }
+
+    public static guiderStepDataToJson(value: GuiderStepData): string {
+        return JSON.stringify(uncast(value, r("GuiderStepData")), null, 2);
     }
 
     public static toMountDeviceInfoData(json: string): MountDeviceInfoData {
@@ -995,6 +1060,20 @@ const typeMap: any = {
         { json: "arc_seconds", js: "arc_seconds", typ: 3.14 },
         { json: "pixel", js: "pixel", typ: 3.14 },
     ], "any"),
+    "GuiderDitherData": o([
+        { json: "stage", js: "stage", typ: r("GuiderDitherDataStage") },
+    ], "any"),
+    "GuiderStartData": o([
+        { json: "stage", js: "stage", typ: r("GuiderStartDataStage") },
+    ], "any"),
+    "GuiderStepData": o([
+        { json: "dec_distiance_raw", js: "dec_distiance_raw", typ: 3.14 },
+        { json: "dec_duration", js: "dec_duration", typ: 3.14 },
+        { json: "frame", js: "frame", typ: 3.14 },
+        { json: "ra_distance_raw", js: "ra_distance_raw", typ: 3.14 },
+        { json: "ra_duration", js: "ra_duration", typ: 3.14 },
+        { json: "time", js: "time", typ: 3.14 },
+    ], "any"),
     "MountDeviceInfoData": o([
         { json: "alignment_mode", js: "alignment_mode", typ: u(undefined, r("AlignmentMode")) },
         { json: "altitude", js: "altitude", typ: u(undefined, 3.14) },
@@ -1168,6 +1247,13 @@ const typeMap: any = {
         "parked",
         "slewed",
         "synced",
+    ],
+    "GuiderDitherDataStage": [
+        "After",
+    ],
+    "GuiderStartDataStage": [
+        "Started",
+        "Stopped",
     ],
     "AlignmentMode": [
         "AltAz",

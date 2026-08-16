@@ -52,9 +52,9 @@
 * [ ] focuser auto focus done
 * [ ] focuser user manual focus
 * [x] guider info
-* [ ] guider after dither
-* [ ] guider guide step
-* [ ] guider suiding start / stop
+* [x] guider after dither
+* [x] guider guide step
+* [x] guider suiding start / stop
 * [x] mount info
 * [x] mount flip
 * [x] rotator info

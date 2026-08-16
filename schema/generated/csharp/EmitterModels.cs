@@ -12,6 +12,9 @@
 //    var flatPanelDeviceInfoData = FlatPanelDeviceInfoData.FromJson(jsonString);
 //    var focuserDeviceInfoData = FocuserDeviceInfoData.FromJson(jsonString);
 //    var guiderDeviceInfoData = GuiderDeviceInfoData.FromJson(jsonString);
+//    var guiderDitherData = GuiderDitherData.FromJson(jsonString);
+//    var guiderStartData = GuiderStartData.FromJson(jsonString);
+//    var guiderStepData = GuiderStepData.FromJson(jsonString);
 //    var mountDeviceInfoData = MountDeviceInfoData.FromJson(jsonString);
 //    var mountFlipData = MountFlipData.FromJson(jsonString);
 //    var mountMovedData = MountMovedData.FromJson(jsonString);
@@ -556,6 +559,48 @@ namespace Bortle.NINA.Emitter.Models
     }
 
     /// <summary>
+    /// Event after the guider has dithered
+    /// </summary>
+    public partial class GuiderDitherData
+    {
+        [JsonPropertyName("stage")]
+        public GuiderDitherDataStage Stage { get; set; }
+    }
+
+    /// <summary>
+    /// Event after the guider has started or stopped
+    /// </summary>
+    public partial class GuiderStartData
+    {
+        [JsonPropertyName("stage")]
+        public GuiderStartDataStage Stage { get; set; }
+    }
+
+    /// <summary>
+    /// Event after the guider has started or stopped
+    /// </summary>
+    public partial class GuiderStepData
+    {
+        [JsonPropertyName("dec_distiance_raw")]
+        public double DecDistianceRaw { get; set; }
+
+        [JsonPropertyName("dec_duration")]
+        public double DecDuration { get; set; }
+
+        [JsonPropertyName("frame")]
+        public double Frame { get; set; }
+
+        [JsonPropertyName("ra_distance_raw")]
+        public double RaDistanceRaw { get; set; }
+
+        [JsonPropertyName("ra_duration")]
+        public double RaDuration { get; set; }
+
+        [JsonPropertyName("time")]
+        public double Time { get; set; }
+    }
+
+    /// <summary>
     /// Periodic Mount event data
     /// </summary>
     public partial class MountDeviceInfoData
@@ -1008,6 +1053,10 @@ namespace Bortle.NINA.Emitter.Models
 
     public enum Position { Closed, Homed, Opened, Parked, Slewed, Synced };
 
+    public enum GuiderDitherDataStage { After };
+
+    public enum GuiderStartDataStage { Started, Stopped };
+
     public enum AlignmentMode { AltAz, GermanPolar, Polar };
 
     public enum Epoch { B1950, J2000, J2050, Jnow };
@@ -1060,6 +1109,21 @@ namespace Bortle.NINA.Emitter.Models
     public partial class GuiderDeviceInfoData
     {
         public static GuiderDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<GuiderDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class GuiderDitherData
+    {
+        public static GuiderDitherData FromJson(string json) => JsonSerializer.Deserialize<GuiderDitherData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class GuiderStartData
+    {
+        public static GuiderStartData FromJson(string json) => JsonSerializer.Deserialize<GuiderStartData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class GuiderStepData
+    {
+        public static GuiderStepData FromJson(string json) => JsonSerializer.Deserialize<GuiderStepData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
     public partial class MountDeviceInfoData
@@ -1117,6 +1181,9 @@ namespace Bortle.NINA.Emitter.Models
         public static string ToJson(this FlatPanelDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this FocuserDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this GuiderDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this GuiderDitherData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this GuiderStartData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this GuiderStepData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this MountDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this MountFlipData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this MountMovedData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -1139,6 +1206,8 @@ namespace Bortle.NINA.Emitter.Models
                 SensorTypeConverter.Singleton,
                 ShutterStateConverter.Singleton,
                 PositionConverter.Singleton,
+                GuiderDitherDataStageConverter.Singleton,
+                GuiderStartDataStageConverter.Singleton,
                 AlignmentModeConverter.Singleton,
                 EpochConverter.Singleton,
                 PierSideConverter.Singleton,
@@ -1491,6 +1560,67 @@ namespace Bortle.NINA.Emitter.Models
         }
 
         public static readonly PositionConverter Singleton = new PositionConverter();
+    }
+
+    internal class GuiderDitherDataStageConverter : JsonConverter<GuiderDitherDataStage>
+    {
+        public override bool CanConvert(Type t) => t == typeof(GuiderDitherDataStage);
+
+        public override GuiderDitherDataStage Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var value = reader.GetString();
+            if (value == "After")
+            {
+                return GuiderDitherDataStage.After;
+            }
+            throw new Exception("Cannot unmarshal type GuiderDitherDataStage");
+        }
+
+        public override void Write(Utf8JsonWriter writer, GuiderDitherDataStage value, JsonSerializerOptions options)
+        {
+            if (value == GuiderDitherDataStage.After)
+            {
+                JsonSerializer.Serialize(writer, "After", options);
+                return;
+            }
+            throw new Exception("Cannot marshal type GuiderDitherDataStage");
+        }
+
+        public static readonly GuiderDitherDataStageConverter Singleton = new GuiderDitherDataStageConverter();
+    }
+
+    internal class GuiderStartDataStageConverter : JsonConverter<GuiderStartDataStage>
+    {
+        public override bool CanConvert(Type t) => t == typeof(GuiderStartDataStage);
+
+        public override GuiderStartDataStage Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var value = reader.GetString();
+            switch (value)
+            {
+                case "Started":
+                    return GuiderStartDataStage.Started;
+                case "Stopped":
+                    return GuiderStartDataStage.Stopped;
+            }
+            throw new Exception("Cannot unmarshal type GuiderStartDataStage");
+        }
+
+        public override void Write(Utf8JsonWriter writer, GuiderStartDataStage value, JsonSerializerOptions options)
+        {
+            switch (value)
+            {
+                case GuiderStartDataStage.Started:
+                    JsonSerializer.Serialize(writer, "Started", options);
+                    return;
+                case GuiderStartDataStage.Stopped:
+                    JsonSerializer.Serialize(writer, "Stopped", options);
+                    return;
+            }
+            throw new Exception("Cannot marshal type GuiderStartDataStage");
+        }
+
+        public static readonly GuiderStartDataStageConverter Singleton = new GuiderStartDataStageConverter();
     }
 
     internal class AlignmentModeConverter : JsonConverter<AlignmentMode>
