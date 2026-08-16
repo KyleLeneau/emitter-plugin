@@ -35,8 +35,7 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private void MediatorOnIsSafeChanged(object sender, IsSafeEventArgs e) {
-            var data = new SafetyChangeData { IsSafe = e.IsSafe };
-            emitter.Enqueue("safety-monitor", "is-safe", data);
+            SendIsSafe(e.IsSafe);
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {
@@ -51,6 +50,7 @@ namespace Bortle.NINA.Emitter.Handlers {
                 DeviceId = deviceInfo.DeviceId
             };
             emitter.Enqueue("device", "connection", data);
+            SendIsSafe(deviceInfo.IsSafe);
             return Task.CompletedTask;
         }
 
@@ -65,6 +65,11 @@ namespace Bortle.NINA.Emitter.Handlers {
             mediator.Connected -= MediatorOnConnected;
             mediator.IsSafeChanged -= MediatorOnIsSafeChanged;
             mediator.RemoveConsumer(this);
+        }
+
+        private void SendIsSafe(Boolean isSafe) {
+            var data = new SafetyChangeData { IsSafe = isSafe };
+            emitter.Enqueue("safety-monitor", "is-safe", data);
         }
     }
 }
