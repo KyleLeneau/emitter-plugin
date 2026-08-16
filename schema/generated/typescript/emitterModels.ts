@@ -1,6 +1,6 @@
 // To parse this data:
 //
-//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, DomeDeviceInfoData, FilterWheelDeviceInfoData, FlatPanelDeviceInfoData, FocuserDeviceInfoData, GuiderDeviceInfoData, MountDeviceInfoData, MountMovedData, RotatorDeviceInfoData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData } from "./file";
+//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, DomeDeviceInfoData, FilterWheelDeviceInfoData, FlatPanelDeviceInfoData, FocuserDeviceInfoData, GuiderDeviceInfoData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData } from "./file";
 //
 //   const deviceConnectionData = Convert.toDeviceConnectionData(json);
 //   const cameraDeviceInfoData = Convert.toCameraDeviceInfoData(json);
@@ -10,6 +10,7 @@
 //   const focuserDeviceInfoData = Convert.toFocuserDeviceInfoData(json);
 //   const guiderDeviceInfoData = Convert.toGuiderDeviceInfoData(json);
 //   const mountDeviceInfoData = Convert.toMountDeviceInfoData(json);
+//   const mountFlipData = Convert.toMountFlipData(json);
 //   const mountMovedData = Convert.toMountMovedData(json);
 //   const rotatorDeviceInfoData = Convert.toRotatorDeviceInfoData(json);
 //   const safetyDeviceInfoData = Convert.toSafetyDeviceInfoData(json);
@@ -369,6 +370,21 @@ export interface TrackingRate {
 }
 
 /**
+ * Event that fires before or after a meridian flip
+ */
+export interface MountFlipData {
+    flip_event:          FlipEvent;
+    success?:            boolean | null;
+    target_coordinates?: Coordinates;
+    [property: string]: any;
+}
+
+export enum FlipEvent {
+    After = "after",
+    Before = "before",
+}
+
+/**
  * Event after the mount has moved
  */
 export interface MountMovedData {
@@ -568,6 +584,14 @@ export class Convert {
 
     public static mountDeviceInfoDataToJson(value: MountDeviceInfoData): string {
         return JSON.stringify(uncast(value, r("MountDeviceInfoData")), null, 2);
+    }
+
+    public static toMountFlipData(json: string): MountFlipData {
+        return cast(JSON.parse(json), r("MountFlipData"));
+    }
+
+    public static mountFlipDataToJson(value: MountFlipData): string {
+        return JSON.stringify(uncast(value, r("MountFlipData")), null, 2);
     }
 
     public static toMountMovedData(json: string): MountMovedData {
@@ -969,6 +993,11 @@ const typeMap: any = {
         { json: "custom_ra_rate", js: "custom_ra_rate", typ: u(undefined, 3.14) },
         { json: "tracking_mode", js: "tracking_mode", typ: u(undefined, r("TrackingMode")) },
     ], "any"),
+    "MountFlipData": o([
+        { json: "flip_event", js: "flip_event", typ: r("FlipEvent") },
+        { json: "success", js: "success", typ: u(undefined, u(true, null)) },
+        { json: "target_coordinates", js: "target_coordinates", typ: u(undefined, r("Coordinates")) },
+    ], "any"),
     "MountMovedData": o([
         { json: "from_coordinates", js: "from_coordinates", typ: u(undefined, r("Coordinates")) },
         { json: "move_type", js: "move_type", typ: r("MoveType") },
@@ -1096,6 +1125,10 @@ const typeMap: any = {
         "Sidereal",
         "Solar",
         "Stopped",
+    ],
+    "FlipEvent": [
+        "after",
+        "before",
     ],
     "MoveType": [
         "homed",

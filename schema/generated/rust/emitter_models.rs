@@ -558,6 +558,24 @@ pub struct TrackingRate {
     pub tracking_mode: Option<TrackingMode>,
 }
 
+/// Event that fires before or after a meridian flip
+#[derive(Serialize, Deserialize)]
+pub struct MountFlipData {
+    pub flip_event: FlipEvent,
+
+    pub success: Option<bool>,
+
+    pub target_coordinates: Option<Coordinates>,
+}
+
+#[derive(Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum FlipEvent {
+    After,
+
+    Before,
+}
+
 /// Event after the mount has moved
 #[derive(Serialize, Deserialize)]
 pub struct MountMovedData {

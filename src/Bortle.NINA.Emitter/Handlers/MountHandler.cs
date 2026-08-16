@@ -100,12 +100,18 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private Task MediatorOnAfterMeridianFlip(object arg1, AfterMeridianFlipEventArgs arg2) {
-            // TODO: Implement event
+            var data = new MountFlipData {
+                FlipEvent = FlipEvent.After, Success = arg2.Success, TargetCoordinates = ToCoordinates(arg2.Target)
+            };
+            emitter.Enqueue("mount", "flip", data);
             return Task.CompletedTask;
         }
 
         private Task MediatorOnBeforeMeridianFlip(object arg1, BeforeMeridianFlipEventArgs arg2) {
-            // TODO: Implement event
+            var data = new MountFlipData {
+                FlipEvent = FlipEvent.Before, TargetCoordinates = ToCoordinates(arg2.Target)
+            };
+            emitter.Enqueue("mount", "flip", data);
             return Task.CompletedTask;
         }
 

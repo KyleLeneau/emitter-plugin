@@ -26,6 +26,7 @@ DATA_SCHEMAS=(
   "$SCHEMAS/focuser_data.yaml"
   "$SCHEMAS/guider_data.yaml"
   "$SCHEMAS/mount_data.yaml"
+  "$SCHEMAS/mount_flip_data.yaml"
   "$SCHEMAS/mount_move_data.yaml"
   "$SCHEMAS/rotator_data.yaml"
   "$SCHEMAS/safety_data.yaml"

@@ -1,0 +1,16 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: MountFlipData
+type: object
+description: Event that fires before or after a meridian flip
+properties:
+  flip_event:
+    type: string
+    enum:
+      - before
+      - after
+  success:
+    type: [boolean, "null"]
+  target_coordinates:
+    $ref: "common.yaml#/definitions/Coordinates"
+required:
+  - flip_event

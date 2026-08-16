@@ -36,15 +36,31 @@
 ### Events
 * [x] Device connection
 * [x] Safety info
+* [x] Safety is_safe change
 * [x] weather info
 * [x] camera info
+* [ ] download timeout
 * [x] dome info
+* [ ] dome shutter event
 * [x] filter wheel info
+* [ ] filter wheel changed
 * [x] flat panel info
+* [ ] flat panel brightness change
+* [ ] flat panel led toggle
+* [ ] flat panel open/close
 * [x] focuser info
+* [ ] focuser auto focus done
+* [ ] focuser user manual focus
 * [x] guider info
+* [ ] guider after dither
+* [ ] guider guide step
+* [ ] guider suiding start / stop
 * [x] mount info
+* [x] mount flip
 * [x] rotator info
+* [ ] rotator moved
+* [ ] rotator moved mechanical
+* [ ] rotator synced
 * [x] switch info
 
 ### Bugs

@@ -12,6 +12,7 @@
 //    var focuserDeviceInfoData = FocuserDeviceInfoData.FromJson(jsonString);
 //    var guiderDeviceInfoData = GuiderDeviceInfoData.FromJson(jsonString);
 //    var mountDeviceInfoData = MountDeviceInfoData.FromJson(jsonString);
+//    var mountFlipData = MountFlipData.FromJson(jsonString);
 //    var mountMovedData = MountMovedData.FromJson(jsonString);
 //    var rotatorDeviceInfoData = RotatorDeviceInfoData.FromJson(jsonString);
 //    var safetyDeviceInfoData = SafetyDeviceInfoData.FromJson(jsonString);
@@ -739,6 +740,22 @@ namespace Bortle.NINA.Emitter.Models
     }
 
     /// <summary>
+    /// Event that fires before or after a meridian flip
+    /// </summary>
+    public partial class MountFlipData
+    {
+        [JsonPropertyName("flip_event")]
+        public FlipEvent FlipEvent { get; set; }
+
+        [JsonPropertyName("success")]
+        public bool? Success { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("target_coordinates")]
+        public Coordinates TargetCoordinates { get; set; }
+    }
+
+    /// <summary>
     /// Event after the mount has moved
     /// </summary>
     public partial class MountMovedData
@@ -971,6 +988,8 @@ namespace Bortle.NINA.Emitter.Models
 
     public enum TrackingMode { Custom, King, Lunar, Sidereal, Solar, Stopped };
 
+    public enum FlipEvent { After, Before };
+
     public enum MoveType { Homed, Parked, Slewed, Unparked };
 
     public partial class DeviceConnectionData
@@ -1013,6 +1032,11 @@ namespace Bortle.NINA.Emitter.Models
         public static MountDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<MountDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
+    public partial class MountFlipData
+    {
+        public static MountFlipData FromJson(string json) => JsonSerializer.Deserialize<MountFlipData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
     public partial class MountMovedData
     {
         public static MountMovedData FromJson(string json) => JsonSerializer.Deserialize<MountMovedData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -1053,6 +1077,7 @@ namespace Bortle.NINA.Emitter.Models
         public static string ToJson(this FocuserDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this GuiderDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this MountDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this MountFlipData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this MountMovedData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this RotatorDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this SafetyDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -1075,6 +1100,7 @@ namespace Bortle.NINA.Emitter.Models
                 EpochConverter.Singleton,
                 PierSideConverter.Singleton,
                 TrackingModeConverter.Singleton,
+                FlipEventConverter.Singleton,
                 MoveTypeConverter.Singleton,
                 new DateOnlyConverter(),
                 new TimeOnlyConverter(),
@@ -1543,6 +1569,40 @@ namespace Bortle.NINA.Emitter.Models
         }
 
         public static readonly TrackingModeConverter Singleton = new TrackingModeConverter();
+    }
+
+    internal class FlipEventConverter : JsonConverter<FlipEvent>
+    {
+        public override bool CanConvert(Type t) => t == typeof(FlipEvent);
+
+        public override FlipEvent Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var value = reader.GetString();
+            switch (value)
+            {
+                case "after":
+                    return FlipEvent.After;
+                case "before":
+                    return FlipEvent.Before;
+            }
+            throw new Exception("Cannot unmarshal type FlipEvent");
+        }
+
+        public override void Write(Utf8JsonWriter writer, FlipEvent value, JsonSerializerOptions options)
+        {
+            switch (value)
+            {
+                case FlipEvent.After:
+                    JsonSerializer.Serialize(writer, "after", options);
+                    return;
+                case FlipEvent.Before:
+                    JsonSerializer.Serialize(writer, "before", options);
+                    return;
+            }
+            throw new Exception("Cannot marshal type FlipEvent");
+        }
+
+        public static readonly FlipEventConverter Singleton = new FlipEventConverter();
     }
 
     internal class MoveTypeConverter : JsonConverter<MoveType>

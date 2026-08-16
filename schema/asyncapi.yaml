@@ -142,6 +142,15 @@ channels:
     messages:
       MountMoveEvent:
         $ref: "#/components/messages/MountMoveEvent"
+  mountFlip:
+    address: "nina.{instanceId}.mount.flip"
+    description: Event when the mount does a meridian flip
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      MountMoveEvent:
+        $ref: "#/components/messages/MountFlipEvent"
 
   # Rotator ─────────────────────────────────────────────────────────────────
   rotatorDeviceInfo:
@@ -267,11 +276,16 @@ operations:
       $ref: "#/channels/mountDeviceInfo"
     tags:
       - name: "Mount"
-
   sendMountMoveEvent:
     action: send
     channel:
       $ref: "#/channels/mountMove"
+    tags:
+      - name: "Mount"
+  sendMountFlipEvent:
+    action: send
+    channel:
+      $ref: "#/channels/mountFlip"
     tags:
       - name: "Mount"
 
@@ -442,7 +456,6 @@ components:
                 const: "io.nina.mount.device-info"
               data:
                 $ref: "./schemas/mount_data.yaml"
-
     MountMoveEvent:
       title: MountMoveEvent
       summary: Event when the mount moves
@@ -455,6 +468,18 @@ components:
                 const: "io.nina.mount.move"
               data:
                 $ref: "./schemas/mount_move_data.yaml"
+    MountFlipEvent:
+      title: MountFlipEvent
+      summary: Event when the mount does a meridian flip
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.mount.flip"
+              data:
+                $ref: "./schemas/mount_flip_data.yaml"
 
     # Rotator ─────────────────────────────────────────────────────────────────
     RotatorDeviceInfoEvent:

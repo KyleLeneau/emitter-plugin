@@ -9,6 +9,7 @@
 //   let focuserDeviceInfoData = try FocuserDeviceInfoData(json)
 //   let guiderDeviceInfoData = try GuiderDeviceInfoData(json)
 //   let mountDeviceInfoData = try MountDeviceInfoData(json)
+//   let mountFlipData = try MountFlipData(json)
 //   let mountMovedData = try MountMovedData(json)
 //   let rotatorDeviceInfoData = try RotatorDeviceInfoData(json)
 //   let safetyDeviceInfoData = try SafetyDeviceInfoData(json)
@@ -1270,6 +1271,64 @@ extension TrackingRate {
     func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
         return String(data: try self.jsonData(), encoding: encoding)
     }
+}
+
+/// Event that fires before or after a meridian flip
+// MARK: - MountFlipData
+struct MountFlipData: Codable {
+    let flipEvent: FlipEvent
+    let success: Bool?
+    let targetCoordinates: Coordinates?
+
+    enum CodingKeys: String, CodingKey {
+        case flipEvent = "flip_event"
+        case success
+        case targetCoordinates = "target_coordinates"
+    }
+}
+
+// MARK: MountFlipData convenience initializers and mutators
+
+extension MountFlipData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(MountFlipData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        flipEvent: FlipEvent? = nil,
+        success: Bool?? = nil,
+        targetCoordinates: Coordinates?? = nil
+    ) -> MountFlipData {
+        return MountFlipData(
+            flipEvent: flipEvent ?? self.flipEvent,
+            success: success ?? self.success,
+            targetCoordinates: targetCoordinates ?? self.targetCoordinates
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+enum FlipEvent: String, Codable {
+    case after = "after"
+    case before = "before"
 }
 
 /// Event after the mount has moved
