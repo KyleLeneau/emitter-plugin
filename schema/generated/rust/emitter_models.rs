@@ -303,6 +303,28 @@ pub enum ShutterState {
     Opening,
 }
 
+/// Event that fires before or after a meridian flip
+#[derive(Serialize, Deserialize)]
+pub struct DomeShutterData {
+    pub position: Position,
+}
+
+#[derive(Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum Position {
+    Closed,
+
+    Homed,
+
+    Opened,
+
+    Parked,
+
+    Slewed,
+
+    Synced,
+}
+
 /// Filter Wheel device state
 #[derive(Serialize, Deserialize)]
 pub struct FilterWheelDeviceInfoData {

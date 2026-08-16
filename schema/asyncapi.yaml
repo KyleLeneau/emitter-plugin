@@ -78,6 +78,15 @@ channels:
     messages:
       DomeDeviceInfoEvent:
         $ref: "#/components/messages/DomeDeviceInfoEvent"
+  domeShutter:
+    address: "nina.{instanceId}.dome.shutter"
+    description: Event when the shutter of the dome changes
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      DomeDeviceInfoEvent:
+        $ref: "#/components/messages/DomeShutterEvent"
 
   # FilterWheel ─────────────────────────────────────────────────────────────
   filterWheelDeviceInfo:
@@ -236,6 +245,12 @@ operations:
       $ref: "#/channels/domeDeviceInfo"
     tags:
       - name: "Dome"
+  sendDomeShutterEvent:
+    action: send
+    channel:
+      $ref: "#/channels/domeShutter"
+    tags:
+      - name: "Dome"
 
   # FilterWheel ─────────────────────────────────────────────────────────────
   sendFilterWheelDeviceInfoEvent:
@@ -386,6 +401,18 @@ components:
                 const: "io.nina.dome.device-info"
               data:
                 $ref: "./schemas/dome_data.yaml"
+    DomeShutterEvent:
+      title: DomeShutterEvent
+      summary: Data about the dome shutter changing state
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.dome.device-info"
+              data:
+                $ref: "./schemas/dome_shutter_data.yaml"
 
     # FilterWheel ─────────────────────────────────────────────────────────────
     FilterWheelDeviceInfoEvent:

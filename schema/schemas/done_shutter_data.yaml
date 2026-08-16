@@ -1,0 +1,16 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: DomeShutterData
+type: object
+description: Event that fires before or after a meridian flip
+properties:
+  position:
+    type: string
+    enum:
+      - closed
+      - homed
+      - opened
+      - parked
+      - slewed
+      - synced
+required:
+  - position

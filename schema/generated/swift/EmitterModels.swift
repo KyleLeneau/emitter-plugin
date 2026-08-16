@@ -4,6 +4,7 @@
 //   let deviceConnectionData = try DeviceConnectionData(json)
 //   let cameraDeviceInfoData = try CameraDeviceInfoData(json)
 //   let domeDeviceInfoData = try DomeDeviceInfoData(json)
+//   let domeShutterData = try DomeShutterData(json)
 //   let filterWheelDeviceInfoData = try FilterWheelDeviceInfoData(json)
 //   let flatPanelDeviceInfoData = try FlatPanelDeviceInfoData(json)
 //   let focuserDeviceInfoData = try FocuserDeviceInfoData(json)
@@ -530,6 +531,56 @@ enum ShutterState: String, Codable {
     case none = "None"
     case opening = "Opening"
     case shutterStateOpen = "Open"
+}
+
+/// Event that fires before or after a meridian flip
+// MARK: - DomeShutterData
+struct DomeShutterData: Codable {
+    let position: Position
+}
+
+// MARK: DomeShutterData convenience initializers and mutators
+
+extension DomeShutterData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(DomeShutterData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        position: Position? = nil
+    ) -> DomeShutterData {
+        return DomeShutterData(
+            position: position ?? self.position
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+enum Position: String, Codable {
+    case closed = "closed"
+    case homed = "homed"
+    case opened = "opened"
+    case parked = "parked"
+    case slewed = "slewed"
+    case synced = "synced"
 }
 
 /// Filter Wheel device state

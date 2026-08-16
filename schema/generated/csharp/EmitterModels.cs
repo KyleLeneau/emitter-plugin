@@ -7,6 +7,7 @@
 //    var deviceConnectionData = DeviceConnectionData.FromJson(jsonString);
 //    var cameraDeviceInfoData = CameraDeviceInfoData.FromJson(jsonString);
 //    var domeDeviceInfoData = DomeDeviceInfoData.FromJson(jsonString);
+//    var domeShutterData = DomeShutterData.FromJson(jsonString);
 //    var filterWheelDeviceInfoData = FilterWheelDeviceInfoData.FromJson(jsonString);
 //    var flatPanelDeviceInfoData = FlatPanelDeviceInfoData.FromJson(jsonString);
 //    var focuserDeviceInfoData = FocuserDeviceInfoData.FromJson(jsonString);
@@ -373,6 +374,15 @@ namespace Bortle.NINA.Emitter.Models
 
         [JsonPropertyName("slewing")]
         public bool Slewing { get; set; }
+    }
+
+    /// <summary>
+    /// Event that fires before or after a meridian flip
+    /// </summary>
+    public partial class DomeShutterData
+    {
+        [JsonPropertyName("position")]
+        public Position Position { get; set; }
     }
 
     /// <summary>
@@ -980,6 +990,8 @@ namespace Bortle.NINA.Emitter.Models
 
     public enum ShutterState { Closed, Closing, Error, None, Open, Opening };
 
+    public enum Position { Closed, Homed, Opened, Parked, Slewed, Synced };
+
     public enum AlignmentMode { AltAz, GermanPolar, Polar };
 
     public enum Epoch { B1950, J2000, J2050, Jnow };
@@ -1005,6 +1017,11 @@ namespace Bortle.NINA.Emitter.Models
     public partial class DomeDeviceInfoData
     {
         public static DomeDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<DomeDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class DomeShutterData
+    {
+        public static DomeShutterData FromJson(string json) => JsonSerializer.Deserialize<DomeShutterData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
     public partial class FilterWheelDeviceInfoData
@@ -1072,6 +1089,7 @@ namespace Bortle.NINA.Emitter.Models
         public static string ToJson(this DeviceConnectionData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this CameraDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this DomeDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this DomeShutterData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this FilterWheelDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this FlatPanelDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this FocuserDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -1096,6 +1114,7 @@ namespace Bortle.NINA.Emitter.Models
                 CameraStateConverter.Singleton,
                 SensorTypeConverter.Singleton,
                 ShutterStateConverter.Singleton,
+                PositionConverter.Singleton,
                 AlignmentModeConverter.Singleton,
                 EpochConverter.Singleton,
                 PierSideConverter.Singleton,
@@ -1393,6 +1412,60 @@ namespace Bortle.NINA.Emitter.Models
         }
 
         public static readonly ShutterStateConverter Singleton = new ShutterStateConverter();
+    }
+
+    internal class PositionConverter : JsonConverter<Position>
+    {
+        public override bool CanConvert(Type t) => t == typeof(Position);
+
+        public override Position Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var value = reader.GetString();
+            switch (value)
+            {
+                case "closed":
+                    return Position.Closed;
+                case "homed":
+                    return Position.Homed;
+                case "opened":
+                    return Position.Opened;
+                case "parked":
+                    return Position.Parked;
+                case "slewed":
+                    return Position.Slewed;
+                case "synced":
+                    return Position.Synced;
+            }
+            throw new Exception("Cannot unmarshal type Position");
+        }
+
+        public override void Write(Utf8JsonWriter writer, Position value, JsonSerializerOptions options)
+        {
+            switch (value)
+            {
+                case Position.Closed:
+                    JsonSerializer.Serialize(writer, "closed", options);
+                    return;
+                case Position.Homed:
+                    JsonSerializer.Serialize(writer, "homed", options);
+                    return;
+                case Position.Opened:
+                    JsonSerializer.Serialize(writer, "opened", options);
+                    return;
+                case Position.Parked:
+                    JsonSerializer.Serialize(writer, "parked", options);
+                    return;
+                case Position.Slewed:
+                    JsonSerializer.Serialize(writer, "slewed", options);
+                    return;
+                case Position.Synced:
+                    JsonSerializer.Serialize(writer, "synced", options);
+                    return;
+            }
+            throw new Exception("Cannot marshal type Position");
+        }
+
+        public static readonly PositionConverter Singleton = new PositionConverter();
     }
 
     internal class AlignmentModeConverter : JsonConverter<AlignmentMode>

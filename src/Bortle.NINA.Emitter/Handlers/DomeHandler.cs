@@ -76,32 +76,38 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private Task MediatorOnClosed(object arg1, EventArgs arg2) {
-            // TODO: Implement event
+            var data = new DomeShutterData { Position = Position.Closed };
+            emitter.Enqueue("dome", "shutter", data);
             return Task.CompletedTask;
         }
 
         private Task MediatorOnHomed(object arg1, EventArgs arg2) {
-            // TODO: Implement event
+            var data = new DomeShutterData { Position = Position.Homed };
+            emitter.Enqueue("dome", "shutter", data);
             return Task.CompletedTask;
         }
 
         private Task MediatorOnOpened(object arg1, EventArgs arg2) {
-            // TODO: Implement event
+            var data = new DomeShutterData { Position = Position.Opened };
+            emitter.Enqueue("dome", "shutter", data);
             return Task.CompletedTask;
         }
 
         private Task MediatorOnParked(object arg1, EventArgs arg2) {
-            // TODO: Implement event
+            var data = new DomeShutterData { Position = Position.Parked };
+            emitter.Enqueue("dome", "shutter", data);
             return Task.CompletedTask;
         }
 
         private Task MediatorOnSlewed(object arg1, DomeEventArgs arg2) {
-            // TODO: Implement event
+            var data = new DomeShutterData { Position = Position.Slewed };
+            emitter.Enqueue("dome", "shutter", data);
             return Task.CompletedTask;
         }
 
         private void MediatorOnSynced(object sender, EventArgs e) {
-            // TODO: Implement event
+            var data = new DomeShutterData { Position = Position.Synced };
+            emitter.Enqueue("dome", "shutter", data);
         }
 
         public void Dispose() {

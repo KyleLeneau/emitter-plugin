@@ -1,10 +1,11 @@
 // To parse this data:
 //
-//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, DomeDeviceInfoData, FilterWheelDeviceInfoData, FlatPanelDeviceInfoData, FocuserDeviceInfoData, GuiderDeviceInfoData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData } from "./file";
+//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FlatPanelDeviceInfoData, FocuserDeviceInfoData, GuiderDeviceInfoData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData } from "./file";
 //
 //   const deviceConnectionData = Convert.toDeviceConnectionData(json);
 //   const cameraDeviceInfoData = Convert.toCameraDeviceInfoData(json);
 //   const domeDeviceInfoData = Convert.toDomeDeviceInfoData(json);
+//   const domeShutterData = Convert.toDomeShutterData(json);
 //   const filterWheelDeviceInfoData = Convert.toFilterWheelDeviceInfoData(json);
 //   const flatPanelDeviceInfoData = Convert.toFlatPanelDeviceInfoData(json);
 //   const focuserDeviceInfoData = Convert.toFocuserDeviceInfoData(json);
@@ -195,6 +196,23 @@ export enum ShutterState {
     None = "None",
     Open = "Open",
     Opening = "Opening",
+}
+
+/**
+ * Event that fires before or after a meridian flip
+ */
+export interface DomeShutterData {
+    position: Position;
+    [property: string]: any;
+}
+
+export enum Position {
+    Closed = "closed",
+    Homed = "homed",
+    Opened = "opened",
+    Parked = "parked",
+    Slewed = "slewed",
+    Synced = "synced",
 }
 
 /**
@@ -546,6 +564,14 @@ export class Convert {
         return JSON.stringify(uncast(value, r("DomeDeviceInfoData")), null, 2);
     }
 
+    public static toDomeShutterData(json: string): DomeShutterData {
+        return cast(JSON.parse(json), r("DomeShutterData"));
+    }
+
+    public static domeShutterDataToJson(value: DomeShutterData): string {
+        return JSON.stringify(uncast(value, r("DomeShutterData")), null, 2);
+    }
+
     public static toFilterWheelDeviceInfoData(json: string): FilterWheelDeviceInfoData {
         return cast(JSON.parse(json), r("FilterWheelDeviceInfoData"));
     }
@@ -887,6 +913,9 @@ const typeMap: any = {
         { json: "shutter_state", js: "shutter_state", typ: r("ShutterState") },
         { json: "slewing", js: "slewing", typ: true },
     ], "any"),
+    "DomeShutterData": o([
+        { json: "position", js: "position", typ: r("Position") },
+    ], "any"),
     "FilterWheelDeviceInfoData": o([
         { json: "connected", js: "connected", typ: true },
         { json: "is_moving", js: "is_moving", typ: true },
@@ -1101,6 +1130,14 @@ const typeMap: any = {
         "None",
         "Open",
         "Opening",
+    ],
+    "Position": [
+        "closed",
+        "homed",
+        "opened",
+        "parked",
+        "slewed",
+        "synced",
     ],
     "AlignmentMode": [
         "AltAz",
