@@ -38,13 +38,13 @@
 * [x] Safety info
 * [x] weather info
 * [ ] camera info
-* [ ] dome info
-* [ ] filter wheel info
-* [ ] flat panel info
-* [ ] focuser info
+* [x] dome info
+* [x] filter wheel info
+* [x] flat panel info
+* [x] focuser info
 * [ ] guider info
 * [ ] mount info
-* [ ] rotator info
+* [x] rotator info
 * [x] switch info
 
 ### Bugs
