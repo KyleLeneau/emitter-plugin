@@ -91,7 +91,7 @@ namespace Bortle.NINA.Emitter {
             registry.Add(new FilterWheelHandler(eventEmitter, filterWheelMediator));
             registry.Add(new FlatPanelHandler(eventEmitter, flatMediator));
             registry.Add(new FocuserHandler(eventEmitter, focuserMediator));
-            // registry.Add(new GuiderHandler(eventEmitter, guiderMediator)); // ISSUE
+            registry.Add(new GuiderHandler(eventEmitter, guiderMediator)); // ISSUE
             // registry.Add(new MountHandler(eventEmitter, telescopeMediator)); // ISSUE
             registry.Add(new RotatorHandler(eventEmitter, rotatorMediator));
             registry.Add(new SafetyHandler(eventEmitter, safetyMonitorMediator));

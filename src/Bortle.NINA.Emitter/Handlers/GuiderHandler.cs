@@ -92,6 +92,8 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private RmsError ToRmsError(RMSError rmsError) {
+            if (rmsError == null) return null;
+
             return new RmsError {
                 Ra = ToRmsUnit(rmsError.RA),
                 Dec = ToRmsUnit(rmsError.Dec),
