@@ -1,5 +1,6 @@
 using Bortle.NINA.Emitter.Events;
 using Bortle.NINA.Emitter.Models;
+using Bortle.NINA.Emitter.Utils;
 using NINA.Equipment.Equipment.MyTelescope;
 using NINA.Equipment.Interfaces.Mediator;
 using System;
@@ -38,8 +39,8 @@ namespace Bortle.NINA.Emitter.Handlers {
                 SiteElevation = deviceInfo.SiteElevation,
                 TimeToMeridianFlip = deviceInfo.TimeToMeridianFlip,
                 SideOfPier = ToPierSide(deviceInfo.SideOfPier),
-                Altitude = deviceInfo.Altitude,
-                Azimuth = deviceInfo.Azimuth,
+                Altitude = deviceInfo.Altitude.Optional(),
+                Azimuth = deviceInfo.Azimuth.Optional(),
                 AtPark = deviceInfo.AtPark,
                 TrackingRate = ToTrackingRate(deviceInfo.TrackingRate),
                 TrackingEnabled = deviceInfo.TrackingEnabled,
@@ -59,8 +60,8 @@ namespace Bortle.NINA.Emitter.Handlers {
                 GuideRateDecArcSecPerSec = deviceInfo.GuideRateDeclinationArcsecPerSec,
                 CanMovePrimaryAxis = deviceInfo.CanMovePrimaryAxis,
                 CanMoveSecondaryAxis = deviceInfo.CanMoveSecondaryAxis,
-                PrimaryAxisRates = deviceInfo.PrimaryAxisRates.Select(v => (List<double>)[v.Item1, v.Item2]).ToList(),
-                SecondaryAxisRates = deviceInfo.SecondaryAxisRates.Select(v => (List<double>)[v.Item1, v.Item2]).ToList(),
+                PrimaryAxisRates = deviceInfo.PrimaryAxisRates != null ? deviceInfo.PrimaryAxisRates.Select(v => (List<double>)[v.Item1, v.Item2]).ToList() : [],
+                SecondaryAxisRates = deviceInfo.SecondaryAxisRates != null ? deviceInfo.SecondaryAxisRates.Select(v => (List<double>)[v.Item1, v.Item2]).ToList() : [],
                 AlignmentMode = ToAlignmentMode(deviceInfo.AlignmentMode),
                 CanPulseGuide = deviceInfo.CanPulseGuide,
                 IsPulseGuiding = deviceInfo.IsPulseGuiding,
@@ -188,6 +189,8 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private Coordinates ToCoordinates(global::NINA.Astrometry.Coordinates coordinates) {
+            if (coordinates == null) return null;
+
             return new Coordinates {
                 RaDegrees = coordinates.RADegrees,
                 DecDegrees = coordinates.Dec,
