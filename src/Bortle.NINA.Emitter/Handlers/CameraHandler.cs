@@ -4,7 +4,6 @@ using NINA.Core.Enum;
 using NINA.Equipment.Equipment.MyCamera;
 using NINA.Equipment.Interfaces.Mediator;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SensorType = Bortle.NINA.Emitter.Models.SensorType;

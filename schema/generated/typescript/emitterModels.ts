@@ -1,6 +1,6 @@
 // To parse this data:
 //
-//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, DomeDeviceInfoData, FilterWheelDeviceInfoData, FlatPanelDeviceInfoData, FocuserDeviceInfoData, GuiderDeviceInfoData, MountDeviceInfoData, RotatorDeviceInfoData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData } from "./file";
+//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, DomeDeviceInfoData, FilterWheelDeviceInfoData, FlatPanelDeviceInfoData, FocuserDeviceInfoData, GuiderDeviceInfoData, MountDeviceInfoData, MountMovedData, RotatorDeviceInfoData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData } from "./file";
 //
 //   const deviceConnectionData = Convert.toDeviceConnectionData(json);
 //   const cameraDeviceInfoData = Convert.toCameraDeviceInfoData(json);
@@ -10,6 +10,7 @@
 //   const focuserDeviceInfoData = Convert.toFocuserDeviceInfoData(json);
 //   const guiderDeviceInfoData = Convert.toGuiderDeviceInfoData(json);
 //   const mountDeviceInfoData = Convert.toMountDeviceInfoData(json);
+//   const mountMovedData = Convert.toMountMovedData(json);
 //   const rotatorDeviceInfoData = Convert.toRotatorDeviceInfoData(json);
 //   const safetyDeviceInfoData = Convert.toSafetyDeviceInfoData(json);
 //   const safetyChangeData = Convert.toSafetyChangeData(json);
@@ -368,6 +369,23 @@ export interface TrackingRate {
 }
 
 /**
+ * Event after the mount has moved
+ */
+export interface MountMovedData {
+    from_coordinates?: Coordinates;
+    move_type:         MoveType;
+    to_coordinates?:   Coordinates;
+    [property: string]: any;
+}
+
+export enum MoveType {
+    Homed = "homed",
+    Parked = "parked",
+    Slewed = "slewed",
+    Unparked = "unparked",
+}
+
+/**
  * Periodic Rotator event data
  */
 export interface RotatorDeviceInfoData {
@@ -546,6 +564,14 @@ export class Convert {
 
     public static mountDeviceInfoDataToJson(value: MountDeviceInfoData): string {
         return JSON.stringify(uncast(value, r("MountDeviceInfoData")), null, 2);
+    }
+
+    public static toMountMovedData(json: string): MountMovedData {
+        return cast(JSON.parse(json), r("MountMovedData"));
+    }
+
+    public static mountMovedDataToJson(value: MountMovedData): string {
+        return JSON.stringify(uncast(value, r("MountMovedData")), null, 2);
     }
 
     public static toRotatorDeviceInfoData(json: string): RotatorDeviceInfoData {
@@ -939,6 +965,11 @@ const typeMap: any = {
         { json: "custom_ra_rate", js: "custom_ra_rate", typ: u(undefined, 3.14) },
         { json: "tracking_mode", js: "tracking_mode", typ: u(undefined, r("TrackingMode")) },
     ], "any"),
+    "MountMovedData": o([
+        { json: "from_coordinates", js: "from_coordinates", typ: u(undefined, r("Coordinates")) },
+        { json: "move_type", js: "move_type", typ: r("MoveType") },
+        { json: "to_coordinates", js: "to_coordinates", typ: u(undefined, r("Coordinates")) },
+    ], "any"),
     "RotatorDeviceInfoData": o([
         { json: "can_reverse", js: "can_reverse", typ: true },
         { json: "connected", js: "connected", typ: true },
@@ -1057,5 +1088,11 @@ const typeMap: any = {
         "Sidereal",
         "Solar",
         "Stopped",
+    ],
+    "MoveType": [
+        "homed",
+        "parked",
+        "slewed",
+        "unparked",
     ],
 };

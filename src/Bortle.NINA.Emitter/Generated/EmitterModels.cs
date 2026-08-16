@@ -12,6 +12,7 @@
 //    var focuserDeviceInfoData = FocuserDeviceInfoData.FromJson(jsonString);
 //    var guiderDeviceInfoData = GuiderDeviceInfoData.FromJson(jsonString);
 //    var mountDeviceInfoData = MountDeviceInfoData.FromJson(jsonString);
+//    var mountMovedData = MountMovedData.FromJson(jsonString);
 //    var rotatorDeviceInfoData = RotatorDeviceInfoData.FromJson(jsonString);
 //    var safetyDeviceInfoData = SafetyDeviceInfoData.FromJson(jsonString);
 //    var safetyChangeData = SafetyChangeData.FromJson(jsonString);
@@ -738,6 +739,23 @@ namespace Bortle.NINA.Emitter.Models
     }
 
     /// <summary>
+    /// Event after the mount has moved
+    /// </summary>
+    public partial class MountMovedData
+    {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("from_coordinates")]
+        public Coordinates FromCoordinates { get; set; }
+
+        [JsonPropertyName("move_type")]
+        public MoveType MoveType { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("to_coordinates")]
+        public Coordinates ToCoordinates { get; set; }
+    }
+
+    /// <summary>
     /// Periodic Rotator event data
     /// </summary>
     public partial class RotatorDeviceInfoData
@@ -938,6 +956,8 @@ namespace Bortle.NINA.Emitter.Models
 
     public enum TrackingMode { Custom, King, Lunar, Sidereal, Solar, Stopped };
 
+    public enum MoveType { Homed, Parked, Slewed, Unparked };
+
     public partial class DeviceConnectionData
     {
         public static DeviceConnectionData FromJson(string json) => JsonSerializer.Deserialize<DeviceConnectionData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -978,6 +998,11 @@ namespace Bortle.NINA.Emitter.Models
         public static MountDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<MountDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
+    public partial class MountMovedData
+    {
+        public static MountMovedData FromJson(string json) => JsonSerializer.Deserialize<MountMovedData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
     public partial class RotatorDeviceInfoData
     {
         public static RotatorDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<RotatorDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -1013,6 +1038,7 @@ namespace Bortle.NINA.Emitter.Models
         public static string ToJson(this FocuserDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this GuiderDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this MountDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this MountMovedData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this RotatorDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this SafetyDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this SafetyChangeData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -1034,6 +1060,7 @@ namespace Bortle.NINA.Emitter.Models
                 EpochConverter.Singleton,
                 PierSideConverter.Singleton,
                 TrackingModeConverter.Singleton,
+                MoveTypeConverter.Singleton,
                 new DateOnlyConverter(),
                 new TimeOnlyConverter(),
                 IsoDateTimeOffsetConverter.Singleton
@@ -1501,6 +1528,50 @@ namespace Bortle.NINA.Emitter.Models
         }
 
         public static readonly TrackingModeConverter Singleton = new TrackingModeConverter();
+    }
+
+    internal class MoveTypeConverter : JsonConverter<MoveType>
+    {
+        public override bool CanConvert(Type t) => t == typeof(MoveType);
+
+        public override MoveType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var value = reader.GetString();
+            switch (value)
+            {
+                case "homed":
+                    return MoveType.Homed;
+                case "parked":
+                    return MoveType.Parked;
+                case "slewed":
+                    return MoveType.Slewed;
+                case "unparked":
+                    return MoveType.Unparked;
+            }
+            throw new Exception("Cannot unmarshal type MoveType");
+        }
+
+        public override void Write(Utf8JsonWriter writer, MoveType value, JsonSerializerOptions options)
+        {
+            switch (value)
+            {
+                case MoveType.Homed:
+                    JsonSerializer.Serialize(writer, "homed", options);
+                    return;
+                case MoveType.Parked:
+                    JsonSerializer.Serialize(writer, "parked", options);
+                    return;
+                case MoveType.Slewed:
+                    JsonSerializer.Serialize(writer, "slewed", options);
+                    return;
+                case MoveType.Unparked:
+                    JsonSerializer.Serialize(writer, "unparked", options);
+                    return;
+            }
+            throw new Exception("Cannot marshal type MoveType");
+        }
+
+        public static readonly MoveTypeConverter Singleton = new MoveTypeConverter();
     }
     
     public class DateOnlyConverter : JsonConverter<DateOnly>

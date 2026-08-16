@@ -9,6 +9,7 @@
 //   let focuserDeviceInfoData = try FocuserDeviceInfoData(json)
 //   let guiderDeviceInfoData = try GuiderDeviceInfoData(json)
 //   let mountDeviceInfoData = try MountDeviceInfoData(json)
+//   let mountMovedData = try MountMovedData(json)
 //   let rotatorDeviceInfoData = try RotatorDeviceInfoData(json)
 //   let safetyDeviceInfoData = try SafetyDeviceInfoData(json)
 //   let safetyChangeData = try SafetyChangeData(json)
@@ -1269,6 +1270,66 @@ extension TrackingRate {
     func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
         return String(data: try self.jsonData(), encoding: encoding)
     }
+}
+
+/// Event after the mount has moved
+// MARK: - MountMovedData
+struct MountMovedData: Codable {
+    let fromCoordinates: Coordinates?
+    let moveType: MoveType
+    let toCoordinates: Coordinates?
+
+    enum CodingKeys: String, CodingKey {
+        case fromCoordinates = "from_coordinates"
+        case moveType = "move_type"
+        case toCoordinates = "to_coordinates"
+    }
+}
+
+// MARK: MountMovedData convenience initializers and mutators
+
+extension MountMovedData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(MountMovedData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        fromCoordinates: Coordinates?? = nil,
+        moveType: MoveType? = nil,
+        toCoordinates: Coordinates?? = nil
+    ) -> MountMovedData {
+        return MountMovedData(
+            fromCoordinates: fromCoordinates ?? self.fromCoordinates,
+            moveType: moveType ?? self.moveType,
+            toCoordinates: toCoordinates ?? self.toCoordinates
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+enum MoveType: String, Codable {
+    case homed = "homed"
+    case parked = "parked"
+    case slewed = "slewed"
+    case unparked = "unparked"
 }
 
 /// Periodic Rotator event data

@@ -558,6 +558,28 @@ pub struct TrackingRate {
     pub tracking_mode: Option<TrackingMode>,
 }
 
+/// Event after the mount has moved
+#[derive(Serialize, Deserialize)]
+pub struct MountMovedData {
+    pub from_coordinates: Option<Coordinates>,
+
+    pub move_type: MoveType,
+
+    pub to_coordinates: Option<Coordinates>,
+}
+
+#[derive(Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum MoveType {
+    Homed,
+
+    Parked,
+
+    Slewed,
+
+    Unparked,
+}
+
 /// Periodic Rotator event data
 #[derive(Serialize, Deserialize)]
 pub struct RotatorDeviceInfoData {

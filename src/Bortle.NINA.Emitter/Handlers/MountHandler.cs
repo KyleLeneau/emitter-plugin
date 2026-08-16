@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 
 namespace Bortle.NINA.Emitter.Handlers {
     public class MountHandler : ITelescopeConsumer {
@@ -109,22 +108,30 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private Task MediatorOnHomed(object arg1, EventArgs arg2) {
-            // TODO: Implement event
+            var data = new MountMovedData { MoveType = MoveType.Homed };
+            emitter.Enqueue("mount", "move", data);
             return Task.CompletedTask;
         }
 
         private Task MediatorOnParked(object arg1, EventArgs arg2) {
-            // TODO: Implement event
+            var data = new MountMovedData { MoveType = MoveType.Parked };
+            emitter.Enqueue("mount", "move", data);
             return Task.CompletedTask;
         }
 
         private Task MediatorOnSlewed(object arg1, MountSlewedEventArgs arg2) {
-            // TODO: Implement event
+            var data = new MountMovedData {
+                MoveType = MoveType.Slewed,
+                FromCoordinates = ToCoordinates(arg2.From),
+                ToCoordinates = ToCoordinates(arg2.To)
+            };
+            emitter.Enqueue("mount", "move", data);
             return Task.CompletedTask;
         }
 
         private Task MediatorOnUnparked(object arg1, EventArgs arg2) {
-            // TODO: Implement event
+            var data = new MountMovedData { MoveType = MoveType.Unparked };
+            emitter.Enqueue("mount", "move", data);
             return Task.CompletedTask;
         }
 
