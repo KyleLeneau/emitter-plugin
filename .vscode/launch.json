@@ -1,0 +1,40 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch NINA (Debug Plugin)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-plugin",
+            "program": "C:\\Program Files\\N.I.N.A. - Nighttime Imaging 'N' Astronomy\\NINA.exe",
+            "cwd": "C:\\Program Files\\N.I.N.A. - Nighttime Imaging 'N' Astronomy",
+            "stopAtEntry": false,
+            "justMyCode": false,
+            // Emitter.dll is copied into the NINA Plugins folder on build, but
+            // Emitter.pdb is not (see NINAPlugin.targets). Point the debugger at
+            // the local build output so it can still find symbols and bind breakpoints.
+            "symbolOptions": {
+                "searchPaths": [
+                    "${workspaceFolder}\\src\\Bortle.NINA.Emitter\\bin\\Debug\\net8.0-windows"
+                ],
+                "searchMicrosoftSymbolServer": false
+            }
+        },
+        {
+            "name": "Attach to NINA",
+            "type": "coreclr",
+            "request": "attach",
+            "processName": "NINA",
+            "justMyCode": false,
+            "symbolOptions": {
+                "searchPaths": [
+                    "${workspaceFolder}\\src\\Bortle.NINA.Emitter\\bin\\Debug\\net8.0-windows"
+                ],
+                "searchMicrosoftSymbolServer": false
+            }
+        }
+    ]
+}
