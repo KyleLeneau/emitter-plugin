@@ -11,7 +11,7 @@ namespace Bortle.NINA.Emitter.Handlers {
     public class WeatherHandler : IWeatherDataConsumer {
         private readonly IEventEmitter emitter;
         private readonly IWeatherDataMediator mediator;
-        private WeatherDataInfo lastInfo;
+        private WeatherDeviceInfoData lastData;
 
         public WeatherHandler(IEventEmitter eventEmitter, IWeatherDataMediator weatherDataMediator) {
             emitter = eventEmitter;
@@ -22,9 +22,6 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         public void UpdateDeviceInfo(WeatherDataInfo deviceInfo) {
-            // Skip duplicates from internal nina polling
-            if (deviceInfo.Equals(lastInfo)) return;
-
             var data = new WeatherDeviceInfoData {
                 Connected = deviceInfo.Connected,
                 Temperature = deviceInfo.Temperature.Optional(),
@@ -41,8 +38,11 @@ namespace Bortle.NINA.Emitter.Handlers {
                 StarFwhm = deviceInfo.StarFWHM.Optional()
             };
 
+            // Skip duplicates from internal nina polling
+            if (data.Equals(lastData)) return;
+
             emitter.Enqueue("weather", "device-info", data);
-            lastInfo = deviceInfo;
+            lastData = data;
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {

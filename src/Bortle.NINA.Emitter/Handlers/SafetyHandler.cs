@@ -10,7 +10,7 @@ namespace Bortle.NINA.Emitter.Handlers {
     public class SafetyHandler : ISafetyMonitorConsumer {
         private readonly IEventEmitter emitter;
         private readonly ISafetyMonitorMediator mediator;
-        private SafetyMonitorInfo lastInfo;
+        private SafetyDeviceInfoData lastData;
 
         public SafetyHandler(IEventEmitter eventEmitter, ISafetyMonitorMediator safetyMonitorMediator) {
             emitter = eventEmitter;
@@ -22,15 +22,16 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         public void UpdateDeviceInfo(SafetyMonitorInfo deviceInfo) {
-            // Skip duplicates from internal nina polling
-            if (deviceInfo.Equals(lastInfo)) return;
-
             var data = new SafetyDeviceInfoData {
                 Connected = deviceInfo.Connected,
                 IsSafe = deviceInfo.IsSafe
             };
+
+            // Skip duplicates from internal nina polling
+            if (data.Equals(lastData)) return;
+
             emitter.Enqueue("safety-monitor", "device-info", data);
-            lastInfo = deviceInfo;
+            lastData = data;
         }
 
         private void MediatorOnIsSafeChanged(object sender, IsSafeEventArgs e) {

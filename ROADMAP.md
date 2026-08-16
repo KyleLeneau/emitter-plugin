@@ -34,7 +34,7 @@
 * [ ] not sure device info skipping and equality is working
 
 ### Events
-* [ ] Device connection
+* [x] Device connection
 * [x] Safety info
 * [x] weather info
 * [ ] camera info
@@ -45,7 +45,7 @@
 * [ ] guider info
 * [ ] mount info
 * [ ] rotator info
-* [ ] switch info
+* [x] switch info
 
 ### Bugs
 
