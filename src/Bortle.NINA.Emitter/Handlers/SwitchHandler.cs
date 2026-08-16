@@ -30,6 +30,10 @@ namespace Bortle.NINA.Emitter.Handlers {
             var data = new SwitchDeviceInfoData {
                 Connected = deviceInfo.Connected,
                 WriteableSwitches = deviceInfo.WritableSwitches != null ? deviceInfo.WritableSwitches.Select(w => new WriteableSwitch {
+                    Id = w.Id,
+                    Name = w.Name,
+                    Description = w.Description,
+                    Value = w.Value,
                     Maximum = w.Maximum,
                     Minimum = w.Minimum,
                     StepSize = w.StepSize,

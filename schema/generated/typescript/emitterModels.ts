@@ -436,10 +436,14 @@ export interface ReadableSwitch {
 }
 
 export interface WriteableSwitch {
+    description?: string;
+    id:           number;
     maximum:      number;
     minimum:      number;
+    name?:        string;
     step_size:    number;
     target_value: number;
+    value?:       number;
     [property: string]: any;
 }
 
@@ -999,10 +1003,14 @@ const typeMap: any = {
         { json: "value", js: "value", typ: u(undefined, 3.14) },
     ], "any"),
     "WriteableSwitch": o([
+        { json: "description", js: "description", typ: u(undefined, "") },
+        { json: "id", js: "id", typ: 0 },
         { json: "maximum", js: "maximum", typ: 3.14 },
         { json: "minimum", js: "minimum", typ: 3.14 },
+        { json: "name", js: "name", typ: u(undefined, "") },
         { json: "step_size", js: "step_size", typ: 3.14 },
         { json: "target_value", js: "target_value", typ: 3.14 },
+        { json: "value", js: "value", typ: u(undefined, 3.14) },
     ], "any"),
     "WeatherDeviceInfoData": o([
         { json: "cloud_cover", js: "cloud_cover", typ: u(undefined, u(3.14, null)) },

@@ -49,6 +49,7 @@
 
 ### Bugs
 
+* [ ] I need a new equality check pattern in handlers to avoid the duplicates (ugh)
 * [ ] Update asyncapi docs to match the events and topics being sent
 
 ### Future

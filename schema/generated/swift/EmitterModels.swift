@@ -1598,12 +1598,18 @@ extension ReadableSwitch {
 
 // MARK: - WriteableSwitch
 struct WriteableSwitch: Codable {
-    let maximum, minimum, stepSize, targetValue: Double
+    let description: String?
+    let id: Int
+    let maximum, minimum: Double
+    let name: String?
+    let stepSize, targetValue: Double
+    let value: Double?
 
     enum CodingKeys: String, CodingKey {
-        case maximum, minimum
+        case description, id, maximum, minimum, name
         case stepSize = "step_size"
         case targetValue = "target_value"
+        case value
     }
 }
 
@@ -1626,16 +1632,24 @@ extension WriteableSwitch {
     }
 
     func with(
+        description: String?? = nil,
+        id: Int? = nil,
         maximum: Double? = nil,
         minimum: Double? = nil,
+        name: String?? = nil,
         stepSize: Double? = nil,
-        targetValue: Double? = nil
+        targetValue: Double? = nil,
+        value: Double?? = nil
     ) -> WriteableSwitch {
         return WriteableSwitch(
+            description: description ?? self.description,
+            id: id ?? self.id,
             maximum: maximum ?? self.maximum,
             minimum: minimum ?? self.minimum,
+            name: name ?? self.name,
             stepSize: stepSize ?? self.stepSize,
-            targetValue: targetValue ?? self.targetValue
+            targetValue: targetValue ?? self.targetValue,
+            value: value ?? self.value
         )
     }
 

@@ -637,13 +637,21 @@ pub struct ReadableSwitch {
 
 #[derive(Serialize, Deserialize)]
 pub struct WriteableSwitch {
+    pub description: Option<String>,
+
+    pub id: i64,
+
     pub maximum: f64,
 
     pub minimum: f64,
 
+    pub name: Option<String>,
+
     pub step_size: f64,
 
     pub target_value: f64,
+
+    pub value: Option<f64>,
 }
 
 /// Weather station sensor readings

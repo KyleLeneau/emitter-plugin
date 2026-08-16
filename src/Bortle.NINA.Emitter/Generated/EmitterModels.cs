@@ -846,17 +846,32 @@ namespace Bortle.NINA.Emitter.Models
 
     public partial class WriteableSwitch
     {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
+
+        [JsonPropertyName("id")]
+        public long Id { get; set; }
+
         [JsonPropertyName("maximum")]
         public double Maximum { get; set; }
 
         [JsonPropertyName("minimum")]
         public double Minimum { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
         [JsonPropertyName("step_size")]
         public double StepSize { get; set; }
 
         [JsonPropertyName("target_value")]
         public double TargetValue { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("value")]
+        public double? Value { get; set; }
     }
 
     /// <summary>

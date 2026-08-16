@@ -10,6 +10,14 @@ properties:
     items:
       type: object
       properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        value:
+          type: number
         maximum:
           type: number
         minimum:
@@ -19,6 +27,7 @@ properties:
         target_value:
           type: number
       required:
+        - id
         - maximum
         - minimum
         - step_size
