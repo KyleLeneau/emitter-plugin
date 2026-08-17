@@ -1,5 +1,6 @@
 using Bortle.NINA.Emitter.Events;
 using Bortle.NINA.Emitter.Models;
+using Bortle.NINA.Emitter.Utils;
 using NINA.Equipment.Equipment.MyDome;
 using NINA.Equipment.Interfaces.Mediator;
 using System;
@@ -43,8 +44,8 @@ namespace Bortle.NINA.Emitter.Handlers {
                 ApplicationFollowing = deviceInfo.ApplicationFollowing,
                 FollowingType = deviceInfo.FollowingType,
                 Slewing = deviceInfo.Slewing,
-                AzimuthDegrees = deviceInfo.Azimuth,
-                AltitudeDegrees = deviceInfo.Altitude,
+                AzimuthDegrees = deviceInfo.Azimuth.Optional(),
+                AltitudeDegrees = deviceInfo.Altitude.Optional(),
             };
 
             // Skip duplicates from internal nina polling

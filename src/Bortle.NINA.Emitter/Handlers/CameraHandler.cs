@@ -1,5 +1,6 @@
 using Bortle.NINA.Emitter.Events;
 using Bortle.NINA.Emitter.Models;
+using Bortle.NINA.Emitter.Utils;
 using NINA.Core.Enum;
 using NINA.Equipment.Equipment.MyCamera;
 using NINA.Equipment.Interfaces.Mediator;
@@ -31,7 +32,7 @@ namespace Bortle.NINA.Emitter.Handlers {
                 Temperature = deviceInfo.Temperature,
                 Gain = deviceInfo.Gain == -1 ? null : deviceInfo.Gain,
                 DefaultGain = deviceInfo.DefaultGain == -1 ? null : deviceInfo.DefaultGain,
-                ElectronsPerAdu = deviceInfo.ElectronsPerADU == -1 ? null : deviceInfo.ElectronsPerADU,
+                ElectronsPerAdu = deviceInfo.ElectronsPerADU == -1 ? null : deviceInfo.ElectronsPerADU.Optional(),
                 BinX = deviceInfo.BinX,
                 BinY = deviceInfo.BinY,
                 BitDepth = deviceInfo.BitDepth,
@@ -62,7 +63,7 @@ namespace Bortle.NINA.Emitter.Handlers {
                 SubSampleY = deviceInfo.SubSampleY,
                 SubSampleWidth = deviceInfo.SubSampleWidth,
                 SubSampleHeight = deviceInfo.SubSampleHeight,
-                TemeratureSetPoint = deviceInfo.TemperatureSetPoint,
+                TemeratureSetPoint = deviceInfo.TemperatureSetPoint.Optional(),
                 ReadoutModes = deviceInfo.ReadoutModes != null ? deviceInfo.ReadoutModes.ToList() : [],
                 ReadoutMode = deviceInfo.ReadoutMode,
                 SnapReadoutMode = deviceInfo.ReadoutModeForSnapImages,
