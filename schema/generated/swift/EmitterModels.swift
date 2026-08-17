@@ -35,6 +35,11 @@
 //   let profileSelectedData = try ProfileSelectedData(json)
 //   let sequenceEndData = try SequenceEndData(json)
 //   let sequenceStartData = try SequenceStartData(json)
+//   let targetSchedulerContainerStoppedData = try TargetSchedulerContainerStoppedData(json)
+//   let targetSchedulerNewTargetStartData = try TargetSchedulerNewTargetStartData(json)
+//   let targetSchedulerTargetCompleteData = try TargetSchedulerTargetCompleteData(json)
+//   let targetSchedulerTargetStartData = try TargetSchedulerTargetStartData(json)
+//   let targetSchedulerWaitStartData = try TargetSchedulerWaitStartData(json)
 
 import Foundation
 
@@ -2885,6 +2890,320 @@ extension SequenceStartData {
     ) -> SequenceStartData {
         return SequenceStartData(
             name: name ?? self.name
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Data when the TS Container instruction ends
+// MARK: - TargetSchedulerContainerStoppedData
+struct TargetSchedulerContainerStoppedData: Codable {
+    let stoppedAt: Date?
+
+    enum CodingKeys: String, CodingKey {
+        case stoppedAt = "stopped_at"
+    }
+}
+
+// MARK: TargetSchedulerContainerStoppedData convenience initializers and mutators
+
+extension TargetSchedulerContainerStoppedData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(TargetSchedulerContainerStoppedData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        stoppedAt: Date?? = nil
+    ) -> TargetSchedulerContainerStoppedData {
+        return TargetSchedulerContainerStoppedData(
+            stoppedAt: stoppedAt ?? self.stoppedAt
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Data when the TS planner returns a target plan and the target is ‘new’
+// MARK: - TargetSchedulerNewTargetStartData
+struct TargetSchedulerNewTargetStartData: Codable {
+    let binning: String?
+    let coordinates: Coordinates?
+    let exposure: Double?
+    let filter, gain, offset, projectName: String?
+    let rotation: Double?
+    let targetEndTime: Date?
+    let targetName: String?
+
+    enum CodingKeys: String, CodingKey {
+        case binning, coordinates, exposure, filter, gain, offset
+        case projectName = "project_name"
+        case rotation
+        case targetEndTime = "target_end_time"
+        case targetName = "target_name"
+    }
+}
+
+// MARK: TargetSchedulerNewTargetStartData convenience initializers and mutators
+
+extension TargetSchedulerNewTargetStartData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(TargetSchedulerNewTargetStartData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        binning: String?? = nil,
+        coordinates: Coordinates?? = nil,
+        exposure: Double?? = nil,
+        filter: String?? = nil,
+        gain: String?? = nil,
+        offset: String?? = nil,
+        projectName: String?? = nil,
+        rotation: Double?? = nil,
+        targetEndTime: Date?? = nil,
+        targetName: String?? = nil
+    ) -> TargetSchedulerNewTargetStartData {
+        return TargetSchedulerNewTargetStartData(
+            binning: binning ?? self.binning,
+            coordinates: coordinates ?? self.coordinates,
+            exposure: exposure ?? self.exposure,
+            filter: filter ?? self.filter,
+            gain: gain ?? self.gain,
+            offset: offset ?? self.offset,
+            projectName: projectName ?? self.projectName,
+            rotation: rotation ?? self.rotation,
+            targetEndTime: targetEndTime ?? self.targetEndTime,
+            targetName: targetName ?? self.targetName
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Data when the TS planner completes a target plan (all exposure plans 100% complete)
+// MARK: - TargetSchedulerTargetCompleteData
+struct TargetSchedulerTargetCompleteData: Codable {
+    let coordinates: Coordinates?
+    let projectName: String?
+    let rotation: Double?
+    let targetName: String?
+
+    enum CodingKeys: String, CodingKey {
+        case coordinates
+        case projectName = "project_name"
+        case rotation
+        case targetName = "target_name"
+    }
+}
+
+// MARK: TargetSchedulerTargetCompleteData convenience initializers and mutators
+
+extension TargetSchedulerTargetCompleteData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(TargetSchedulerTargetCompleteData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        coordinates: Coordinates?? = nil,
+        projectName: String?? = nil,
+        rotation: Double?? = nil,
+        targetName: String?? = nil
+    ) -> TargetSchedulerTargetCompleteData {
+        return TargetSchedulerTargetCompleteData(
+            coordinates: coordinates ?? self.coordinates,
+            projectName: projectName ?? self.projectName,
+            rotation: rotation ?? self.rotation,
+            targetName: targetName ?? self.targetName
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Data when the TS planner returns a target plan. Sent regardless of whether the target is
+/// new or not.
+// MARK: - TargetSchedulerTargetStartData
+struct TargetSchedulerTargetStartData: Codable {
+    let binning: String?
+    let coordinates: Coordinates?
+    let exposure: Double?
+    let filter, gain, offset, projectName: String?
+    let rotation: Double?
+    let targetEndTime: Date?
+    let targetName: String?
+
+    enum CodingKeys: String, CodingKey {
+        case binning, coordinates, exposure, filter, gain, offset
+        case projectName = "project_name"
+        case rotation
+        case targetEndTime = "target_end_time"
+        case targetName = "target_name"
+    }
+}
+
+// MARK: TargetSchedulerTargetStartData convenience initializers and mutators
+
+extension TargetSchedulerTargetStartData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(TargetSchedulerTargetStartData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        binning: String?? = nil,
+        coordinates: Coordinates?? = nil,
+        exposure: Double?? = nil,
+        filter: String?? = nil,
+        gain: String?? = nil,
+        offset: String?? = nil,
+        projectName: String?? = nil,
+        rotation: Double?? = nil,
+        targetEndTime: Date?? = nil,
+        targetName: String?? = nil
+    ) -> TargetSchedulerTargetStartData {
+        return TargetSchedulerTargetStartData(
+            binning: binning ?? self.binning,
+            coordinates: coordinates ?? self.coordinates,
+            exposure: exposure ?? self.exposure,
+            filter: filter ?? self.filter,
+            gain: gain ?? self.gain,
+            offset: offset ?? self.offset,
+            projectName: projectName ?? self.projectName,
+            rotation: rotation ?? self.rotation,
+            targetEndTime: targetEndTime ?? self.targetEndTime,
+            targetName: targetName ?? self.targetName
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Data when a the target scheduler enter a wait period
+// MARK: - TargetSchedulerWaitStartData
+struct TargetSchedulerWaitStartData: Codable {
+    let coordinates: Coordinates?
+    let projectName: String?
+    let rotation: Double?
+    let secsTillNextTarget: Int?
+    let targetName: String?
+    let waitEndTime: Date?
+
+    enum CodingKeys: String, CodingKey {
+        case coordinates
+        case projectName = "project_name"
+        case rotation
+        case secsTillNextTarget = "secs_till_next_target"
+        case targetName = "target_name"
+        case waitEndTime = "wait_end_time"
+    }
+}
+
+// MARK: TargetSchedulerWaitStartData convenience initializers and mutators
+
+extension TargetSchedulerWaitStartData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(TargetSchedulerWaitStartData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        coordinates: Coordinates?? = nil,
+        projectName: String?? = nil,
+        rotation: Double?? = nil,
+        secsTillNextTarget: Int?? = nil,
+        targetName: String?? = nil,
+        waitEndTime: Date?? = nil
+    ) -> TargetSchedulerWaitStartData {
+        return TargetSchedulerWaitStartData(
+            coordinates: coordinates ?? self.coordinates,
+            projectName: projectName ?? self.projectName,
+            rotation: rotation ?? self.rotation,
+            secsTillNextTarget: secsTillNextTarget ?? self.secsTillNextTarget,
+            targetName: targetName ?? self.targetName,
+            waitEndTime: waitEndTime ?? self.waitEndTime
         )
     }
 

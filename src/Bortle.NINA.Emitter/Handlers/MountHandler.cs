@@ -51,9 +51,9 @@ namespace Bortle.NINA.Emitter.Handlers {
                 CanSetTracking = deviceInfo.CanSetTrackingEnabled,
                 CanSetDeclinationRate = deviceInfo.CanSetDeclinationRate,
                 CanSetRightAscensionRate = deviceInfo.CanSetRightAscensionRate,
-                EquatorialSystem = ToEpoch(deviceInfo.EquatorialSystem),
+                EquatorialSystem = AstrometryCoordinates.ToEpoch(deviceInfo.EquatorialSystem),
                 HasUnknownEpoch = deviceInfo.HasUnknownEpoch,
-                TargetCoordinates = ToCoordinates(deviceInfo.TargetCoordinates),
+                TargetCoordinates = AstrometryCoordinates.ToCoordinates(deviceInfo.TargetCoordinates),
                 TargetSideOfPier = ToPierSide(deviceInfo.TargetSideOfPier),
                 Slewing = deviceInfo.Slewing,
                 GuideRateRaArcSecPerSec = deviceInfo.GuideRateRightAscensionArcsecPerSec.Optional(),
@@ -103,7 +103,7 @@ namespace Bortle.NINA.Emitter.Handlers {
             var data = new MountFlipData {
                 FlipEvent = FlipEvent.After,
                 Success = arg2.Success,
-                TargetCoordinates = ToCoordinates(arg2.Target)
+                TargetCoordinates = AstrometryCoordinates.ToCoordinates(arg2.Target)
             };
             emitter.Enqueue("mount", "flip", data);
             return Task.CompletedTask;
@@ -112,7 +112,7 @@ namespace Bortle.NINA.Emitter.Handlers {
         private Task MediatorOnBeforeMeridianFlip(object arg1, BeforeMeridianFlipEventArgs arg2) {
             var data = new MountFlipData {
                 FlipEvent = FlipEvent.Before,
-                TargetCoordinates = ToCoordinates(arg2.Target)
+                TargetCoordinates = AstrometryCoordinates.ToCoordinates(arg2.Target)
             };
             emitter.Enqueue("mount", "flip", data);
             return Task.CompletedTask;
@@ -133,8 +133,8 @@ namespace Bortle.NINA.Emitter.Handlers {
         private Task MediatorOnSlewed(object arg1, MountSlewedEventArgs arg2) {
             var data = new MountMovedData {
                 MoveType = MoveType.Slewed,
-                FromCoordinates = ToCoordinates(arg2.From),
-                ToCoordinates = ToCoordinates(arg2.To)
+                FromCoordinates = AstrometryCoordinates.ToCoordinates(arg2.From),
+                ToCoordinates = AstrometryCoordinates.ToCoordinates(arg2.To)
             };
             emitter.Enqueue("mount", "move", data);
             return Task.CompletedTask;
@@ -187,25 +187,7 @@ namespace Bortle.NINA.Emitter.Handlers {
             };
         }
 
-        private Epoch? ToEpoch(global::NINA.Astrometry.Epoch epoch) {
-            return epoch switch {
-                global::NINA.Astrometry.Epoch.JNOW => Epoch.Jnow,
-                global::NINA.Astrometry.Epoch.B1950 => Epoch.B1950,
-                global::NINA.Astrometry.Epoch.J2000 => Epoch.J2000,
-                global::NINA.Astrometry.Epoch.J2050 => Epoch.J2050,
-                _ => null
-            };
-        }
 
-        private Coordinates ToCoordinates(global::NINA.Astrometry.Coordinates coordinates) {
-            if (coordinates == null) return null;
-
-            return new Coordinates {
-                RaDegrees = coordinates.RADegrees,
-                DecDegrees = coordinates.Dec,
-                Epoch = ToEpoch(coordinates.Epoch),
-            };
-        }
 
         private AlignmentMode? ToAlignmentMode(global::NINA.Core.Enum.AlignmentMode mode) {
             return mode switch {

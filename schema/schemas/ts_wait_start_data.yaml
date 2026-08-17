@@ -1,0 +1,18 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: TargetSchedulerWaitStartData
+type: object
+description: Data when a the target scheduler enter a wait period
+properties:
+  wait_end_time:
+    type: string
+    format: "date-time"
+  secs_till_next_target:
+    type: integer
+  project_name:
+    type: string
+  target_name:
+    type: string
+  coordinates:
+    $ref: "common.yaml#/definitions/Coordinates"
+  rotation:
+    type: number

@@ -31,7 +31,11 @@
 * [x] create and deploy logo/image github pages
 * [x] generate asyncapi website / docs
 * [x] not sure device info skipping and equality is working
+* [x] I need a new equality check pattern in handlers to avoid the duplicates (ugh)
+* [x] Update asyncapi docs to match the events and topics being sent
 * [ ] implement kafka backend
+* [ ] re-look at image saved event and include more data
+* [ ] re-look at sequence handler data and if/how to get more
 
 ### Events
 * [x] Device connection
@@ -67,17 +71,17 @@
 * [x] profile horizon change
 * [x] profile collection change
 * [ ] image saved
-* [ ] TS wait start
-* [ ] TS new target start
-* [ ] TS target start
+* [x] TS wait start
+* [x] TS new target start
+* [x] TS target start
+* [x] TS container stop
+* [x] TS target complete
 * [ ] sequence starting
 * [ ] sequence finish
 * [ ] sequence custom (need a sequence action)
 
 ### Bugs
 
-* [ ] I need a new equality check pattern in handlers to avoid the duplicates (ugh)
-* [ ] Update asyncapi docs to match the events and topics being sent
 
 ### Future
 

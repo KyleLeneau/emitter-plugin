@@ -1,4 +1,5 @@
 using Bortle.NINA.Emitter.Events;
+using Bortle.NINA.Emitter.Models;
 using NINA.Core.Utility;
 using NINA.Sequencer.Interfaces.Mediator;
 using System;
@@ -26,12 +27,16 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private Task ServiceOnSequenceStarting(object arg1, EventArgs arg2) {
-            // TODO: Implement event
+            var data = new SequenceStartData { Name = "Some Name for starting sequence" };
+            service.SequenceStarting += ServiceOnSequenceStarting;
+            emitter.Enqueue("sequence", "start", data);
             return Task.CompletedTask;
         }
 
         private Task ServiceOnSequenceFinished(object arg1, EventArgs arg2) {
-            // TODO: Implement event
+            var data = new SequenceEndData { Name = "Some Name for ending sequence" };
+            service.SequenceFinished += ServiceOnSequenceFinished;
+            emitter.Enqueue("sequence", "end", data);
             return Task.CompletedTask;
         }
 

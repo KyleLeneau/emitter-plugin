@@ -38,6 +38,11 @@
 //    var profileSelectedData = ProfileSelectedData.FromJson(jsonString);
 //    var sequenceEndData = SequenceEndData.FromJson(jsonString);
 //    var sequenceStartData = SequenceStartData.FromJson(jsonString);
+//    var targetSchedulerContainerStoppedData = TargetSchedulerContainerStoppedData.FromJson(jsonString);
+//    var targetSchedulerNewTargetStartData = TargetSchedulerNewTargetStartData.FromJson(jsonString);
+//    var targetSchedulerTargetCompleteData = TargetSchedulerTargetCompleteData.FromJson(jsonString);
+//    var targetSchedulerTargetStartData = TargetSchedulerTargetStartData.FromJson(jsonString);
+//    var targetSchedulerWaitStartData = TargetSchedulerWaitStartData.FromJson(jsonString);
 #nullable enable
 #pragma warning disable CS8618
 #pragma warning disable CS8601
@@ -1313,6 +1318,161 @@ namespace Bortle.NINA.Emitter.Models
         public string Name { get; set; }
     }
 
+    /// <summary>
+    /// Data when the TS Container instruction ends
+    /// </summary>
+    public partial class TargetSchedulerContainerStoppedData
+    {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("stopped_at")]
+        public DateTimeOffset? StoppedAt { get; set; }
+    }
+
+    /// <summary>
+    /// Data when the TS planner returns a target plan and the target is ‘new’
+    /// </summary>
+    public partial class TargetSchedulerNewTargetStartData
+    {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("binning")]
+        public string Binning { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("coordinates")]
+        public Coordinates Coordinates { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("exposure")]
+        public double? Exposure { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("filter")]
+        public string Filter { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("gain")]
+        public string Gain { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("offset")]
+        public string Offset { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("project_name")]
+        public string ProjectName { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("rotation")]
+        public double? Rotation { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("target_end_time")]
+        public DateTimeOffset? TargetEndTime { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("target_name")]
+        public string TargetName { get; set; }
+    }
+
+    /// <summary>
+    /// Data when the TS planner completes a target plan (all exposure plans 100% complete)
+    /// </summary>
+    public partial class TargetSchedulerTargetCompleteData
+    {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("coordinates")]
+        public Coordinates Coordinates { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("project_name")]
+        public string ProjectName { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("rotation")]
+        public double? Rotation { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("target_name")]
+        public string TargetName { get; set; }
+    }
+
+    /// <summary>
+    /// Data when the TS planner returns a target plan. Sent regardless of whether the target is
+    /// new or not.
+    /// </summary>
+    public partial class TargetSchedulerTargetStartData
+    {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("binning")]
+        public string Binning { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("coordinates")]
+        public Coordinates Coordinates { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("exposure")]
+        public double? Exposure { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("filter")]
+        public string Filter { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("gain")]
+        public string Gain { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("offset")]
+        public string Offset { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("project_name")]
+        public string ProjectName { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("rotation")]
+        public double? Rotation { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("target_end_time")]
+        public DateTimeOffset? TargetEndTime { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("target_name")]
+        public string TargetName { get; set; }
+    }
+
+    /// <summary>
+    /// Data when a the target scheduler enter a wait period
+    /// </summary>
+    public partial class TargetSchedulerWaitStartData
+    {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("coordinates")]
+        public Coordinates Coordinates { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("project_name")]
+        public string ProjectName { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("rotation")]
+        public double? Rotation { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("secs_till_next_target")]
+        public long? SecsTillNextTarget { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("target_name")]
+        public string TargetName { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("wait_end_time")]
+        public DateTimeOffset? WaitEndTime { get; set; }
+    }
+
     public enum DeviceType { Camera, Dome, FilterWheel, FlatPanel, Focuser, Guider, Mount, Rotator, SafetyMonitor, Switch, Weather };
 
     public enum CameraState { Download, Error, Exposing, Idle, LoadingFile, None, Reading, Waiting };
@@ -1519,6 +1679,31 @@ namespace Bortle.NINA.Emitter.Models
         public static SequenceStartData FromJson(string json) => JsonSerializer.Deserialize<SequenceStartData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
+    public partial class TargetSchedulerContainerStoppedData
+    {
+        public static TargetSchedulerContainerStoppedData FromJson(string json) => JsonSerializer.Deserialize<TargetSchedulerContainerStoppedData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class TargetSchedulerNewTargetStartData
+    {
+        public static TargetSchedulerNewTargetStartData FromJson(string json) => JsonSerializer.Deserialize<TargetSchedulerNewTargetStartData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class TargetSchedulerTargetCompleteData
+    {
+        public static TargetSchedulerTargetCompleteData FromJson(string json) => JsonSerializer.Deserialize<TargetSchedulerTargetCompleteData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class TargetSchedulerTargetStartData
+    {
+        public static TargetSchedulerTargetStartData FromJson(string json) => JsonSerializer.Deserialize<TargetSchedulerTargetStartData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class TargetSchedulerWaitStartData
+    {
+        public static TargetSchedulerWaitStartData FromJson(string json) => JsonSerializer.Deserialize<TargetSchedulerWaitStartData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
     public static class Serialize
     {
         public static string ToJson(this DeviceConnectionData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -1555,6 +1740,11 @@ namespace Bortle.NINA.Emitter.Models
         public static string ToJson(this ProfileSelectedData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this SequenceEndData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this SequenceStartData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this TargetSchedulerContainerStoppedData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this TargetSchedulerNewTargetStartData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this TargetSchedulerTargetCompleteData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this TargetSchedulerTargetStartData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this TargetSchedulerWaitStartData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
     internal static class Converter

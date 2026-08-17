@@ -363,8 +363,71 @@ channels:
         $ref: "#/components/messages/ProfileLocaleEvent"
 
   # Sequence ────────────────────────────────────────────────────────────────
+  sequenceStart:
+    address: "nina.{instanceId}.sequence.start"
+    description: Event when a sequence starts
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      SequenceStartEvent:
+        $ref: "#/components/messages/SequenceStartEvent"
+  sequenceEnd:
+    address: "nina.{instanceId}.sequence.end"
+    description: Event when a sequence ends
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      SequenceEndEvent:
+        $ref: "#/components/messages/SequenceEndEvent"
 
   # TargetScheduler ─────────────────────────────────────────────────────────
+  targetSchedulerWaitStart:
+    address: "nina.{instanceId}.target-scheduler.wait-start"
+    description: Event when the target scheduler enters a wait period
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      TargetSchedulerWaitStartEvent:
+        $ref: "#/components/messages/TargetSchedulerWaitStartEvent"
+  targetSchedulerNewTargetStart:
+    address: "nina.{instanceId}.target-scheduler.new-target-start"
+    description: Event when the TS planner returns a target plan and the target is new
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      TargetSchedulerNewTargetStartEvent:
+        $ref: "#/components/messages/TargetSchedulerNewTargetStartEvent"
+  targetSchedulerTargetStart:
+    address: "nina.{instanceId}.target-scheduler.target-start"
+    description: Event when the TS planner returns a target plan, new or not
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      TargetSchedulerTargetStartEvent:
+        $ref: "#/components/messages/TargetSchedulerTargetStartEvent"
+  targetSchedulerContainerStopped:
+    address: "nina.{instanceId}.target-scheduler.container-stopped"
+    description: Event when the TS container instruction ends
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      TargetSchedulerContainerStoppedEvent:
+        $ref: "#/components/messages/TargetSchedulerContainerStoppedEvent"
+  targetSchedulerTargetComplete:
+    address: "nina.{instanceId}.target-scheduler.target-complete"
+    description: Event when the TS planner completes a target plan
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      TargetSchedulerTargetCompleteEvent:
+        $ref: "#/components/messages/TargetSchedulerTargetCompleteEvent"
 
 # ─── Operations (list of events pushed on topics) ───────────────────────────
 operations:
@@ -590,8 +653,50 @@ operations:
       - name: "Profile"
 
   # Sequence ────────────────────────────────────────────────────────────────
+  sendSequenceStartEvent:
+    action: send
+    channel:
+      $ref: "#/channels/sequenceStart"
+    tags:
+      - name: "Sequence"
+  sendSequenceEndEvent:
+    action: send
+    channel:
+      $ref: "#/channels/sequenceEnd"
+    tags:
+      - name: "Sequence"
 
   # TargetScheduler ─────────────────────────────────────────────────────────
+  sendTargetSchedulerWaitStartEvent:
+    action: send
+    channel:
+      $ref: "#/channels/targetSchedulerWaitStart"
+    tags:
+      - name: "TargetScheduler"
+  sendTargetSchedulerNewTargetStartEvent:
+    action: send
+    channel:
+      $ref: "#/channels/targetSchedulerNewTargetStart"
+    tags:
+      - name: "TargetScheduler"
+  sendTargetSchedulerTargetStartEvent:
+    action: send
+    channel:
+      $ref: "#/channels/targetSchedulerTargetStart"
+    tags:
+      - name: "TargetScheduler"
+  sendTargetSchedulerContainerStoppedEvent:
+    action: send
+    channel:
+      $ref: "#/channels/targetSchedulerContainerStopped"
+    tags:
+      - name: "TargetScheduler"
+  sendTargetSchedulerTargetCompleteEvent:
+    action: send
+    channel:
+      $ref: "#/channels/targetSchedulerTargetComplete"
+    tags:
+      - name: "TargetScheduler"
 
 
 # ─── Components ────────────────────────────────────────────────────────────
@@ -897,7 +1002,6 @@ components:
                 const: "io.nina.safety-monitor.device-info"
               data:
                 $ref: "./schemas/safety_data.yaml"
-
     SafetyChangeEvent:
       title: SafetyChangeEvent
       summary: Event when is_safe changes
@@ -1016,5 +1120,89 @@ components:
                 $ref: "./schemas/profile_locale_data.yaml"
 
     # Sequence ────────────────────────────────────────────────────────────────
+    SequenceStartEvent:
+      title: SequenceStartEvent
+      summary: Event when a sequence starts
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.sequence.start"
+              data:
+                $ref: "./schemas/sequence_start_data.yaml"
+    SequenceEndEvent:
+      title: SequenceEndEvent
+      summary: Event when a sequence ends
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.sequence.end"
+              data:
+                $ref: "./schemas/sequence_end_data.yaml"
 
     # TargetScheduler ─────────────────────────────────────────────────────────
+    TargetSchedulerWaitStartEvent:
+      title: TargetSchedulerWaitStartEvent
+      summary: Event when the target scheduler enters a wait period
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.target-scheduler.wait-start"
+              data:
+                $ref: "./schemas/ts_wait_start_data.yaml"
+    TargetSchedulerNewTargetStartEvent:
+      title: TargetSchedulerNewTargetStartEvent
+      summary: Event when the TS planner returns a target plan and the target is new
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.target-scheduler.new-target-start"
+              data:
+                $ref: "./schemas/ts_new_target_start_data.yaml"
+    TargetSchedulerTargetStartEvent:
+      title: TargetSchedulerTargetStartEvent
+      summary: Event when the TS planner returns a target plan, new or not
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.target-scheduler.target-start"
+              data:
+                $ref: "./schemas/ts_target_start_data.yaml"
+    TargetSchedulerContainerStoppedEvent:
+      title: TargetSchedulerContainerStoppedEvent
+      summary: Event when the TS container instruction ends
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.target-scheduler.container-stopped"
+              data:
+                $ref: "./schemas/ts_container_stop_data.yaml"
+    TargetSchedulerTargetCompleteEvent:
+      title: TargetSchedulerTargetCompleteEvent
+      summary: Event when the TS planner completes a target plan
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.target-scheduler.target-complete"
+              data:
+                $ref: "./schemas/ts_target_complete_data.yaml"

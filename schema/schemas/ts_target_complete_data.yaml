@@ -1,0 +1,13 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: TargetSchedulerTargetCompleteData
+type: object
+description: Data when the TS planner completes a target plan (all exposure plans 100% complete)
+properties:
+  target_name:
+    type: string
+  project_name:
+    type: string
+  coordinates:
+    $ref: "common.yaml#/definitions/Coordinates"
+  rotation:
+    type: number

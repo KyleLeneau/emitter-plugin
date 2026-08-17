@@ -1,6 +1,6 @@
 // To parse this data:
 //
-//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, CameraErrorData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FilterWheelChangeData, FlatPanelDeviceInfoData, FlatPanelLEDData, FlatPanelStateData, FlatPanelValueData, FocuserDeviceInfoData, FocuserChangeData, GuiderDeviceInfoData, GuiderDitherData, GuiderStartData, GuiderStepData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, RotatorMovedData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData, ImageSavedData, ProfileHorizonData, ProfileListData, ProfileLocaleData, ProfileLocationData, ProfileSelectedData, SequenceEndData, SequenceStartData } from "./file";
+//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, CameraErrorData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FilterWheelChangeData, FlatPanelDeviceInfoData, FlatPanelLEDData, FlatPanelStateData, FlatPanelValueData, FocuserDeviceInfoData, FocuserChangeData, GuiderDeviceInfoData, GuiderDitherData, GuiderStartData, GuiderStepData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, RotatorMovedData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData, ImageSavedData, ProfileHorizonData, ProfileListData, ProfileLocaleData, ProfileLocationData, ProfileSelectedData, SequenceEndData, SequenceStartData, TargetSchedulerContainerStoppedData, TargetSchedulerNewTargetStartData, TargetSchedulerTargetCompleteData, TargetSchedulerTargetStartData, TargetSchedulerWaitStartData } from "./file";
 //
 //   const deviceConnectionData = Convert.toDeviceConnectionData(json);
 //   const cameraDeviceInfoData = Convert.toCameraDeviceInfoData(json);
@@ -36,6 +36,11 @@
 //   const profileSelectedData = Convert.toProfileSelectedData(json);
 //   const sequenceEndData = Convert.toSequenceEndData(json);
 //   const sequenceStartData = Convert.toSequenceStartData(json);
+//   const targetSchedulerContainerStoppedData = Convert.toTargetSchedulerContainerStoppedData(json);
+//   const targetSchedulerNewTargetStartData = Convert.toTargetSchedulerNewTargetStartData(json);
+//   const targetSchedulerTargetCompleteData = Convert.toTargetSchedulerTargetCompleteData(json);
+//   const targetSchedulerTargetStartData = Convert.toTargetSchedulerTargetStartData(json);
+//   const targetSchedulerWaitStartData = Convert.toTargetSchedulerWaitStartData(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
@@ -782,6 +787,73 @@ export interface SequenceStartData {
     [property: string]: any;
 }
 
+/**
+ * Data when the TS Container instruction ends
+ */
+export interface TargetSchedulerContainerStoppedData {
+    stopped_at?: Date;
+    [property: string]: any;
+}
+
+/**
+ * Data when the TS planner returns a target plan and the target is ‘new’
+ */
+export interface TargetSchedulerNewTargetStartData {
+    binning?:         string;
+    coordinates?:     Coordinates;
+    exposure?:        number;
+    filter?:          string;
+    gain?:            string;
+    offset?:          string;
+    project_name?:    string;
+    rotation?:        number;
+    target_end_time?: Date;
+    target_name?:     string;
+    [property: string]: any;
+}
+
+/**
+ * Data when the TS planner completes a target plan (all exposure plans 100% complete)
+ */
+export interface TargetSchedulerTargetCompleteData {
+    coordinates?:  Coordinates;
+    project_name?: string;
+    rotation?:     number;
+    target_name?:  string;
+    [property: string]: any;
+}
+
+/**
+ * Data when the TS planner returns a target plan. Sent regardless of whether the target is
+ * new or not.
+ */
+export interface TargetSchedulerTargetStartData {
+    binning?:         string;
+    coordinates?:     Coordinates;
+    exposure?:        number;
+    filter?:          string;
+    gain?:            string;
+    offset?:          string;
+    project_name?:    string;
+    rotation?:        number;
+    target_end_time?: Date;
+    target_name?:     string;
+    [property: string]: any;
+}
+
+/**
+ * Data when a the target scheduler enter a wait period
+ */
+export interface TargetSchedulerWaitStartData {
+    coordinates?:           Coordinates;
+    project_name?:          string;
+    rotation?:              number;
+    secs_till_next_target?: number;
+    target_name?:           string;
+    wait_end_time?:         Date;
+    [property: string]: any;
+}
+
 // Converts JSON strings to/from your types
 // and asserts the results of JSON.parse at runtime
 export class Convert {
@@ -1055,6 +1127,46 @@ export class Convert {
 
     public static sequenceStartDataToJson(value: SequenceStartData): string {
         return JSON.stringify(uncast(value, r("SequenceStartData")), null, 2);
+    }
+
+    public static toTargetSchedulerContainerStoppedData(json: string): TargetSchedulerContainerStoppedData {
+        return cast(JSON.parse(json), r("TargetSchedulerContainerStoppedData"));
+    }
+
+    public static targetSchedulerContainerStoppedDataToJson(value: TargetSchedulerContainerStoppedData): string {
+        return JSON.stringify(uncast(value, r("TargetSchedulerContainerStoppedData")), null, 2);
+    }
+
+    public static toTargetSchedulerNewTargetStartData(json: string): TargetSchedulerNewTargetStartData {
+        return cast(JSON.parse(json), r("TargetSchedulerNewTargetStartData"));
+    }
+
+    public static targetSchedulerNewTargetStartDataToJson(value: TargetSchedulerNewTargetStartData): string {
+        return JSON.stringify(uncast(value, r("TargetSchedulerNewTargetStartData")), null, 2);
+    }
+
+    public static toTargetSchedulerTargetCompleteData(json: string): TargetSchedulerTargetCompleteData {
+        return cast(JSON.parse(json), r("TargetSchedulerTargetCompleteData"));
+    }
+
+    public static targetSchedulerTargetCompleteDataToJson(value: TargetSchedulerTargetCompleteData): string {
+        return JSON.stringify(uncast(value, r("TargetSchedulerTargetCompleteData")), null, 2);
+    }
+
+    public static toTargetSchedulerTargetStartData(json: string): TargetSchedulerTargetStartData {
+        return cast(JSON.parse(json), r("TargetSchedulerTargetStartData"));
+    }
+
+    public static targetSchedulerTargetStartDataToJson(value: TargetSchedulerTargetStartData): string {
+        return JSON.stringify(uncast(value, r("TargetSchedulerTargetStartData")), null, 2);
+    }
+
+    public static toTargetSchedulerWaitStartData(json: string): TargetSchedulerWaitStartData {
+        return cast(JSON.parse(json), r("TargetSchedulerWaitStartData"));
+    }
+
+    public static targetSchedulerWaitStartDataToJson(value: TargetSchedulerWaitStartData): string {
+        return JSON.stringify(uncast(value, r("TargetSchedulerWaitStartData")), null, 2);
     }
 }
 
@@ -1569,6 +1681,47 @@ const typeMap: any = {
     ], "any"),
     "SequenceStartData": o([
         { json: "name", js: "name", typ: u(undefined, "") },
+    ], "any"),
+    "TargetSchedulerContainerStoppedData": o([
+        { json: "stopped_at", js: "stopped_at", typ: u(undefined, Date) },
+    ], "any"),
+    "TargetSchedulerNewTargetStartData": o([
+        { json: "binning", js: "binning", typ: u(undefined, "") },
+        { json: "coordinates", js: "coordinates", typ: u(undefined, r("Coordinates")) },
+        { json: "exposure", js: "exposure", typ: u(undefined, 3.14) },
+        { json: "filter", js: "filter", typ: u(undefined, "") },
+        { json: "gain", js: "gain", typ: u(undefined, "") },
+        { json: "offset", js: "offset", typ: u(undefined, "") },
+        { json: "project_name", js: "project_name", typ: u(undefined, "") },
+        { json: "rotation", js: "rotation", typ: u(undefined, 3.14) },
+        { json: "target_end_time", js: "target_end_time", typ: u(undefined, Date) },
+        { json: "target_name", js: "target_name", typ: u(undefined, "") },
+    ], "any"),
+    "TargetSchedulerTargetCompleteData": o([
+        { json: "coordinates", js: "coordinates", typ: u(undefined, r("Coordinates")) },
+        { json: "project_name", js: "project_name", typ: u(undefined, "") },
+        { json: "rotation", js: "rotation", typ: u(undefined, 3.14) },
+        { json: "target_name", js: "target_name", typ: u(undefined, "") },
+    ], "any"),
+    "TargetSchedulerTargetStartData": o([
+        { json: "binning", js: "binning", typ: u(undefined, "") },
+        { json: "coordinates", js: "coordinates", typ: u(undefined, r("Coordinates")) },
+        { json: "exposure", js: "exposure", typ: u(undefined, 3.14) },
+        { json: "filter", js: "filter", typ: u(undefined, "") },
+        { json: "gain", js: "gain", typ: u(undefined, "") },
+        { json: "offset", js: "offset", typ: u(undefined, "") },
+        { json: "project_name", js: "project_name", typ: u(undefined, "") },
+        { json: "rotation", js: "rotation", typ: u(undefined, 3.14) },
+        { json: "target_end_time", js: "target_end_time", typ: u(undefined, Date) },
+        { json: "target_name", js: "target_name", typ: u(undefined, "") },
+    ], "any"),
+    "TargetSchedulerWaitStartData": o([
+        { json: "coordinates", js: "coordinates", typ: u(undefined, r("Coordinates")) },
+        { json: "project_name", js: "project_name", typ: u(undefined, "") },
+        { json: "rotation", js: "rotation", typ: u(undefined, 3.14) },
+        { json: "secs_till_next_target", js: "secs_till_next_target", typ: u(undefined, 0) },
+        { json: "target_name", js: "target_name", typ: u(undefined, "") },
+        { json: "wait_end_time", js: "wait_end_time", typ: u(undefined, Date) },
     ], "any"),
     "DeviceType": [
         "Camera",

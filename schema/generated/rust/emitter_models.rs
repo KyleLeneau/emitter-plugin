@@ -984,3 +984,86 @@ pub struct SequenceEndData {
 pub struct SequenceStartData {
     pub name: Option<String>,
 }
+
+/// Data when the TS Container instruction ends
+#[derive(Serialize, Deserialize)]
+pub struct TargetSchedulerContainerStoppedData {
+    pub stopped_at: Option<String>,
+}
+
+/// Data when the TS planner returns a target plan and the target is ‘new’
+#[derive(Serialize, Deserialize)]
+pub struct TargetSchedulerNewTargetStartData {
+    pub binning: Option<String>,
+
+    pub coordinates: Option<Coordinates>,
+
+    pub exposure: Option<f64>,
+
+    pub filter: Option<String>,
+
+    pub gain: Option<String>,
+
+    pub offset: Option<String>,
+
+    pub project_name: Option<String>,
+
+    pub rotation: Option<f64>,
+
+    pub target_end_time: Option<String>,
+
+    pub target_name: Option<String>,
+}
+
+/// Data when the TS planner completes a target plan (all exposure plans 100% complete)
+#[derive(Serialize, Deserialize)]
+pub struct TargetSchedulerTargetCompleteData {
+    pub coordinates: Option<Coordinates>,
+
+    pub project_name: Option<String>,
+
+    pub rotation: Option<f64>,
+
+    pub target_name: Option<String>,
+}
+
+/// Data when the TS planner returns a target plan. Sent regardless of whether the target is
+/// new or not.
+#[derive(Serialize, Deserialize)]
+pub struct TargetSchedulerTargetStartData {
+    pub binning: Option<String>,
+
+    pub coordinates: Option<Coordinates>,
+
+    pub exposure: Option<f64>,
+
+    pub filter: Option<String>,
+
+    pub gain: Option<String>,
+
+    pub offset: Option<String>,
+
+    pub project_name: Option<String>,
+
+    pub rotation: Option<f64>,
+
+    pub target_end_time: Option<String>,
+
+    pub target_name: Option<String>,
+}
+
+/// Data when a the target scheduler enter a wait period
+#[derive(Serialize, Deserialize)]
+pub struct TargetSchedulerWaitStartData {
+    pub coordinates: Option<Coordinates>,
+
+    pub project_name: Option<String>,
+
+    pub rotation: Option<f64>,
+
+    pub secs_till_next_target: Option<i64>,
+
+    pub target_name: Option<String>,
+
+    pub wait_end_time: Option<String>,
+}

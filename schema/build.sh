@@ -52,6 +52,11 @@ DATA_SCHEMAS=(
   "$SCHEMAS/profile_selected_data.yaml"
   "$SCHEMAS/sequence_end_data.yaml"
   "$SCHEMAS/sequence_start_data.yaml"
+  "$SCHEMAS/ts_container_stop_data.yaml"
+  "$SCHEMAS/ts_new_target_start_data.yaml"
+  "$SCHEMAS/ts_target_complete_data.yaml"
+  "$SCHEMAS/ts_target_start_data.yaml"
+  "$SCHEMAS/ts_wait_start_data.yaml"
 )
 
 generate() {
