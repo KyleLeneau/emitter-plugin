@@ -14,6 +14,7 @@
 //    var flatPanelStateData = FlatPanelStateData.FromJson(jsonString);
 //    var flatPanelValueData = FlatPanelValueData.FromJson(jsonString);
 //    var focuserDeviceInfoData = FocuserDeviceInfoData.FromJson(jsonString);
+//    var focuserChangeData = FocuserChangeData.FromJson(jsonString);
 //    var guiderDeviceInfoData = GuiderDeviceInfoData.FromJson(jsonString);
 //    var guiderDitherData = GuiderDitherData.FromJson(jsonString);
 //    var guiderStartData = GuiderStartData.FromJson(jsonString);
@@ -536,6 +537,31 @@ namespace Bortle.NINA.Emitter.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("temperature")]
         public double? Temperature { get; set; }
+    }
+
+    /// <summary>
+    /// Event data when the user or auto focus runs
+    /// </summary>
+    public partial class FocuserChangeData
+    {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("filter")]
+        public string Filter { get; set; }
+
+        [JsonPropertyName("focus_event")]
+        public FocusEvent FocusEvent { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("postion")]
+        public double? Postion { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("temperature")]
+        public double? Temperature { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("timestamp")]
+        public DateTimeOffset? Timestamp { get; set; }
     }
 
     /// <summary>
@@ -1088,6 +1114,8 @@ namespace Bortle.NINA.Emitter.Models
 
     public enum State { Closed, Opened };
 
+    public enum FocusEvent { AutoFocusEnd, AutoFocusStart, ManualFocus };
+
     public enum GuiderDitherDataStage { After };
 
     public enum GuiderStartDataStage { Started, Stopped };
@@ -1154,6 +1182,11 @@ namespace Bortle.NINA.Emitter.Models
     public partial class FocuserDeviceInfoData
     {
         public static FocuserDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<FocuserDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class FocuserChangeData
+    {
+        public static FocuserChangeData FromJson(string json) => JsonSerializer.Deserialize<FocuserChangeData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
     public partial class GuiderDeviceInfoData
@@ -1233,6 +1266,7 @@ namespace Bortle.NINA.Emitter.Models
         public static string ToJson(this FlatPanelStateData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this FlatPanelValueData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this FocuserDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this FocuserChangeData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this GuiderDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this GuiderDitherData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this GuiderStartData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -1260,6 +1294,7 @@ namespace Bortle.NINA.Emitter.Models
                 ShutterStateConverter.Singleton,
                 PositionConverter.Singleton,
                 StateConverter.Singleton,
+                FocusEventConverter.Singleton,
                 GuiderDitherDataStageConverter.Singleton,
                 GuiderStartDataStageConverter.Singleton,
                 AlignmentModeConverter.Singleton,
@@ -1648,6 +1683,45 @@ namespace Bortle.NINA.Emitter.Models
         }
 
         public static readonly StateConverter Singleton = new StateConverter();
+    }
+
+    internal class FocusEventConverter : JsonConverter<FocusEvent>
+    {
+        public override bool CanConvert(Type t) => t == typeof(FocusEvent);
+
+        public override FocusEvent Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var value = reader.GetString();
+            switch (value)
+            {
+                case "AutoFocusEnd":
+                    return FocusEvent.AutoFocusEnd;
+                case "AutoFocusStart":
+                    return FocusEvent.AutoFocusStart;
+                case "ManualFocus":
+                    return FocusEvent.ManualFocus;
+            }
+            throw new Exception("Cannot unmarshal type FocusEvent");
+        }
+
+        public override void Write(Utf8JsonWriter writer, FocusEvent value, JsonSerializerOptions options)
+        {
+            switch (value)
+            {
+                case FocusEvent.AutoFocusEnd:
+                    JsonSerializer.Serialize(writer, "AutoFocusEnd", options);
+                    return;
+                case FocusEvent.AutoFocusStart:
+                    JsonSerializer.Serialize(writer, "AutoFocusStart", options);
+                    return;
+                case FocusEvent.ManualFocus:
+                    JsonSerializer.Serialize(writer, "ManualFocus", options);
+                    return;
+            }
+            throw new Exception("Cannot marshal type FocusEvent");
+        }
+
+        public static readonly FocusEventConverter Singleton = new FocusEventConverter();
     }
 
     internal class GuiderDitherDataStageConverter : JsonConverter<GuiderDitherDataStage>

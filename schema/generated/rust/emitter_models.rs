@@ -422,6 +422,32 @@ pub struct FocuserDeviceInfoData {
     pub temperature: Option<f64>,
 }
 
+/// Event data when the user or auto focus runs
+#[derive(Serialize, Deserialize)]
+pub struct FocuserChangeData {
+    pub filter: Option<String>,
+
+    pub focus_event: FocusEvent,
+
+    pub postion: Option<f64>,
+
+    pub temperature: Option<f64>,
+
+    pub timestamp: Option<String>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum FocusEvent {
+    #[serde(rename = "AutoFocusEnd")]
+    AutoFocusEnd,
+
+    #[serde(rename = "AutoFocusStart")]
+    AutoFocusStart,
+
+    #[serde(rename = "ManualFocus")]
+    ManualFocus,
+}
+
 /// Periodic Guider event data
 #[derive(Serialize, Deserialize)]
 pub struct GuiderDeviceInfoData {

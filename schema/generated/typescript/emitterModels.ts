@@ -1,6 +1,6 @@
 // To parse this data:
 //
-//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FlatPanelDeviceInfoData, FlatPanelLEDData, FlatPanelStateData, FlatPanelValueData, FocuserDeviceInfoData, GuiderDeviceInfoData, GuiderDitherData, GuiderStartData, GuiderStepData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, RotatorMovedData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData } from "./file";
+//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FlatPanelDeviceInfoData, FlatPanelLEDData, FlatPanelStateData, FlatPanelValueData, FocuserDeviceInfoData, FocuserChangeData, GuiderDeviceInfoData, GuiderDitherData, GuiderStartData, GuiderStepData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, RotatorMovedData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData } from "./file";
 //
 //   const deviceConnectionData = Convert.toDeviceConnectionData(json);
 //   const cameraDeviceInfoData = Convert.toCameraDeviceInfoData(json);
@@ -12,6 +12,7 @@
 //   const flatPanelStateData = Convert.toFlatPanelStateData(json);
 //   const flatPanelValueData = Convert.toFlatPanelValueData(json);
 //   const focuserDeviceInfoData = Convert.toFocuserDeviceInfoData(json);
+//   const focuserChangeData = Convert.toFocuserChangeData(json);
 //   const guiderDeviceInfoData = Convert.toGuiderDeviceInfoData(json);
 //   const guiderDitherData = Convert.toGuiderDitherData(json);
 //   const guiderStartData = Convert.toGuiderStartData(json);
@@ -305,6 +306,24 @@ export interface FocuserDeviceInfoData {
     temp_comp_available?: boolean;
     temperature?:         number;
     [property: string]: any;
+}
+
+/**
+ * Event data when the user or auto focus runs
+ */
+export interface FocuserChangeData {
+    filter?:      string;
+    focus_event:  FocusEvent;
+    postion?:     number;
+    temperature?: number;
+    timestamp?:   Date;
+    [property: string]: any;
+}
+
+export enum FocusEvent {
+    AutoFocusEnd = "AutoFocusEnd",
+    AutoFocusStart = "AutoFocusStart",
+    ManualFocus = "ManualFocus",
 }
 
 /**
@@ -711,6 +730,14 @@ export class Convert {
         return JSON.stringify(uncast(value, r("FocuserDeviceInfoData")), null, 2);
     }
 
+    public static toFocuserChangeData(json: string): FocuserChangeData {
+        return cast(JSON.parse(json), r("FocuserChangeData"));
+    }
+
+    public static focuserChangeDataToJson(value: FocuserChangeData): string {
+        return JSON.stringify(uncast(value, r("FocuserChangeData")), null, 2);
+    }
+
     public static toGuiderDeviceInfoData(json: string): GuiderDeviceInfoData {
         return cast(JSON.parse(json), r("GuiderDeviceInfoData"));
     }
@@ -1108,6 +1135,13 @@ const typeMap: any = {
         { json: "temp_comp_available", js: "temp_comp_available", typ: u(undefined, true) },
         { json: "temperature", js: "temperature", typ: u(undefined, 3.14) },
     ], "any"),
+    "FocuserChangeData": o([
+        { json: "filter", js: "filter", typ: u(undefined, "") },
+        { json: "focus_event", js: "focus_event", typ: r("FocusEvent") },
+        { json: "postion", js: "postion", typ: u(undefined, 3.14) },
+        { json: "temperature", js: "temperature", typ: u(undefined, 3.14) },
+        { json: "timestamp", js: "timestamp", typ: u(undefined, Date) },
+    ], "any"),
     "GuiderDeviceInfoData": o([
         { json: "can_clear_calibration", js: "can_clear_calibration", typ: true },
         { json: "can_get_lock_postion", js: "can_get_lock_postion", typ: true },
@@ -1318,6 +1352,11 @@ const typeMap: any = {
     "State": [
         "Closed",
         "Opened",
+    ],
+    "FocusEvent": [
+        "AutoFocusEnd",
+        "AutoFocusStart",
+        "ManualFocus",
     ],
     "GuiderDitherDataStage": [
         "After",

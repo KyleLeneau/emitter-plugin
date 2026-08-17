@@ -11,6 +11,7 @@
 //   let flatPanelStateData = try FlatPanelStateData(json)
 //   let flatPanelValueData = try FlatPanelValueData(json)
 //   let focuserDeviceInfoData = try FocuserDeviceInfoData(json)
+//   let focuserChangeData = try FocuserChangeData(json)
 //   let guiderDeviceInfoData = try GuiderDeviceInfoData(json)
 //   let guiderDitherData = try GuiderDitherData(json)
 //   let guiderStartData = try GuiderStartData(json)
@@ -982,6 +983,70 @@ extension FocuserDeviceInfoData {
     func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
         return String(data: try self.jsonData(), encoding: encoding)
     }
+}
+
+/// Event data when the user or auto focus runs
+// MARK: - FocuserChangeData
+struct FocuserChangeData: Codable {
+    let filter: String?
+    let focusEvent: FocusEvent
+    let postion, temperature: Double?
+    let timestamp: Date?
+
+    enum CodingKeys: String, CodingKey {
+        case filter
+        case focusEvent = "focus_event"
+        case postion, temperature, timestamp
+    }
+}
+
+// MARK: FocuserChangeData convenience initializers and mutators
+
+extension FocuserChangeData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(FocuserChangeData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        filter: String?? = nil,
+        focusEvent: FocusEvent? = nil,
+        postion: Double?? = nil,
+        temperature: Double?? = nil,
+        timestamp: Date?? = nil
+    ) -> FocuserChangeData {
+        return FocuserChangeData(
+            filter: filter ?? self.filter,
+            focusEvent: focusEvent ?? self.focusEvent,
+            postion: postion ?? self.postion,
+            temperature: temperature ?? self.temperature,
+            timestamp: timestamp ?? self.timestamp
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+enum FocusEvent: String, Codable {
+    case autoFocusEnd = "AutoFocusEnd"
+    case autoFocusStart = "AutoFocusStart"
+    case manualFocus = "ManualFocus"
 }
 
 /// Periodic Guider event data

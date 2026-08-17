@@ -49,8 +49,7 @@
 * [x] flat panel led toggle
 * [x] flat panel open/close
 * [x] focuser info
-* [ ] focuser auto focus done
-* [ ] focuser user manual focus
+* [x] focuser focus change, start, end
 * [x] guider info
 * [x] guider after dither
 * [x] guider guide step

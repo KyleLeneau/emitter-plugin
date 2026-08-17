@@ -147,6 +147,15 @@ channels:
     messages:
       FocuserDeviceInfoEvent:
         $ref: "#/components/messages/FocuserDeviceInfoEvent"
+  focuserChange:
+    address: "nina.{instanceId}.focuser.focus"
+    description: Events when focuser changes focus
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      FocuserChangeEvent:
+        $ref: "#/components/messages/FocuserChangeEvent"
 
   # Guider ──────────────────────────────────────────────────────────────────
   guiderDeviceInfo:
@@ -353,6 +362,12 @@ operations:
     action: send
     channel:
       $ref: "#/channels/focuserDeviceInfo"
+    tags:
+      - name: "Focuser"
+  sendFocuserChangeEvent:
+    action: send
+    channel:
+      $ref: "#/channels/focuserChange"
     tags:
       - name: "Focuser"
 
@@ -595,6 +610,18 @@ components:
                 const: "io.nina.focuser.device-info"
               data:
                 $ref: "./schemas/focuser_data.yaml"
+    FocuserChangeEvent:
+      title: FocuserChangeEvent
+      summary: Focuser focus change event
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.focuser.focus"
+              data:
+                $ref: "./schemas/focuser_change_data.yaml"
 
     # Guider ──────────────────────────────────────────────────────────────────
     GuiderDeviceInfoEvent:

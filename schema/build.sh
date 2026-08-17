@@ -28,6 +28,7 @@ DATA_SCHEMAS=(
   "$SCHEMAS/flat_panel_state_data.yaml"
   "$SCHEMAS/flat_panel_value_data.yaml"
   "$SCHEMAS/focuser_data.yaml"
+  "$SCHEMAS/focuser_change_data.yaml"
   "$SCHEMAS/guider_data.yaml"
   "$SCHEMAS/guider_dither_data.yaml"
   "$SCHEMAS/guider_start_data.yaml"

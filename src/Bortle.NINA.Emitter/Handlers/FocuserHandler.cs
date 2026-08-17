@@ -39,12 +39,27 @@ namespace Bortle.NINA.Emitter.Handlers {
             lastData = data;
         }
 
+        public void AutoFocusRunStarting() {
+            var data = new FocuserChangeData { FocusEvent = FocusEvent.AutoFocusStart };
+            emitter.Enqueue("focuser", "focus", data);
+        }
+
         public void UpdateEndAutoFocusRun(AutoFocusInfo info) {
-            // TODO: Implement event
+            var data = new FocuserChangeData {
+                FocusEvent = FocusEvent.AutoFocusEnd,
+                Filter = info.Filter,
+                Timestamp = info.Timestamp,
+                Temperature = info.Temperature.Optional(),
+                Postion = info.Position.Optional(),
+            };
+            emitter.Enqueue("focuser", "focus", data);
         }
 
         public void UpdateUserFocused(FocuserInfo info) {
-            // TODO: Implement event
+            var data = new FocuserChangeData {
+                FocusEvent = FocusEvent.ManualFocus
+            };
+            emitter.Enqueue("focuser", "focus", data);
         }
 
         private Task MediatorOnConnected(object arg1, EventArgs arg2) {
