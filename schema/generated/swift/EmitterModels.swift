@@ -3,6 +3,7 @@
 //
 //   let deviceConnectionData = try DeviceConnectionData(json)
 //   let cameraDeviceInfoData = try CameraDeviceInfoData(json)
+//   let cameraErrorData = try CameraErrorData(json)
 //   let domeDeviceInfoData = try DomeDeviceInfoData(json)
 //   let domeShutterData = try DomeShutterData(json)
 //   let filterWheelDeviceInfoData = try FilterWheelDeviceInfoData(json)
@@ -435,6 +436,51 @@ enum SensorType: String, Codable {
     case monochrome = "Monochrome"
     case rgbg = "RGBG"
     case rggb = "RGGB"
+}
+
+/// Data on the camera encounters and error
+// MARK: - CameraErrorData
+struct CameraErrorData: Codable {
+    let error: Error
+}
+
+// MARK: CameraErrorData convenience initializers and mutators
+
+extension CameraErrorData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(CameraErrorData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        error: Error? = nil
+    ) -> CameraErrorData {
+        return CameraErrorData(
+            error: error ?? self.error
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+enum Error: String, Codable {
+    case downloadTimeout = "DownloadTimeout"
 }
 
 /// Dome device state

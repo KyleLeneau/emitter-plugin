@@ -67,6 +67,15 @@ channels:
     messages:
       CameraDeviceInfoEvent:
         $ref: "#/components/messages/CameraDeviceInfoEvent"
+  cameraError:
+    address: "nina.{instanceId}.camera.error"
+    description: Event when the camera encounters an error
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      CameraErrorEvent:
+        $ref: "#/components/messages/CameraErrorEvent"
 
   # Dome ────────────────────────────────────────────────────────────────────
   domeDeviceInfo:
@@ -365,6 +374,12 @@ operations:
       $ref: "#/channels/cameraDeviceInfo"
     tags:
       - name: "Camera"
+  sendCameraErrorEvent:
+    action: send
+    channel:
+      $ref: "#/channels/cameraError"
+    tags:
+      - name: "Camera"
 
   # Dome ────────────────────────────────────────────────────────────────────
   sendDomeDeviceInfoEvent:
@@ -599,6 +614,18 @@ components:
                 const: "io.nina.camera.device-info"
               data:
                 $ref: "./schemas/camera_data.yaml"
+    CameraErrorEvent:
+      title: CameraErrorEvent
+      summary: Event when the camera encounters an error
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.camera.error"
+              data:
+                $ref: "./schemas/camera_error_data.yaml"
 
     # Dome ────────────────────────────────────────────────────────────────────
     DomeDeviceInfoEvent:

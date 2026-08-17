@@ -1,0 +1,11 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: CameraErrorData
+type: object
+description: Data on the camera encounters and error
+properties:
+  error:
+    type: string
+    enum:
+      - DownloadTimeout
+required:
+  - error

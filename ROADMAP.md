@@ -39,7 +39,7 @@
 * [x] Safety is_safe change
 * [x] weather info
 * [x] camera info
-* [ ] download timeout
+* [x] camera download timeout
 * [x] dome info
 * [x] dome shutter event
 * [x] filter wheel info

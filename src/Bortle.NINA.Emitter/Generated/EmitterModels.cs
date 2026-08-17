@@ -6,6 +6,7 @@
 //
 //    var deviceConnectionData = DeviceConnectionData.FromJson(jsonString);
 //    var cameraDeviceInfoData = CameraDeviceInfoData.FromJson(jsonString);
+//    var cameraErrorData = CameraErrorData.FromJson(jsonString);
 //    var domeDeviceInfoData = DomeDeviceInfoData.FromJson(jsonString);
 //    var domeShutterData = DomeShutterData.FromJson(jsonString);
 //    var filterWheelDeviceInfoData = FilterWheelDeviceInfoData.FromJson(jsonString);
@@ -328,6 +329,15 @@ namespace Bortle.NINA.Emitter.Models
 
         [JsonPropertyName("y")]
         public long Y { get; set; }
+    }
+
+    /// <summary>
+    /// Data on the camera encounters and error
+    /// </summary>
+    public partial class CameraErrorData
+    {
+        [JsonPropertyName("error")]
+        public Error Error { get; set; }
     }
 
     /// <summary>
@@ -1188,6 +1198,8 @@ namespace Bortle.NINA.Emitter.Models
 
     public enum SensorType { Bggr, Bgrg, Cmyg, Cmyg2, Color, Gbgr, Gbrg, Grbg, Grgb, Lrgb, Monochrome, Rgbg, Rggb };
 
+    public enum Error { DownloadTimeout };
+
     public enum ShutterState { Closed, Closing, Error, None, Open, Opening };
 
     public enum Position { Closed, Homed, Opened, Parked, Slewed, Synced };
@@ -1224,6 +1236,11 @@ namespace Bortle.NINA.Emitter.Models
     public partial class CameraDeviceInfoData
     {
         public static CameraDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<CameraDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class CameraErrorData
+    {
+        public static CameraErrorData FromJson(string json) => JsonSerializer.Deserialize<CameraErrorData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
     public partial class DomeDeviceInfoData
@@ -1370,6 +1387,7 @@ namespace Bortle.NINA.Emitter.Models
     {
         public static string ToJson(this DeviceConnectionData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this CameraDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this CameraErrorData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this DomeDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this DomeShutterData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this FilterWheelDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -1409,6 +1427,7 @@ namespace Bortle.NINA.Emitter.Models
                 DeviceTypeConverter.Singleton,
                 CameraStateConverter.Singleton,
                 SensorTypeConverter.Singleton,
+                ErrorConverter.Singleton,
                 ShutterStateConverter.Singleton,
                 PositionConverter.Singleton,
                 StateConverter.Singleton,
@@ -1660,6 +1679,33 @@ namespace Bortle.NINA.Emitter.Models
         }
 
         public static readonly SensorTypeConverter Singleton = new SensorTypeConverter();
+    }
+
+    internal class ErrorConverter : JsonConverter<Error>
+    {
+        public override bool CanConvert(Type t) => t == typeof(Error);
+
+        public override Error Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var value = reader.GetString();
+            if (value == "DownloadTimeout")
+            {
+                return Error.DownloadTimeout;
+            }
+            throw new Exception("Cannot unmarshal type Error");
+        }
+
+        public override void Write(Utf8JsonWriter writer, Error value, JsonSerializerOptions options)
+        {
+            if (value == Error.DownloadTimeout)
+            {
+                JsonSerializer.Serialize(writer, "DownloadTimeout", options);
+                return;
+            }
+            throw new Exception("Cannot marshal type Error");
+        }
+
+        public static readonly ErrorConverter Singleton = new ErrorConverter();
     }
 
     internal class ShutterStateConverter : JsonConverter<ShutterState>

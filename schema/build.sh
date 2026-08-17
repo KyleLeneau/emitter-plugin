@@ -20,6 +20,7 @@ DOCS_OUT="$SCRIPT_DIR/../build/docs"
 DATA_SCHEMAS=(
   "$SCHEMAS/device_connect_data.yaml"
   "$SCHEMAS/camera_data.yaml"
+  "$SCHEMAS/camera_error_data.yaml"
   "$SCHEMAS/dome_data.yaml"
   "$SCHEMAS/dome_shutter_data.yaml"
   "$SCHEMAS/filter_wheel_data.yaml"

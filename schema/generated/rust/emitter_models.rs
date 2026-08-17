@@ -250,6 +250,18 @@ pub enum SensorType {
     Rggb,
 }
 
+/// Data on the camera encounters and error
+#[derive(Serialize, Deserialize)]
+pub struct CameraErrorData {
+    pub error: Error,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum Error {
+    #[serde(rename = "DownloadTimeout")]
+    DownloadTimeout,
+}
+
 /// Dome device state
 #[derive(Serialize, Deserialize)]
 pub struct DomeDeviceInfoData {

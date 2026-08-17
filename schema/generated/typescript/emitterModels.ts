@@ -1,9 +1,10 @@
 // To parse this data:
 //
-//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FilterWheelChangeData, FlatPanelDeviceInfoData, FlatPanelLEDData, FlatPanelStateData, FlatPanelValueData, FocuserDeviceInfoData, FocuserChangeData, GuiderDeviceInfoData, GuiderDitherData, GuiderStartData, GuiderStepData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, RotatorMovedData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData, ProfileHorizonData, ProfileListData, ProfileLocaleData, ProfileLocationData, ProfileSelectedData } from "./file";
+//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, CameraErrorData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FilterWheelChangeData, FlatPanelDeviceInfoData, FlatPanelLEDData, FlatPanelStateData, FlatPanelValueData, FocuserDeviceInfoData, FocuserChangeData, GuiderDeviceInfoData, GuiderDitherData, GuiderStartData, GuiderStepData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, RotatorMovedData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData, ProfileHorizonData, ProfileListData, ProfileLocaleData, ProfileLocationData, ProfileSelectedData } from "./file";
 //
 //   const deviceConnectionData = Convert.toDeviceConnectionData(json);
 //   const cameraDeviceInfoData = Convert.toCameraDeviceInfoData(json);
+//   const cameraErrorData = Convert.toCameraErrorData(json);
 //   const domeDeviceInfoData = Convert.toDomeDeviceInfoData(json);
 //   const domeShutterData = Convert.toDomeShutterData(json);
 //   const filterWheelDeviceInfoData = Convert.toFilterWheelDeviceInfoData(json);
@@ -177,6 +178,18 @@ export enum SensorType {
     Monochrome = "Monochrome",
     Rgbg = "RGBG",
     Rggb = "RGGB",
+}
+
+/**
+ * Data on the camera encounters and error
+ */
+export interface CameraErrorData {
+    error: Error;
+    [property: string]: any;
+}
+
+export enum Error {
+    DownloadTimeout = "DownloadTimeout",
 }
 
 /**
@@ -732,6 +745,14 @@ export class Convert {
         return JSON.stringify(uncast(value, r("CameraDeviceInfoData")), null, 2);
     }
 
+    public static toCameraErrorData(json: string): CameraErrorData {
+        return cast(JSON.parse(json), r("CameraErrorData"));
+    }
+
+    public static cameraErrorDataToJson(value: CameraErrorData): string {
+        return JSON.stringify(uncast(value, r("CameraErrorData")), null, 2);
+    }
+
     public static toDomeDeviceInfoData(json: string): DomeDeviceInfoData {
         return cast(JSON.parse(json), r("DomeDeviceInfoData"));
     }
@@ -1182,6 +1203,9 @@ const typeMap: any = {
         { json: "x", js: "x", typ: 0 },
         { json: "y", js: "y", typ: 0 },
     ], "any"),
+    "CameraErrorData": o([
+        { json: "error", js: "error", typ: r("Error") },
+    ], "any"),
     "DomeDeviceInfoData": o([
         { json: "altitude_degrees", js: "altitude_degrees", typ: u(undefined, 3.14) },
         { json: "application_following", js: "application_following", typ: true },
@@ -1469,6 +1493,9 @@ const typeMap: any = {
         "Monochrome",
         "RGBG",
         "RGGB",
+    ],
+    "Error": [
+        "DownloadTimeout",
     ],
     "ShutterState": [
         "Closed",

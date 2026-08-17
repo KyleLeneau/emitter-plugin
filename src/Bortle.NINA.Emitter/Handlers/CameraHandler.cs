@@ -112,7 +112,8 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private Task MediatorOnDownloadTimeout(object arg1, EventArgs arg2) {
-            // TODO: Implement event
+            var data = new CameraErrorData { Error = Error.DownloadTimeout };
+            emitter.Enqueue("camera", "error", data);
             return Task.CompletedTask;
         }
 
