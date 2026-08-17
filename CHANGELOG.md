@@ -2,6 +2,10 @@
 
 <!-- prettier-ignore-start -->
 
+## 0.2.0
+
+* Add: wire up and test about 40 [events and topics](https://kyleleneau.github.io/emitter-plugin/)
+
 ## 0.1.0
 
 * Add: Working skeleton of the plugin with device connection events
