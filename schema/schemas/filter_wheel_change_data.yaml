@@ -1,0 +1,12 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: FilterWheelChangeData
+type: object
+description: Filter Wheel selected filter change event data
+properties:
+  from_filter:
+    $ref: "common.yaml#/definitions/FilterInfo"
+  to_filter:
+    $ref: "common.yaml#/definitions/FilterInfo"
+required:
+  - from_filter
+  - to_filter

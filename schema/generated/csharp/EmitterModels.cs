@@ -9,6 +9,7 @@
 //    var domeDeviceInfoData = DomeDeviceInfoData.FromJson(jsonString);
 //    var domeShutterData = DomeShutterData.FromJson(jsonString);
 //    var filterWheelDeviceInfoData = FilterWheelDeviceInfoData.FromJson(jsonString);
+//    var filterWheelChangeData = FilterWheelChangeData.FromJson(jsonString);
 //    var flatPanelDeviceInfoData = FlatPanelDeviceInfoData.FromJson(jsonString);
 //    var flatPanelLedData = FlatPanelLedData.FromJson(jsonString);
 //    var flatPanelStateData = FlatPanelStateData.FromJson(jsonString);
@@ -438,6 +439,18 @@ namespace Bortle.NINA.Emitter.Models
 
         [JsonPropertyName("postion")]
         public double? Postion { get; set; }
+    }
+
+    /// <summary>
+    /// Filter Wheel selected filter change event data
+    /// </summary>
+    public partial class FilterWheelChangeData
+    {
+        [JsonPropertyName("from_filter")]
+        public FilterInfo FromFilter { get; set; }
+
+        [JsonPropertyName("to_filter")]
+        public FilterInfo ToFilter { get; set; }
     }
 
     /// <summary>
@@ -1159,6 +1172,11 @@ namespace Bortle.NINA.Emitter.Models
         public static FilterWheelDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<FilterWheelDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
+    public partial class FilterWheelChangeData
+    {
+        public static FilterWheelChangeData FromJson(string json) => JsonSerializer.Deserialize<FilterWheelChangeData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
     public partial class FlatPanelDeviceInfoData
     {
         public static FlatPanelDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<FlatPanelDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -1261,6 +1279,7 @@ namespace Bortle.NINA.Emitter.Models
         public static string ToJson(this DomeDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this DomeShutterData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this FilterWheelDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this FilterWheelChangeData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this FlatPanelDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this FlatPanelLedData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this FlatPanelStateData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);

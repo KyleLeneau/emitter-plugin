@@ -43,7 +43,7 @@
 * [x] dome info
 * [x] dome shutter event
 * [x] filter wheel info
-* [ ] filter wheel changed
+* [x] filter wheel changed
 * [x] flat panel info
 * [x] flat panel brightness change
 * [x] flat panel led toggle

@@ -57,7 +57,11 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private Task MediatorOnFilterChanged(object arg1, FilterChangedEventArgs arg2) {
-            // TODO: Implement event
+            var data = new FilterWheelChangeData {
+                FromFilter = ToFilterInfo(arg2.From),
+                ToFilter = ToFilterInfo(arg2.To)
+            };
+            emitter.Enqueue("filter-wheel", "change", data);
             return Task.CompletedTask;
         }
 

@@ -23,6 +23,7 @@ DATA_SCHEMAS=(
   "$SCHEMAS/dome_data.yaml"
   "$SCHEMAS/dome_shutter_data.yaml"
   "$SCHEMAS/filter_wheel_data.yaml"
+  "$SCHEMAS/filter_wheel_change_data.yaml"
   "$SCHEMAS/flat_panel_data.yaml"
   "$SCHEMAS/flat_panel_led_data.yaml"
   "$SCHEMAS/flat_panel_state_data.yaml"

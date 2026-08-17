@@ -6,6 +6,7 @@
 //   let domeDeviceInfoData = try DomeDeviceInfoData(json)
 //   let domeShutterData = try DomeShutterData(json)
 //   let filterWheelDeviceInfoData = try FilterWheelDeviceInfoData(json)
+//   let filterWheelChangeData = try FilterWheelChangeData(json)
 //   let flatPanelDeviceInfoData = try FlatPanelDeviceInfoData(json)
 //   let flatPanelLEDData = try FlatPanelLEDData(json)
 //   let flatPanelStateData = try FlatPanelStateData(json)
@@ -699,6 +700,54 @@ extension FilterInfo {
             name: name ?? self.name,
             offset: offset ?? self.offset,
             postion: postion ?? self.postion
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Filter Wheel selected filter change event data
+// MARK: - FilterWheelChangeData
+struct FilterWheelChangeData: Codable {
+    let fromFilter, toFilter: FilterInfo
+
+    enum CodingKeys: String, CodingKey {
+        case fromFilter = "from_filter"
+        case toFilter = "to_filter"
+    }
+}
+
+// MARK: FilterWheelChangeData convenience initializers and mutators
+
+extension FilterWheelChangeData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(FilterWheelChangeData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        fromFilter: FilterInfo? = nil,
+        toFilter: FilterInfo? = nil
+    ) -> FilterWheelChangeData {
+        return FilterWheelChangeData(
+            fromFilter: fromFilter ?? self.fromFilter,
+            toFilter: toFilter ?? self.toFilter
         )
     }
 

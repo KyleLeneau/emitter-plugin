@@ -98,6 +98,15 @@ channels:
     messages:
       FilterWheelDeviceInfoEvent:
         $ref: "#/components/messages/FilterWheelDeviceInfoEvent"
+  filterWheelChange:
+    address: "nina.{instanceId}.filter-wheel.device-info"
+    description: Event when filter wheel changes filters
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      FilterWheelChangeEvent:
+        $ref: "#/components/messages/FilterWheelChangeEvent"
 
   # FlatPanel ───────────────────────────────────────────────────────────────
   flatPanelDeviceInfo:
@@ -330,6 +339,12 @@ operations:
       $ref: "#/channels/filterWheelDeviceInfo"
     tags:
       - name: "FilterWheel"
+  sendFilterWheelChangeEvent:
+    action: send
+    channel:
+      $ref: "#/channels/filterWheelChange"
+    tags:
+      - name: "FilterWheel"
 
   # FlatPanel ───────────────────────────────────────────────────────────────
   sendFlatPanelDeviceInfoEvent:
@@ -546,6 +561,18 @@ components:
                 const: "io.nina.filter-wheel.device-info"
               data:
                 $ref: "./schemas/filter_wheel_data.yaml"
+    FilterWheelChangeEvent:
+      title: FilterWheelChangeEvent
+      summary: Event when the wheel changes filters
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.filter-wheel.change"
+              data:
+                $ref: "./schemas/filter_wheel_change_data.yaml"
 
     # FlatPanel ───────────────────────────────────────────────────────────────
     FlatPanelDeviceInfoEvent:

@@ -355,6 +355,14 @@ pub struct FilterInfo {
     pub postion: Option<f64>,
 }
 
+/// Filter Wheel selected filter change event data
+#[derive(Serialize, Deserialize)]
+pub struct FilterWheelChangeData {
+    pub from_filter: FilterInfo,
+
+    pub to_filter: FilterInfo,
+}
+
 /// Flat Panel device state
 #[derive(Serialize, Deserialize)]
 pub struct FlatPanelDeviceInfoData {

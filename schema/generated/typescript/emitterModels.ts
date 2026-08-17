@@ -1,12 +1,13 @@
 // To parse this data:
 //
-//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FlatPanelDeviceInfoData, FlatPanelLEDData, FlatPanelStateData, FlatPanelValueData, FocuserDeviceInfoData, FocuserChangeData, GuiderDeviceInfoData, GuiderDitherData, GuiderStartData, GuiderStepData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, RotatorMovedData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData } from "./file";
+//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FilterWheelChangeData, FlatPanelDeviceInfoData, FlatPanelLEDData, FlatPanelStateData, FlatPanelValueData, FocuserDeviceInfoData, FocuserChangeData, GuiderDeviceInfoData, GuiderDitherData, GuiderStartData, GuiderStepData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, RotatorMovedData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData } from "./file";
 //
 //   const deviceConnectionData = Convert.toDeviceConnectionData(json);
 //   const cameraDeviceInfoData = Convert.toCameraDeviceInfoData(json);
 //   const domeDeviceInfoData = Convert.toDomeDeviceInfoData(json);
 //   const domeShutterData = Convert.toDomeShutterData(json);
 //   const filterWheelDeviceInfoData = Convert.toFilterWheelDeviceInfoData(json);
+//   const filterWheelChangeData = Convert.toFilterWheelChangeData(json);
 //   const flatPanelDeviceInfoData = Convert.toFlatPanelDeviceInfoData(json);
 //   const flatPanelLEDData = Convert.toFlatPanelLEDData(json);
 //   const flatPanelStateData = Convert.toFlatPanelStateData(json);
@@ -245,6 +246,15 @@ export interface FilterInfo {
     name?:               null | string;
     offset?:             number | null;
     postion?:            number | null;
+    [property: string]: any;
+}
+
+/**
+ * Filter Wheel selected filter change event data
+ */
+export interface FilterWheelChangeData {
+    from_filter: FilterInfo;
+    to_filter:   FilterInfo;
     [property: string]: any;
 }
 
@@ -690,6 +700,14 @@ export class Convert {
         return JSON.stringify(uncast(value, r("FilterWheelDeviceInfoData")), null, 2);
     }
 
+    public static toFilterWheelChangeData(json: string): FilterWheelChangeData {
+        return cast(JSON.parse(json), r("FilterWheelChangeData"));
+    }
+
+    public static filterWheelChangeDataToJson(value: FilterWheelChangeData): string {
+        return JSON.stringify(uncast(value, r("FilterWheelChangeData")), null, 2);
+    }
+
     public static toFlatPanelDeviceInfoData(json: string): FlatPanelDeviceInfoData {
         return cast(JSON.parse(json), r("FlatPanelDeviceInfoData"));
     }
@@ -1104,6 +1122,10 @@ const typeMap: any = {
         { json: "name", js: "name", typ: u(undefined, u(null, "")) },
         { json: "offset", js: "offset", typ: u(undefined, u(3.14, null)) },
         { json: "postion", js: "postion", typ: u(undefined, u(3.14, null)) },
+    ], "any"),
+    "FilterWheelChangeData": o([
+        { json: "from_filter", js: "from_filter", typ: r("FilterInfo") },
+        { json: "to_filter", js: "to_filter", typ: r("FilterInfo") },
     ], "any"),
     "FlatPanelDeviceInfoData": o([
         { json: "brightness", js: "brightness", typ: 0 },
