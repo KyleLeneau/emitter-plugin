@@ -1,0 +1,9 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: ImageSavedData
+type: object
+description: Data when the a new image is taken/saved
+properties:
+  file_path:
+    type: string
+required:
+  - file_path

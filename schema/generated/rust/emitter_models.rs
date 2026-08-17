@@ -870,6 +870,12 @@ pub struct WeatherDeviceInfoData {
     pub wind_speed: Option<f64>,
 }
 
+/// Data when the a new image is taken/saved
+#[derive(Serialize, Deserialize)]
+pub struct ImageSavedData {
+    pub file_path: String,
+}
+
 /// Data when the profile horizon changes
 #[derive(Serialize, Deserialize)]
 pub struct ProfileHorizonData {

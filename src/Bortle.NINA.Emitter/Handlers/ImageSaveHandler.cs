@@ -1,4 +1,5 @@
 using Bortle.NINA.Emitter.Events;
+using NINA.Core.Utility;
 using NINA.WPF.Base.Interfaces.Mediator;
 using System;
 using System.Threading.Tasks;
@@ -18,16 +19,19 @@ namespace Bortle.NINA.Emitter.Handlers {
 
         private Task ServiceOnBeforeFinalizeImageSaved(object arg1, BeforeFinalizeImageSavedEventArgs arg2) {
             // TODO: Implement event
+            Logger.Debug("on image before finalize");
             return Task.CompletedTask;
         }
 
         private Task ServiceOnBeforeImageSaved(object arg1, BeforeImageSavedEventArgs arg2) {
             // TODO: Implement event
+            Logger.Debug("on image before saved");
             return Task.CompletedTask;
         }
 
         private void ServiceOnImageSaved(object sender, ImageSavedEventArgs e) {
             // TODO: Implement event
+            Logger.Debug("on image saved");
         }
 
         public void Dispose() {

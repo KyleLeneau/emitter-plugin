@@ -1,7 +1,6 @@
 using Bortle.NINA.Emitter.Configuration;
 using Bortle.NINA.Emitter.Events;
 using CloudNative.CloudEvents;
-using CloudNative.CloudEvents.SystemTextJson;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -12,7 +11,6 @@ namespace Bortle.NINA.Emitter.EventSinks {
 
     public class WebhookEventSink : IEventSink {
         private readonly WebhookSinkOptions options;
-        private readonly JsonEventFormatter formatter = new JsonEventFormatter(CloudEventJsonOptions.Settings, default);
         private HttpClient httpClient;
         private ConnectionState state = ConnectionState.Disconnected;
 
@@ -62,7 +60,7 @@ namespace Bortle.NINA.Emitter.EventSinks {
                 throw new InvalidOperationException("WebhookSink is not connected.");
             }
 
-            var bytes = this.formatter.EncodeStructuredModeMessage(evt, out var contentType);
+            var bytes = CloudEventEncoder.EncodeStructuredModeMessage(evt, out var contentType);
             using var content = new ByteArrayContent(bytes.ToArray());
             content.Headers.ContentType = new MediaTypeHeaderValue(contentType.MediaType) {
                 CharSet = contentType.CharSet

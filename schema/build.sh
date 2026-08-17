@@ -44,6 +44,7 @@ DATA_SCHEMAS=(
   "$SCHEMAS/safety_change_data.yaml"
   "$SCHEMAS/switch_data.yaml"
   "$SCHEMAS/weather_data.yaml"
+  "$SCHEMAS/image_save_data.yaml"
   "$SCHEMAS/profile_horizon_data.yaml"
   "$SCHEMAS/profile_list_data.yaml"
   "$SCHEMAS/profile_locale_data.yaml"

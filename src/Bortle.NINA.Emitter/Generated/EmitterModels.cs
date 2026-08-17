@@ -30,6 +30,7 @@
 //    var safetyChangeData = SafetyChangeData.FromJson(jsonString);
 //    var switchDeviceInfoData = SwitchDeviceInfoData.FromJson(jsonString);
 //    var weatherDeviceInfoData = WeatherDeviceInfoData.FromJson(jsonString);
+//    var imageSavedData = ImageSavedData.FromJson(jsonString);
 //    var profileHorizonData = ProfileHorizonData.FromJson(jsonString);
 //    var profileListData = ProfileListData.FromJson(jsonString);
 //    var profileLocaleData = ProfileLocaleData.FromJson(jsonString);
@@ -1131,6 +1132,15 @@ namespace Bortle.NINA.Emitter.Models
     }
 
     /// <summary>
+    /// Data when the a new image is taken/saved
+    /// </summary>
+    public partial class ImageSavedData
+    {
+        [JsonPropertyName("file_path")]
+        public string FilePath { get; set; }
+    }
+
+    /// <summary>
     /// Data when the profile horizon changes
     /// </summary>
     public partial class ProfileHorizonData
@@ -1358,6 +1368,11 @@ namespace Bortle.NINA.Emitter.Models
         public static WeatherDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<WeatherDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
+    public partial class ImageSavedData
+    {
+        public static ImageSavedData FromJson(string json) => JsonSerializer.Deserialize<ImageSavedData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
     public partial class ProfileHorizonData
     {
         public static ProfileHorizonData FromJson(string json) => JsonSerializer.Deserialize<ProfileHorizonData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -1411,6 +1426,7 @@ namespace Bortle.NINA.Emitter.Models
         public static string ToJson(this SafetyChangeData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this SwitchDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this WeatherDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this ImageSavedData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this ProfileHorizonData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this ProfileListData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this ProfileLocaleData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);

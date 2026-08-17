@@ -1,6 +1,6 @@
 // To parse this data:
 //
-//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, CameraErrorData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FilterWheelChangeData, FlatPanelDeviceInfoData, FlatPanelLEDData, FlatPanelStateData, FlatPanelValueData, FocuserDeviceInfoData, FocuserChangeData, GuiderDeviceInfoData, GuiderDitherData, GuiderStartData, GuiderStepData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, RotatorMovedData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData, ProfileHorizonData, ProfileListData, ProfileLocaleData, ProfileLocationData, ProfileSelectedData } from "./file";
+//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, CameraErrorData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FilterWheelChangeData, FlatPanelDeviceInfoData, FlatPanelLEDData, FlatPanelStateData, FlatPanelValueData, FocuserDeviceInfoData, FocuserChangeData, GuiderDeviceInfoData, GuiderDitherData, GuiderStartData, GuiderStepData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, RotatorMovedData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData, ImageSavedData, ProfileHorizonData, ProfileListData, ProfileLocaleData, ProfileLocationData, ProfileSelectedData } from "./file";
 //
 //   const deviceConnectionData = Convert.toDeviceConnectionData(json);
 //   const cameraDeviceInfoData = Convert.toCameraDeviceInfoData(json);
@@ -28,6 +28,7 @@
 //   const safetyChangeData = Convert.toSafetyChangeData(json);
 //   const switchDeviceInfoData = Convert.toSwitchDeviceInfoData(json);
 //   const weatherDeviceInfoData = Convert.toWeatherDeviceInfoData(json);
+//   const imageSavedData = Convert.toImageSavedData(json);
 //   const profileHorizonData = Convert.toProfileHorizonData(json);
 //   const profileListData = Convert.toProfileListData(json);
 //   const profileLocaleData = Convert.toProfileLocaleData(json);
@@ -676,6 +677,14 @@ export interface WeatherDeviceInfoData {
 }
 
 /**
+ * Data when the a new image is taken/saved
+ */
+export interface ImageSavedData {
+    file_path: string;
+    [property: string]: any;
+}
+
+/**
  * Data when the profile horizon changes
  */
 export interface ProfileHorizonData {
@@ -935,6 +944,14 @@ export class Convert {
 
     public static weatherDeviceInfoDataToJson(value: WeatherDeviceInfoData): string {
         return JSON.stringify(uncast(value, r("WeatherDeviceInfoData")), null, 2);
+    }
+
+    public static toImageSavedData(json: string): ImageSavedData {
+        return cast(JSON.parse(json), r("ImageSavedData"));
+    }
+
+    public static imageSavedDataToJson(value: ImageSavedData): string {
+        return JSON.stringify(uncast(value, r("ImageSavedData")), null, 2);
     }
 
     public static toProfileHorizonData(json: string): ProfileHorizonData {
@@ -1436,6 +1453,9 @@ const typeMap: any = {
         { json: "wind_direction", js: "wind_direction", typ: u(undefined, u(3.14, null)) },
         { json: "wind_gust", js: "wind_gust", typ: u(undefined, u(3.14, null)) },
         { json: "wind_speed", js: "wind_speed", typ: u(undefined, u(3.14, null)) },
+    ], "any"),
+    "ImageSavedData": o([
+        { json: "file_path", js: "file_path", typ: "" },
     ], "any"),
     "ProfileHorizonData": o([
         { json: "file_path", js: "file_path", typ: u(undefined, "") },

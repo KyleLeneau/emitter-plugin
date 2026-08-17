@@ -1,7 +1,6 @@
 using Bortle.NINA.Emitter.Configuration;
 using Bortle.NINA.Emitter.Events;
 using CloudNative.CloudEvents;
-using CloudNative.CloudEvents.SystemTextJson;
 using NATS.Client.Core;
 using NATS.Net;
 using NINA.Core.Utility;
@@ -17,7 +16,6 @@ namespace Bortle.NINA.Emitter.EventSinks {
         private const string TypePrefix = "io.nina.";
 
         private readonly NatsSinkOptions options;
-        private readonly JsonEventFormatter formatter = new JsonEventFormatter(CloudEventJsonOptions.Settings, default);
         private NatsClient client;
         private ConnectionState state = ConnectionState.Disconnected;
 
@@ -75,7 +73,7 @@ namespace Bortle.NINA.Emitter.EventSinks {
             }
 
             var subject = BuildSubject(this.options.SubjectPrefix, evt);
-            var bytes = this.formatter.EncodeStructuredModeMessage(evt, out _);
+            var bytes = CloudEventEncoder.EncodeStructuredModeMessage(evt, out _);
 
             try {
                 await this.client.PublishAsync(subject, bytes.ToArray(), cancellationToken: ct);

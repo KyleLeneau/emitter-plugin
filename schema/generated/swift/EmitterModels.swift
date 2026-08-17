@@ -27,6 +27,7 @@
 //   let safetyChangeData = try SafetyChangeData(json)
 //   let switchDeviceInfoData = try SwitchDeviceInfoData(json)
 //   let weatherDeviceInfoData = try WeatherDeviceInfoData(json)
+//   let imageSavedData = try ImageSavedData(json)
 //   let profileHorizonData = try ProfileHorizonData(json)
 //   let profileListData = try ProfileListData(json)
 //   let profileLocaleData = try ProfileLocaleData(json)
@@ -2374,6 +2375,51 @@ extension WeatherDeviceInfoData {
             windDirection: windDirection ?? self.windDirection,
             windGust: windGust ?? self.windGust,
             windSpeed: windSpeed ?? self.windSpeed
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Data when the a new image is taken/saved
+// MARK: - ImageSavedData
+struct ImageSavedData: Codable {
+    let filePath: String
+
+    enum CodingKeys: String, CodingKey {
+        case filePath = "file_path"
+    }
+}
+
+// MARK: ImageSavedData convenience initializers and mutators
+
+extension ImageSavedData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(ImageSavedData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        filePath: String? = nil
+    ) -> ImageSavedData {
+        return ImageSavedData(
+            filePath: filePath ?? self.filePath
         )
     }
 
