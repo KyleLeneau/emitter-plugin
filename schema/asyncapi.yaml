@@ -305,6 +305,15 @@ channels:
         $ref: "#/components/messages/WeatherDeviceInfoEvent"
 
   # Imaging ─────────────────────────────────────────────────────────────────
+  imageSaved:
+    address: "nina.{instanceId}.image.saved"
+    description: Event when a new image is taken and saved
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      ImageSavedEvent:
+        $ref: "#/components/messages/ImageSavedEvent"
 
   # Profile ─────────────────────────────────────────────────────────────────
   profileList:
@@ -541,6 +550,12 @@ operations:
       - name: "Weather"
 
   # Imaging ─────────────────────────────────────────────────────────────────
+  sendImageSavedEvent:
+    action: send
+    channel:
+      $ref: "#/channels/imageSaved"
+    tags:
+      - name: "Imaging"
 
   # Profile ─────────────────────────────────────────────────────────────────
   sendProfileListEvent:
@@ -925,6 +940,18 @@ components:
                 $ref: "./schemas/weather_data.yaml"
 
     # Imaging ─────────────────────────────────────────────────────────────────
+    ImageSavedEvent:
+      title: ImageSavedEvent
+      summary: Event when a new image is taken and saved
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.image.saved"
+              data:
+                $ref: "./schemas/image_save_data.yaml"
 
     # Profile ─────────────────────────────────────────────────────────────────
     ProfileListEvent:

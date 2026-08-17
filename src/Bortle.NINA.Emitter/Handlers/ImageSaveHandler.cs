@@ -1,4 +1,5 @@
 using Bortle.NINA.Emitter.Events;
+using Bortle.NINA.Emitter.Models;
 using NINA.Core.Utility;
 using NINA.WPF.Base.Interfaces.Mediator;
 using System;
@@ -30,8 +31,34 @@ namespace Bortle.NINA.Emitter.Handlers {
         }
 
         private void ServiceOnImageSaved(object sender, ImageSavedEventArgs e) {
-            // TODO: Implement event
             Logger.Debug("on image saved");
+            var data = new ImageSavedData {
+                FilePath = e.PathToImage.AbsolutePath,
+                FileType = e.FileType.ToString(),
+                ImageType = e.MetaData.Image.ImageType,
+                IsBayered = e.IsBayered,
+                ExposureDuration = e.Duration,
+                PixelHeight = e.Image.PixelHeight,
+                PixelWidth = e.Image.PixelWidth,
+                Filter = e.Filter,
+                ImageStatistics = new ImageStatistics {
+                    BitDepth = e.Statistics.BitDepth,
+                    Stdev = e.Statistics.StDev,
+                    Mean = e.Statistics.Mean,
+                    Median = e.Statistics.Median,
+                    MedianAbsDev = e.Statistics.MedianAbsoluteDeviation,
+                    Max = e.Statistics.Max,
+                    MaxOccurrences = e.Statistics.MaxOccurrences,
+                    Min = e.Statistics.Min,
+                    MinOccurrences = e.Statistics.MinOccurrences,
+                },
+                StarStatistics = new StarStatistics {
+                    Hfr = e.StarDetectionAnalysis.HFR,
+                    HfrStdDev = e.StarDetectionAnalysis.HFRStDev,
+                    DetectedStars = e.StarDetectionAnalysis.DetectedStars,
+                }
+            };
+            emitter.Enqueue("image", "saved", data);
         }
 
         public void Dispose() {

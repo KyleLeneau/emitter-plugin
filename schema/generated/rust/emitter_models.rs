@@ -873,7 +873,55 @@ pub struct WeatherDeviceInfoData {
 /// Data when the a new image is taken/saved
 #[derive(Serialize, Deserialize)]
 pub struct ImageSavedData {
+    pub exposure_duration: Option<f64>,
+
     pub file_path: String,
+
+    pub file_type: Option<String>,
+
+    pub filter: Option<String>,
+
+    pub image_statistics: Option<ImageStatistics>,
+
+    pub image_type: Option<String>,
+
+    pub is_bayered: Option<bool>,
+
+    pub pixel_height: Option<i64>,
+
+    pub pixel_width: Option<i64>,
+
+    pub star_statistics: Option<StarStatistics>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct ImageStatistics {
+    pub bit_depth: Option<i64>,
+
+    pub max: Option<i64>,
+
+    pub max_occurrences: Option<f64>,
+
+    pub mean: Option<f64>,
+
+    pub median: Option<f64>,
+
+    pub median_abs_dev: Option<f64>,
+
+    pub min: Option<i64>,
+
+    pub min_occurrences: Option<f64>,
+
+    pub stdev: Option<f64>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct StarStatistics {
+    pub detected_stars: Option<i64>,
+
+    pub hfr: Option<f64>,
+
+    pub hfr_std_dev: Option<f64>,
 }
 
 /// Data when the profile horizon changes
@@ -923,4 +971,16 @@ pub struct ProfileSelectedData {
     pub id: String,
 
     pub name: String,
+}
+
+/// Data when a sequence ends
+#[derive(Serialize, Deserialize)]
+pub struct SequenceEndData {
+    pub name: Option<String>,
+}
+
+/// Data when a sequence starts
+#[derive(Serialize, Deserialize)]
+pub struct SequenceStartData {
+    pub name: Option<String>,
 }

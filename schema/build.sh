@@ -50,6 +50,8 @@ DATA_SCHEMAS=(
   "$SCHEMAS/profile_locale_data.yaml"
   "$SCHEMAS/profile_location_data.yaml"
   "$SCHEMAS/profile_selected_data.yaml"
+  "$SCHEMAS/sequence_end_data.yaml"
+  "$SCHEMAS/sequence_start_data.yaml"
 )
 
 generate() {

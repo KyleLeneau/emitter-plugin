@@ -1,6 +1,6 @@
 // To parse this data:
 //
-//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, CameraErrorData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FilterWheelChangeData, FlatPanelDeviceInfoData, FlatPanelLEDData, FlatPanelStateData, FlatPanelValueData, FocuserDeviceInfoData, FocuserChangeData, GuiderDeviceInfoData, GuiderDitherData, GuiderStartData, GuiderStepData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, RotatorMovedData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData, ImageSavedData, ProfileHorizonData, ProfileListData, ProfileLocaleData, ProfileLocationData, ProfileSelectedData } from "./file";
+//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, CameraErrorData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FilterWheelChangeData, FlatPanelDeviceInfoData, FlatPanelLEDData, FlatPanelStateData, FlatPanelValueData, FocuserDeviceInfoData, FocuserChangeData, GuiderDeviceInfoData, GuiderDitherData, GuiderStartData, GuiderStepData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, RotatorMovedData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData, ImageSavedData, ProfileHorizonData, ProfileListData, ProfileLocaleData, ProfileLocationData, ProfileSelectedData, SequenceEndData, SequenceStartData } from "./file";
 //
 //   const deviceConnectionData = Convert.toDeviceConnectionData(json);
 //   const cameraDeviceInfoData = Convert.toCameraDeviceInfoData(json);
@@ -34,6 +34,8 @@
 //   const profileLocaleData = Convert.toProfileLocaleData(json);
 //   const profileLocationData = Convert.toProfileLocationData(json);
 //   const profileSelectedData = Convert.toProfileSelectedData(json);
+//   const sequenceEndData = Convert.toSequenceEndData(json);
+//   const sequenceStartData = Convert.toSequenceStartData(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
@@ -680,7 +682,36 @@ export interface WeatherDeviceInfoData {
  * Data when the a new image is taken/saved
  */
 export interface ImageSavedData {
-    file_path: string;
+    exposure_duration?: number;
+    file_path:          string;
+    file_type?:         string;
+    filter?:            null | string;
+    image_statistics?:  ImageStatistics;
+    image_type?:        string;
+    is_bayered?:        boolean;
+    pixel_height?:      number;
+    pixel_width?:       number;
+    star_statistics?:   StarStatistics;
+    [property: string]: any;
+}
+
+export interface ImageStatistics {
+    bit_depth?:       number;
+    max?:             number;
+    max_occurrences?: number;
+    mean?:            number;
+    median?:          number;
+    median_abs_dev?:  number;
+    min?:             number;
+    min_occurrences?: number;
+    stdev?:           number;
+    [property: string]: any;
+}
+
+export interface StarStatistics {
+    detected_stars?: number;
+    hfr?:            number;
+    hfr_std_dev?:    number;
     [property: string]: any;
 }
 
@@ -732,6 +763,22 @@ export interface ProfileSelectedData {
     description?: null | string;
     id:           string;
     name:         string;
+    [property: string]: any;
+}
+
+/**
+ * Data when a sequence ends
+ */
+export interface SequenceEndData {
+    name?: string;
+    [property: string]: any;
+}
+
+/**
+ * Data when a sequence starts
+ */
+export interface SequenceStartData {
+    name?: string;
     [property: string]: any;
 }
 
@@ -992,6 +1039,22 @@ export class Convert {
 
     public static profileSelectedDataToJson(value: ProfileSelectedData): string {
         return JSON.stringify(uncast(value, r("ProfileSelectedData")), null, 2);
+    }
+
+    public static toSequenceEndData(json: string): SequenceEndData {
+        return cast(JSON.parse(json), r("SequenceEndData"));
+    }
+
+    public static sequenceEndDataToJson(value: SequenceEndData): string {
+        return JSON.stringify(uncast(value, r("SequenceEndData")), null, 2);
+    }
+
+    public static toSequenceStartData(json: string): SequenceStartData {
+        return cast(JSON.parse(json), r("SequenceStartData"));
+    }
+
+    public static sequenceStartDataToJson(value: SequenceStartData): string {
+        return JSON.stringify(uncast(value, r("SequenceStartData")), null, 2);
     }
 }
 
@@ -1455,7 +1518,32 @@ const typeMap: any = {
         { json: "wind_speed", js: "wind_speed", typ: u(undefined, u(3.14, null)) },
     ], "any"),
     "ImageSavedData": o([
+        { json: "exposure_duration", js: "exposure_duration", typ: u(undefined, 3.14) },
         { json: "file_path", js: "file_path", typ: "" },
+        { json: "file_type", js: "file_type", typ: u(undefined, "") },
+        { json: "filter", js: "filter", typ: u(undefined, u(null, "")) },
+        { json: "image_statistics", js: "image_statistics", typ: u(undefined, r("ImageStatistics")) },
+        { json: "image_type", js: "image_type", typ: u(undefined, "") },
+        { json: "is_bayered", js: "is_bayered", typ: u(undefined, true) },
+        { json: "pixel_height", js: "pixel_height", typ: u(undefined, 0) },
+        { json: "pixel_width", js: "pixel_width", typ: u(undefined, 0) },
+        { json: "star_statistics", js: "star_statistics", typ: u(undefined, r("StarStatistics")) },
+    ], "any"),
+    "ImageStatistics": o([
+        { json: "bit_depth", js: "bit_depth", typ: u(undefined, 0) },
+        { json: "max", js: "max", typ: u(undefined, 0) },
+        { json: "max_occurrences", js: "max_occurrences", typ: u(undefined, 3.14) },
+        { json: "mean", js: "mean", typ: u(undefined, 3.14) },
+        { json: "median", js: "median", typ: u(undefined, 3.14) },
+        { json: "median_abs_dev", js: "median_abs_dev", typ: u(undefined, 3.14) },
+        { json: "min", js: "min", typ: u(undefined, 0) },
+        { json: "min_occurrences", js: "min_occurrences", typ: u(undefined, 3.14) },
+        { json: "stdev", js: "stdev", typ: u(undefined, 3.14) },
+    ], "any"),
+    "StarStatistics": o([
+        { json: "detected_stars", js: "detected_stars", typ: u(undefined, 0) },
+        { json: "hfr", js: "hfr", typ: u(undefined, 3.14) },
+        { json: "hfr_std_dev", js: "hfr_std_dev", typ: u(undefined, 3.14) },
     ], "any"),
     "ProfileHorizonData": o([
         { json: "file_path", js: "file_path", typ: u(undefined, "") },
@@ -1475,6 +1563,12 @@ const typeMap: any = {
         { json: "description", js: "description", typ: u(undefined, u(null, "")) },
         { json: "id", js: "id", typ: "" },
         { json: "name", js: "name", typ: "" },
+    ], "any"),
+    "SequenceEndData": o([
+        { json: "name", js: "name", typ: u(undefined, "") },
+    ], "any"),
+    "SequenceStartData": o([
+        { json: "name", js: "name", typ: u(undefined, "") },
     ], "any"),
     "DeviceType": [
         "Camera",

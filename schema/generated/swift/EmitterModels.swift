@@ -33,6 +33,8 @@
 //   let profileLocaleData = try ProfileLocaleData(json)
 //   let profileLocationData = try ProfileLocationData(json)
 //   let profileSelectedData = try ProfileSelectedData(json)
+//   let sequenceEndData = try SequenceEndData(json)
+//   let sequenceStartData = try SequenceStartData(json)
 
 import Foundation
 
@@ -2390,10 +2392,27 @@ extension WeatherDeviceInfoData {
 /// Data when the a new image is taken/saved
 // MARK: - ImageSavedData
 struct ImageSavedData: Codable {
+    let exposureDuration: Double?
     let filePath: String
+    let fileType: String?
+    let filter: String?
+    let imageStatistics: ImageStatistics?
+    let imageType: String?
+    let isBayered: Bool?
+    let pixelHeight, pixelWidth: Int?
+    let starStatistics: StarStatistics?
 
     enum CodingKeys: String, CodingKey {
+        case exposureDuration = "exposure_duration"
         case filePath = "file_path"
+        case fileType = "file_type"
+        case filter
+        case imageStatistics = "image_statistics"
+        case imageType = "image_type"
+        case isBayered = "is_bayered"
+        case pixelHeight = "pixel_height"
+        case pixelWidth = "pixel_width"
+        case starStatistics = "star_statistics"
     }
 }
 
@@ -2416,10 +2435,149 @@ extension ImageSavedData {
     }
 
     func with(
-        filePath: String? = nil
+        exposureDuration: Double?? = nil,
+        filePath: String? = nil,
+        fileType: String?? = nil,
+        filter: String?? = nil,
+        imageStatistics: ImageStatistics?? = nil,
+        imageType: String?? = nil,
+        isBayered: Bool?? = nil,
+        pixelHeight: Int?? = nil,
+        pixelWidth: Int?? = nil,
+        starStatistics: StarStatistics?? = nil
     ) -> ImageSavedData {
         return ImageSavedData(
-            filePath: filePath ?? self.filePath
+            exposureDuration: exposureDuration ?? self.exposureDuration,
+            filePath: filePath ?? self.filePath,
+            fileType: fileType ?? self.fileType,
+            filter: filter ?? self.filter,
+            imageStatistics: imageStatistics ?? self.imageStatistics,
+            imageType: imageType ?? self.imageType,
+            isBayered: isBayered ?? self.isBayered,
+            pixelHeight: pixelHeight ?? self.pixelHeight,
+            pixelWidth: pixelWidth ?? self.pixelWidth,
+            starStatistics: starStatistics ?? self.starStatistics
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+// MARK: - ImageStatistics
+struct ImageStatistics: Codable {
+    let bitDepth, max: Int?
+    let maxOccurrences, mean, median, medianAbsDev: Double?
+    let min: Int?
+    let minOccurrences, stdev: Double?
+
+    enum CodingKeys: String, CodingKey {
+        case bitDepth = "bit_depth"
+        case max
+        case maxOccurrences = "max_occurrences"
+        case mean, median
+        case medianAbsDev = "median_abs_dev"
+        case min
+        case minOccurrences = "min_occurrences"
+        case stdev
+    }
+}
+
+// MARK: ImageStatistics convenience initializers and mutators
+
+extension ImageStatistics {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(ImageStatistics.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        bitDepth: Int?? = nil,
+        max: Int?? = nil,
+        maxOccurrences: Double?? = nil,
+        mean: Double?? = nil,
+        median: Double?? = nil,
+        medianAbsDev: Double?? = nil,
+        min: Int?? = nil,
+        minOccurrences: Double?? = nil,
+        stdev: Double?? = nil
+    ) -> ImageStatistics {
+        return ImageStatistics(
+            bitDepth: bitDepth ?? self.bitDepth,
+            max: max ?? self.max,
+            maxOccurrences: maxOccurrences ?? self.maxOccurrences,
+            mean: mean ?? self.mean,
+            median: median ?? self.median,
+            medianAbsDev: medianAbsDev ?? self.medianAbsDev,
+            min: min ?? self.min,
+            minOccurrences: minOccurrences ?? self.minOccurrences,
+            stdev: stdev ?? self.stdev
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+// MARK: - StarStatistics
+struct StarStatistics: Codable {
+    let detectedStars: Int?
+    let hfr, hfrStdDev: Double?
+
+    enum CodingKeys: String, CodingKey {
+        case detectedStars = "detected_stars"
+        case hfr
+        case hfrStdDev = "hfr_std_dev"
+    }
+}
+
+// MARK: StarStatistics convenience initializers and mutators
+
+extension StarStatistics {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(StarStatistics.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        detectedStars: Int?? = nil,
+        hfr: Double?? = nil,
+        hfrStdDev: Double?? = nil
+    ) -> StarStatistics {
+        return StarStatistics(
+            detectedStars: detectedStars ?? self.detectedStars,
+            hfr: hfr ?? self.hfr,
+            hfrStdDev: hfrStdDev ?? self.hfrStdDev
         )
     }
 
@@ -2644,6 +2802,88 @@ extension ProfileSelectedData {
         return ProfileSelectedData(
             description: description ?? self.description,
             id: id ?? self.id,
+            name: name ?? self.name
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Data when a sequence ends
+// MARK: - SequenceEndData
+struct SequenceEndData: Codable {
+    let name: String?
+}
+
+// MARK: SequenceEndData convenience initializers and mutators
+
+extension SequenceEndData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(SequenceEndData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        name: String?? = nil
+    ) -> SequenceEndData {
+        return SequenceEndData(
+            name: name ?? self.name
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Data when a sequence starts
+// MARK: - SequenceStartData
+struct SequenceStartData: Codable {
+    let name: String?
+}
+
+// MARK: SequenceStartData convenience initializers and mutators
+
+extension SequenceStartData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(SequenceStartData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        name: String?? = nil
+    ) -> SequenceStartData {
+        return SequenceStartData(
             name: name ?? self.name
         )
     }

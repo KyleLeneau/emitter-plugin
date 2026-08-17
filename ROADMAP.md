@@ -66,6 +66,13 @@
 * [x] profile location change
 * [x] profile horizon change
 * [x] profile collection change
+* [ ] image saved
+* [ ] TS wait start
+* [ ] TS new target start
+* [ ] TS target start
+* [ ] sequence starting
+* [ ] sequence finish
+* [ ] sequence custom (need a sequence action)
 
 ### Bugs
 

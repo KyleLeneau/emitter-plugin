@@ -36,6 +36,8 @@
 //    var profileLocaleData = ProfileLocaleData.FromJson(jsonString);
 //    var profileLocationData = ProfileLocationData.FromJson(jsonString);
 //    var profileSelectedData = ProfileSelectedData.FromJson(jsonString);
+//    var sequenceEndData = SequenceEndData.FromJson(jsonString);
+//    var sequenceStartData = SequenceStartData.FromJson(jsonString);
 #nullable enable
 #pragma warning disable CS8618
 #pragma warning disable CS8601
@@ -1136,8 +1138,97 @@ namespace Bortle.NINA.Emitter.Models
     /// </summary>
     public partial class ImageSavedData
     {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("exposure_duration")]
+        public double? ExposureDuration { get; set; }
+
         [JsonPropertyName("file_path")]
         public string FilePath { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("file_type")]
+        public string FileType { get; set; }
+
+        [JsonPropertyName("filter")]
+        public string Filter { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("image_statistics")]
+        public ImageStatistics ImageStatistics { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("image_type")]
+        public string ImageType { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("is_bayered")]
+        public bool? IsBayered { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("pixel_height")]
+        public long? PixelHeight { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("pixel_width")]
+        public long? PixelWidth { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("star_statistics")]
+        public StarStatistics StarStatistics { get; set; }
+    }
+
+    public partial class ImageStatistics
+    {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("bit_depth")]
+        public long? BitDepth { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("max")]
+        public long? Max { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("max_occurrences")]
+        public double? MaxOccurrences { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("mean")]
+        public double? Mean { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("median")]
+        public double? Median { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("median_abs_dev")]
+        public double? MedianAbsDev { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("min")]
+        public long? Min { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("min_occurrences")]
+        public double? MinOccurrences { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("stdev")]
+        public double? Stdev { get; set; }
+    }
+
+    public partial class StarStatistics
+    {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("detected_stars")]
+        public long? DetectedStars { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("hfr")]
+        public double? Hfr { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("hfr_std_dev")]
+        public double? HfrStdDev { get; set; }
     }
 
     /// <summary>
@@ -1198,6 +1289,26 @@ namespace Bortle.NINA.Emitter.Models
         [JsonPropertyName("id")]
         public string Id { get; set; }
 
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+    }
+
+    /// <summary>
+    /// Data when a sequence ends
+    /// </summary>
+    public partial class SequenceEndData
+    {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+    }
+
+    /// <summary>
+    /// Data when a sequence starts
+    /// </summary>
+    public partial class SequenceStartData
+    {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("name")]
         public string Name { get; set; }
     }
@@ -1398,6 +1509,16 @@ namespace Bortle.NINA.Emitter.Models
         public static ProfileSelectedData FromJson(string json) => JsonSerializer.Deserialize<ProfileSelectedData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
+    public partial class SequenceEndData
+    {
+        public static SequenceEndData FromJson(string json) => JsonSerializer.Deserialize<SequenceEndData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class SequenceStartData
+    {
+        public static SequenceStartData FromJson(string json) => JsonSerializer.Deserialize<SequenceStartData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
     public static class Serialize
     {
         public static string ToJson(this DeviceConnectionData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -1432,6 +1553,8 @@ namespace Bortle.NINA.Emitter.Models
         public static string ToJson(this ProfileLocaleData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this ProfileLocationData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this ProfileSelectedData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this SequenceEndData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this SequenceStartData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
     internal static class Converter
