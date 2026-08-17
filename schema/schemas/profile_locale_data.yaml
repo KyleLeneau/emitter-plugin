@@ -1,0 +1,7 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: ProfileLocaleData
+type: object
+description: Data when the profile locale changes
+properties:
+  name:
+    type: string

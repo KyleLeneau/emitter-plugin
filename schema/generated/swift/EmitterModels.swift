@@ -26,6 +26,11 @@
 //   let safetyChangeData = try SafetyChangeData(json)
 //   let switchDeviceInfoData = try SwitchDeviceInfoData(json)
 //   let weatherDeviceInfoData = try WeatherDeviceInfoData(json)
+//   let profileHorizonData = try ProfileHorizonData(json)
+//   let profileListData = try ProfileListData(json)
+//   let profileLocaleData = try ProfileLocaleData(json)
+//   let profileLocationData = try ProfileLocationData(json)
+//   let profileSelectedData = try ProfileSelectedData(json)
 
 import Foundation
 
@@ -2323,6 +2328,231 @@ extension WeatherDeviceInfoData {
             windDirection: windDirection ?? self.windDirection,
             windGust: windGust ?? self.windGust,
             windSpeed: windSpeed ?? self.windSpeed
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Data when the profile horizon changes
+// MARK: - ProfileHorizonData
+struct ProfileHorizonData: Codable {
+    let filePath: String?
+
+    enum CodingKeys: String, CodingKey {
+        case filePath = "file_path"
+    }
+}
+
+// MARK: ProfileHorizonData convenience initializers and mutators
+
+extension ProfileHorizonData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(ProfileHorizonData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        filePath: String?? = nil
+    ) -> ProfileHorizonData {
+        return ProfileHorizonData(
+            filePath: filePath ?? self.filePath
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Data when the profile list changes
+// MARK: - ProfileListData
+struct ProfileListData: Codable {
+    let action: Action
+}
+
+// MARK: ProfileListData convenience initializers and mutators
+
+extension ProfileListData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(ProfileListData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        action: Action? = nil
+    ) -> ProfileListData {
+        return ProfileListData(
+            action: action ?? self.action
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+enum Action: String, Codable {
+    case add = "Add"
+    case remove = "Remove"
+    case replace = "Replace"
+    case reset = "Reset"
+}
+
+/// Data when the profile locale changes
+// MARK: - ProfileLocaleData
+struct ProfileLocaleData: Codable {
+    let name: String?
+}
+
+// MARK: ProfileLocaleData convenience initializers and mutators
+
+extension ProfileLocaleData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(ProfileLocaleData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        name: String?? = nil
+    ) -> ProfileLocaleData {
+        return ProfileLocaleData(
+            name: name ?? self.name
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Data when the profile location changes
+// MARK: - ProfileLocationData
+struct ProfileLocationData: Codable {
+    let elevation, latitude, longitude: Double?
+}
+
+// MARK: ProfileLocationData convenience initializers and mutators
+
+extension ProfileLocationData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(ProfileLocationData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        elevation: Double?? = nil,
+        latitude: Double?? = nil,
+        longitude: Double?? = nil
+    ) -> ProfileLocationData {
+        return ProfileLocationData(
+            elevation: elevation ?? self.elevation,
+            latitude: latitude ?? self.latitude,
+            longitude: longitude ?? self.longitude
+        )
+    }
+
+    func jsonData() throws -> Data {
+        return try newJSONEncoder().encode(self)
+    }
+
+    func jsonString(encoding: String.Encoding = .utf8) throws -> String? {
+        return String(data: try self.jsonData(), encoding: encoding)
+    }
+}
+
+/// Data on the currently selected profile
+// MARK: - ProfileSelectedData
+struct ProfileSelectedData: Codable {
+    let description: String?
+    let id, name: String
+}
+
+// MARK: ProfileSelectedData convenience initializers and mutators
+
+extension ProfileSelectedData {
+    init(data: Data) throws {
+        self = try newJSONDecoder().decode(ProfileSelectedData.self, from: data)
+    }
+
+    init(_ json: String, using encoding: String.Encoding = .utf8) throws {
+        guard let data = json.data(using: encoding) else {
+            throw NSError(domain: "JSONDecoding", code: 0, userInfo: nil)
+        }
+        try self.init(data: data)
+    }
+
+    init(fromURL url: URL) throws {
+        try self.init(data: try Data(contentsOf: url))
+    }
+
+    func with(
+        description: String?? = nil,
+        id: String? = nil,
+        name: String? = nil
+    ) -> ProfileSelectedData {
+        return ProfileSelectedData(
+            description: description ?? self.description,
+            id: id ?? self.id,
+            name: name ?? self.name
         )
     }
 

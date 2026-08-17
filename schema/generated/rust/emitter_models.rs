@@ -857,3 +857,52 @@ pub struct WeatherDeviceInfoData {
     /// Wind speed in m/s; null if unsupported by the device
     pub wind_speed: Option<f64>,
 }
+
+/// Data when the profile horizon changes
+#[derive(Serialize, Deserialize)]
+pub struct ProfileHorizonData {
+    pub file_path: Option<String>,
+}
+
+/// Data when the profile list changes
+#[derive(Serialize, Deserialize)]
+pub struct ProfileListData {
+    pub action: Action,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum Action {
+    Add,
+
+    Remove,
+
+    Replace,
+
+    Reset,
+}
+
+/// Data when the profile locale changes
+#[derive(Serialize, Deserialize)]
+pub struct ProfileLocaleData {
+    pub name: Option<String>,
+}
+
+/// Data when the profile location changes
+#[derive(Serialize, Deserialize)]
+pub struct ProfileLocationData {
+    pub elevation: Option<f64>,
+
+    pub latitude: Option<f64>,
+
+    pub longitude: Option<f64>,
+}
+
+/// Data on the currently selected profile
+#[derive(Serialize, Deserialize)]
+pub struct ProfileSelectedData {
+    pub description: Option<String>,
+
+    pub id: String,
+
+    pub name: String,
+}

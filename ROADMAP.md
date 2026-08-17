@@ -61,6 +61,11 @@
 * [x] rotator moved mechanical
 * [x] rotator synced
 * [x] switch info
+* [x] profile selected
+* [x] profile locale change
+* [x] profile location change
+* [x] profile horizon change
+* [x] profile collection change
 
 ### Bugs
 

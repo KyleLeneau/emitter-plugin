@@ -43,6 +43,11 @@ DATA_SCHEMAS=(
   "$SCHEMAS/safety_change_data.yaml"
   "$SCHEMAS/switch_data.yaml"
   "$SCHEMAS/weather_data.yaml"
+  "$SCHEMAS/profile_horizon_data.yaml"
+  "$SCHEMAS/profile_list_data.yaml"
+  "$SCHEMAS/profile_locale_data.yaml"
+  "$SCHEMAS/profile_location_data.yaml"
+  "$SCHEMAS/profile_selected_data.yaml"
 )
 
 generate() {

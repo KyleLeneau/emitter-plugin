@@ -296,8 +296,56 @@ channels:
         $ref: "#/components/messages/WeatherDeviceInfoEvent"
 
   # Imaging ─────────────────────────────────────────────────────────────────
+
   # Profile ─────────────────────────────────────────────────────────────────
+  profileList:
+    address: "nina.{instanceId}.profile.list"
+    description: Event when the profile list changes
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      ProfileListEvent:
+        $ref: "#/components/messages/ProfileListEvent"
+  profileSelected:
+    address: "nina.{instanceId}.profile.selected"
+    description: Event with data on the currently selected profile
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      ProfileSelectedEvent:
+        $ref: "#/components/messages/ProfileSelectedEvent"
+  profileLocation:
+    address: "nina.{instanceId}.profile.location"
+    description: Event when the profile location changes
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      ProfileLocationEvent:
+        $ref: "#/components/messages/ProfileLocationEvent"
+  profileHorizon:
+    address: "nina.{instanceId}.profile.horizon"
+    description: Event when the profile horizon changes
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      ProfileHorizonEvent:
+        $ref: "#/components/messages/ProfileHorizonEvent"
+  profileLocale:
+    address: "nina.{instanceId}.profile.locale"
+    description: Event when the profile locale changes
+    parameters:
+      instanceId:
+        $ref: "#/components/parameters/InstanceId"
+    messages:
+      ProfileLocaleEvent:
+        $ref: "#/components/messages/ProfileLocaleEvent"
+
   # Sequence ────────────────────────────────────────────────────────────────
+
   # TargetScheduler ─────────────────────────────────────────────────────────
 
 # ─── Operations (list of events pushed on topics) ───────────────────────────
@@ -480,6 +528,36 @@ operations:
   # Imaging ─────────────────────────────────────────────────────────────────
 
   # Profile ─────────────────────────────────────────────────────────────────
+  sendProfileListEvent:
+    action: send
+    channel:
+      $ref: "#/channels/profileList"
+    tags:
+      - name: "Profile"
+  sendProfileSelectedEvent:
+    action: send
+    channel:
+      $ref: "#/channels/profileSelected"
+    tags:
+      - name: "Profile"
+  sendProfileLocationEvent:
+    action: send
+    channel:
+      $ref: "#/channels/profileLocation"
+    tags:
+      - name: "Profile"
+  sendProfileHorizonEvent:
+    action: send
+    channel:
+      $ref: "#/channels/profileHorizon"
+    tags:
+      - name: "Profile"
+  sendProfileLocaleEvent:
+    action: send
+    channel:
+      $ref: "#/channels/profileLocale"
+    tags:
+      - name: "Profile"
 
   # Sequence ────────────────────────────────────────────────────────────────
 
@@ -820,23 +898,69 @@ components:
                 $ref: "./schemas/weather_data.yaml"
 
     # Imaging ─────────────────────────────────────────────────────────────────
-    # Profile ─────────────────────────────────────────────────────────────────
-    # Sequence ────────────────────────────────────────────────────────────────
-    # TargetScheduler ─────────────────────────────────────────────────────────
 
-    # ImagingEvent:
-    #   name: ImagingEvent
-    #   title: Imaging Event
-    #   summary: Image capture lifecycle event — CloudEvent type io.nina.imaging.{eventType}
-    #   contentType: application/cloudevents+json
-    #   payload:
-    #     schemaFormat: application/schema+json;version=draft-07
-    #     schema:
-    #       allOf:
-    #         - $ref: "./schemas/cloudevents.json"
-    #         - type: object
-    #           properties:
-    #             type:
-    #               pattern: "^io\\.nina\\.imaging\\..+"
-    #             data:
-    #               $ref: "./schemas/imaging_data.yaml"
+    # Profile ─────────────────────────────────────────────────────────────────
+    ProfileListEvent:
+      title: ProfileListEvent
+      summary: Event when the profile list changes
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.profile.list"
+              data:
+                $ref: "./schemas/profile_list_data.yaml"
+    ProfileSelectedEvent:
+      title: ProfileSelectedEvent
+      summary: Event with data on the currently selected profile
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.profile.selected"
+              data:
+                $ref: "./schemas/profile_selected_data.yaml"
+    ProfileLocationEvent:
+      title: ProfileLocationEvent
+      summary: Event when the profile location changes
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.profile.location"
+              data:
+                $ref: "./schemas/profile_location_data.yaml"
+    ProfileHorizonEvent:
+      title: ProfileHorizonEvent
+      summary: Event when the profile horizon changes
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.profile.horizon"
+              data:
+                $ref: "./schemas/profile_horizon_data.yaml"
+    ProfileLocaleEvent:
+      title: ProfileLocaleEvent
+      summary: Event when the profile locale changes
+      payload:
+        allOf:
+          - $ref: "./schemas/cloudevents.json"
+          - type: object
+            properties:
+              type:
+                const: "io.nina.profile.locale"
+              data:
+                $ref: "./schemas/profile_locale_data.yaml"
+
+    # Sequence ────────────────────────────────────────────────────────────────
+
+    # TargetScheduler ─────────────────────────────────────────────────────────

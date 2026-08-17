@@ -85,7 +85,13 @@ namespace Bortle.NINA.Emitter {
             eventEmitter = new EventEmitterService(sinks);
             _ = eventEmitter.StartAsync();
 
-            // Setup event handlers
+            // Setup app event handlers
+            registry.Add(new ProfileHandler(eventEmitter, profileService));
+            registry.Add(new ImageSaveHandler(eventEmitter, imageSaveMediator));
+            registry.Add(new SequenceHandler(eventEmitter, sequenceMediator));
+            registry.Add(new TargetSchedulerHandler(eventEmitter, messageBroker));
+
+            // Setup device event handlers
             registry.Add(new CameraHandler(eventEmitter, cameraDataMediator));
             registry.Add(new DomeHandler(eventEmitter, domeMediator));
             registry.Add(new FilterWheelHandler(eventEmitter, filterWheelMediator));
@@ -97,10 +103,6 @@ namespace Bortle.NINA.Emitter {
             registry.Add(new SafetyHandler(eventEmitter, safetyMonitorMediator));
             registry.Add(new SwitchHandler(eventEmitter, switchMediator));
             registry.Add(new WeatherHandler(eventEmitter, weatherDataMediator));
-            registry.Add(new ImageSaveHandler(eventEmitter, imageSaveMediator));
-            registry.Add(new ProfileHandler(eventEmitter, profileService));
-            registry.Add(new SequenceHandler(eventEmitter, sequenceMediator));
-            registry.Add(new TargetSchedulerHandler(eventEmitter, messageBroker));
 
             // Setup GlobalOptions View Model
             OptionsVM = new GlobalOptionsViewModel(pluginSettings, eventEmitter);

@@ -1,0 +1,11 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: ProfileLocationData
+type: object
+description: Data when the profile location changes
+properties:
+  latitude:
+    type: number
+  longitude:
+    type: number
+  elevation:
+    type: number

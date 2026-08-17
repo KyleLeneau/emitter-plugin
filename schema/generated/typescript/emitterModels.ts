@@ -1,6 +1,6 @@
 // To parse this data:
 //
-//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FilterWheelChangeData, FlatPanelDeviceInfoData, FlatPanelLEDData, FlatPanelStateData, FlatPanelValueData, FocuserDeviceInfoData, FocuserChangeData, GuiderDeviceInfoData, GuiderDitherData, GuiderStartData, GuiderStepData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, RotatorMovedData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData } from "./file";
+//   import { Convert, DeviceConnectionData, CameraDeviceInfoData, DomeDeviceInfoData, DomeShutterData, FilterWheelDeviceInfoData, FilterWheelChangeData, FlatPanelDeviceInfoData, FlatPanelLEDData, FlatPanelStateData, FlatPanelValueData, FocuserDeviceInfoData, FocuserChangeData, GuiderDeviceInfoData, GuiderDitherData, GuiderStartData, GuiderStepData, MountDeviceInfoData, MountFlipData, MountMovedData, RotatorDeviceInfoData, RotatorMovedData, SafetyDeviceInfoData, SafetyChangeData, SwitchDeviceInfoData, WeatherDeviceInfoData, ProfileHorizonData, ProfileListData, ProfileLocaleData, ProfileLocationData, ProfileSelectedData } from "./file";
 //
 //   const deviceConnectionData = Convert.toDeviceConnectionData(json);
 //   const cameraDeviceInfoData = Convert.toCameraDeviceInfoData(json);
@@ -27,6 +27,11 @@
 //   const safetyChangeData = Convert.toSafetyChangeData(json);
 //   const switchDeviceInfoData = Convert.toSwitchDeviceInfoData(json);
 //   const weatherDeviceInfoData = Convert.toWeatherDeviceInfoData(json);
+//   const profileHorizonData = Convert.toProfileHorizonData(json);
+//   const profileListData = Convert.toProfileListData(json);
+//   const profileLocaleData = Convert.toProfileLocaleData(json);
+//   const profileLocationData = Convert.toProfileLocationData(json);
+//   const profileSelectedData = Convert.toProfileSelectedData(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
@@ -657,6 +662,57 @@ export interface WeatherDeviceInfoData {
     [property: string]: any;
 }
 
+/**
+ * Data when the profile horizon changes
+ */
+export interface ProfileHorizonData {
+    file_path?: string;
+    [property: string]: any;
+}
+
+/**
+ * Data when the profile list changes
+ */
+export interface ProfileListData {
+    action: Action;
+    [property: string]: any;
+}
+
+export enum Action {
+    Add = "Add",
+    Remove = "Remove",
+    Replace = "Replace",
+    Reset = "Reset",
+}
+
+/**
+ * Data when the profile locale changes
+ */
+export interface ProfileLocaleData {
+    name?: string;
+    [property: string]: any;
+}
+
+/**
+ * Data when the profile location changes
+ */
+export interface ProfileLocationData {
+    elevation?: number;
+    latitude?:  number;
+    longitude?: number;
+    [property: string]: any;
+}
+
+/**
+ * Data on the currently selected profile
+ */
+export interface ProfileSelectedData {
+    description?: null | string;
+    id:           string;
+    name:         string;
+    [property: string]: any;
+}
+
 // Converts JSON strings to/from your types
 // and asserts the results of JSON.parse at runtime
 export class Convert {
@@ -858,6 +914,46 @@ export class Convert {
 
     public static weatherDeviceInfoDataToJson(value: WeatherDeviceInfoData): string {
         return JSON.stringify(uncast(value, r("WeatherDeviceInfoData")), null, 2);
+    }
+
+    public static toProfileHorizonData(json: string): ProfileHorizonData {
+        return cast(JSON.parse(json), r("ProfileHorizonData"));
+    }
+
+    public static profileHorizonDataToJson(value: ProfileHorizonData): string {
+        return JSON.stringify(uncast(value, r("ProfileHorizonData")), null, 2);
+    }
+
+    public static toProfileListData(json: string): ProfileListData {
+        return cast(JSON.parse(json), r("ProfileListData"));
+    }
+
+    public static profileListDataToJson(value: ProfileListData): string {
+        return JSON.stringify(uncast(value, r("ProfileListData")), null, 2);
+    }
+
+    public static toProfileLocaleData(json: string): ProfileLocaleData {
+        return cast(JSON.parse(json), r("ProfileLocaleData"));
+    }
+
+    public static profileLocaleDataToJson(value: ProfileLocaleData): string {
+        return JSON.stringify(uncast(value, r("ProfileLocaleData")), null, 2);
+    }
+
+    public static toProfileLocationData(json: string): ProfileLocationData {
+        return cast(JSON.parse(json), r("ProfileLocationData"));
+    }
+
+    public static profileLocationDataToJson(value: ProfileLocationData): string {
+        return JSON.stringify(uncast(value, r("ProfileLocationData")), null, 2);
+    }
+
+    public static toProfileSelectedData(json: string): ProfileSelectedData {
+        return cast(JSON.parse(json), r("ProfileSelectedData"));
+    }
+
+    public static profileSelectedDataToJson(value: ProfileSelectedData): string {
+        return JSON.stringify(uncast(value, r("ProfileSelectedData")), null, 2);
     }
 }
 
@@ -1317,6 +1413,25 @@ const typeMap: any = {
         { json: "wind_gust", js: "wind_gust", typ: u(undefined, u(3.14, null)) },
         { json: "wind_speed", js: "wind_speed", typ: u(undefined, u(3.14, null)) },
     ], "any"),
+    "ProfileHorizonData": o([
+        { json: "file_path", js: "file_path", typ: u(undefined, "") },
+    ], "any"),
+    "ProfileListData": o([
+        { json: "action", js: "action", typ: r("Action") },
+    ], "any"),
+    "ProfileLocaleData": o([
+        { json: "name", js: "name", typ: u(undefined, "") },
+    ], "any"),
+    "ProfileLocationData": o([
+        { json: "elevation", js: "elevation", typ: u(undefined, 3.14) },
+        { json: "latitude", js: "latitude", typ: u(undefined, 3.14) },
+        { json: "longitude", js: "longitude", typ: u(undefined, 3.14) },
+    ], "any"),
+    "ProfileSelectedData": o([
+        { json: "description", js: "description", typ: u(undefined, u(null, "")) },
+        { json: "id", js: "id", typ: "" },
+        { json: "name", js: "name", typ: "" },
+    ], "any"),
     "DeviceType": [
         "Camera",
         "Dome",
@@ -1425,5 +1540,11 @@ const typeMap: any = {
         "moved",
         "moved_mechanical",
         "synced",
+    ],
+    "Action": [
+        "Add",
+        "Remove",
+        "Replace",
+        "Reset",
     ],
 };

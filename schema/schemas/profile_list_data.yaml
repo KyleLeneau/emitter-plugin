@@ -1,0 +1,14 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: ProfileListData
+type: object
+description: Data when the profile list changes
+properties:
+  action:
+    type: string
+    enum:
+      - Add
+      - Remove
+      - Replace
+      - Reset
+required:
+  - action

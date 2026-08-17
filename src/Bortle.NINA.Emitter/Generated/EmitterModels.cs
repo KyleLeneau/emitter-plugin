@@ -29,6 +29,11 @@
 //    var safetyChangeData = SafetyChangeData.FromJson(jsonString);
 //    var switchDeviceInfoData = SwitchDeviceInfoData.FromJson(jsonString);
 //    var weatherDeviceInfoData = WeatherDeviceInfoData.FromJson(jsonString);
+//    var profileHorizonData = ProfileHorizonData.FromJson(jsonString);
+//    var profileListData = ProfileListData.FromJson(jsonString);
+//    var profileLocaleData = ProfileLocaleData.FromJson(jsonString);
+//    var profileLocationData = ProfileLocationData.FromJson(jsonString);
+//    var profileSelectedData = ProfileSelectedData.FromJson(jsonString);
 #nullable enable
 #pragma warning disable CS8618
 #pragma warning disable CS8601
@@ -1115,6 +1120,68 @@ namespace Bortle.NINA.Emitter.Models
         public double? WindSpeed { get; set; }
     }
 
+    /// <summary>
+    /// Data when the profile horizon changes
+    /// </summary>
+    public partial class ProfileHorizonData
+    {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("file_path")]
+        public string FilePath { get; set; }
+    }
+
+    /// <summary>
+    /// Data when the profile list changes
+    /// </summary>
+    public partial class ProfileListData
+    {
+        [JsonPropertyName("action")]
+        public Action Action { get; set; }
+    }
+
+    /// <summary>
+    /// Data when the profile locale changes
+    /// </summary>
+    public partial class ProfileLocaleData
+    {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+    }
+
+    /// <summary>
+    /// Data when the profile location changes
+    /// </summary>
+    public partial class ProfileLocationData
+    {
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("elevation")]
+        public double? Elevation { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("latitude")]
+        public double? Latitude { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("longitude")]
+        public double? Longitude { get; set; }
+    }
+
+    /// <summary>
+    /// Data on the currently selected profile
+    /// </summary>
+    public partial class ProfileSelectedData
+    {
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
+
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+    }
+
     public enum DeviceType { Camera, Dome, FilterWheel, FlatPanel, Focuser, Guider, Mount, Rotator, SafetyMonitor, Switch, Weather };
 
     public enum CameraState { Download, Error, Exposing, Idle, LoadingFile, None, Reading, Waiting };
@@ -1146,6 +1213,8 @@ namespace Bortle.NINA.Emitter.Models
     public enum MoveType { Homed, Parked, Slewed, Unparked };
 
     public enum Event { Moved, MovedMechanical, Synced };
+
+    public enum Action { Add, Remove, Replace, Reset };
 
     public partial class DeviceConnectionData
     {
@@ -1272,6 +1341,31 @@ namespace Bortle.NINA.Emitter.Models
         public static WeatherDeviceInfoData FromJson(string json) => JsonSerializer.Deserialize<WeatherDeviceInfoData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
+    public partial class ProfileHorizonData
+    {
+        public static ProfileHorizonData FromJson(string json) => JsonSerializer.Deserialize<ProfileHorizonData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class ProfileListData
+    {
+        public static ProfileListData FromJson(string json) => JsonSerializer.Deserialize<ProfileListData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class ProfileLocaleData
+    {
+        public static ProfileLocaleData FromJson(string json) => JsonSerializer.Deserialize<ProfileLocaleData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class ProfileLocationData
+    {
+        public static ProfileLocationData FromJson(string json) => JsonSerializer.Deserialize<ProfileLocationData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
+    public partial class ProfileSelectedData
+    {
+        public static ProfileSelectedData FromJson(string json) => JsonSerializer.Deserialize<ProfileSelectedData>(json, Bortle.NINA.Emitter.Models.Converter.Settings);
+    }
+
     public static class Serialize
     {
         public static string ToJson(this DeviceConnectionData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
@@ -1299,6 +1393,11 @@ namespace Bortle.NINA.Emitter.Models
         public static string ToJson(this SafetyChangeData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this SwitchDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
         public static string ToJson(this WeatherDeviceInfoData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this ProfileHorizonData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this ProfileListData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this ProfileLocaleData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this ProfileLocationData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
+        public static string ToJson(this ProfileSelectedData self) => JsonSerializer.Serialize(self, Bortle.NINA.Emitter.Models.Converter.Settings);
     }
 
     internal static class Converter
@@ -1323,6 +1422,7 @@ namespace Bortle.NINA.Emitter.Models
                 FlipEventConverter.Singleton,
                 MoveTypeConverter.Singleton,
                 EventConverter.Singleton,
+                ActionConverter.Singleton,
                 new DateOnlyConverter(),
                 new TimeOnlyConverter(),
                 IsoDateTimeOffsetConverter.Singleton
@@ -2095,6 +2195,50 @@ namespace Bortle.NINA.Emitter.Models
         }
 
         public static readonly EventConverter Singleton = new EventConverter();
+    }
+
+    internal class ActionConverter : JsonConverter<Action>
+    {
+        public override bool CanConvert(Type t) => t == typeof(Action);
+
+        public override Action Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var value = reader.GetString();
+            switch (value)
+            {
+                case "Add":
+                    return Action.Add;
+                case "Remove":
+                    return Action.Remove;
+                case "Replace":
+                    return Action.Replace;
+                case "Reset":
+                    return Action.Reset;
+            }
+            throw new Exception("Cannot unmarshal type Action");
+        }
+
+        public override void Write(Utf8JsonWriter writer, Action value, JsonSerializerOptions options)
+        {
+            switch (value)
+            {
+                case Action.Add:
+                    JsonSerializer.Serialize(writer, "Add", options);
+                    return;
+                case Action.Remove:
+                    JsonSerializer.Serialize(writer, "Remove", options);
+                    return;
+                case Action.Replace:
+                    JsonSerializer.Serialize(writer, "Replace", options);
+                    return;
+                case Action.Reset:
+                    JsonSerializer.Serialize(writer, "Reset", options);
+                    return;
+            }
+            throw new Exception("Cannot marshal type Action");
+        }
+
+        public static readonly ActionConverter Singleton = new ActionConverter();
     }
     
     public class DateOnlyConverter : JsonConverter<DateOnly>
