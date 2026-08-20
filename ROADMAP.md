@@ -37,6 +37,7 @@
 * [ ] re-look at image saved event and include more data
 * [ ] re-look at sequence handler data and if/how to get more
 * [ ] rust nats example (filter and re-publish?)
+* [ ] full test and run through of the plugin with a setup
 
 ### Events
 * [x] Device connection
