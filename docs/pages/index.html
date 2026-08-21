@@ -13,6 +13,13 @@
   <style>
     body { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
   </style>
+  <!-- Amplitude Analytics -->
+  <script src="https://cdn.amplitude.com/script/9d9b9314bfad1c268638504c4c57c7d3.js"></script>
+  <script>
+    window.amplitude.init('9d9b9314bfad1c268638504c4c57c7d3', {
+      autocapture: { pageViews: true, sessions: true },
+    });
+  </script>
 </head>
 <body class="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center px-6">
   <main class="w-full max-w-xl text-center">
@@ -34,6 +41,7 @@
 
     <a
       href="mailto:your-email@example.com"
+      data-amp-label="Email"
       class="inline-flex items-center gap-2 text-slate-400 hover:text-slate-200 transition-colors mb-10 hidden"
     >
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" class="w-5 h-5">
@@ -46,6 +54,7 @@
     <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
       <a
         href="docs/index.html"
+        data-amp-label="Event Docs"
         class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-3 transition-colors shadow-lg shadow-indigo-950/50"
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" class="w-5 h-5">
@@ -56,6 +65,7 @@
 
       <a
         href="https://github.com/KyleLeneau/emitter-plugin/releases"
+        data-amp-label="GitHub Releases"
         class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 font-medium px-6 py-3 transition-colors border border-slate-700"
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
@@ -66,6 +76,7 @@
 
       <a
         href="https://github.com/KyleLeneau/emitter-plugin"
+        data-amp-label="GitHub Repo"
         class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 font-medium px-6 py-3 transition-colors border border-slate-700"
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
@@ -88,6 +99,7 @@
         </code>
         <button
           type="button"
+          data-amp-label="Copy Repo URL"
           onclick="navigator.clipboard.writeText(document.getElementById('repo-url').textContent.trim()); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy', 1500);"
           class="shrink-0 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-100 text-sm font-medium px-3 py-2 transition-colors border border-slate-700"
         >
@@ -97,5 +109,17 @@
     </div>
 
   </main>
+
+  <script>
+    // Track clicks on labeled buttons/links so we can see where visitors go.
+    document.querySelectorAll('[data-amp-label]').forEach((el) => {
+      el.addEventListener('click', () => {
+        window.amplitude.track('Button Click', {
+          label: el.getAttribute('data-amp-label'),
+          href: el.getAttribute('href') || null,
+        });
+      });
+    });
+  </script>
 </body>
 </html>
