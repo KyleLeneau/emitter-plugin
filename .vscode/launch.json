@@ -13,9 +13,6 @@
             "cwd": "C:\\Program Files\\N.I.N.A. - Nighttime Imaging 'N' Astronomy",
             "stopAtEntry": false,
             "justMyCode": false,
-            // Emitter.dll is copied into the NINA Plugins folder on build, but
-            // Emitter.pdb is not (see NINAPlugin.targets). Point the debugger at
-            // the local build output so it can still find symbols and bind breakpoints.
             "symbolOptions": {
                 "searchPaths": [
                     "${workspaceFolder}\\src\\Bortle.NINA.Emitter\\bin\\Debug\\net8.0-windows"
@@ -35,6 +32,26 @@
                 ],
                 "searchMicrosoftSymbolServer": false
             }
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:emitter-plugin}/examples/swift-webhook",
+            "name": "Debug swift-webhook (examples/swift-webhook)",
+            "target": "swift-webhook",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug swift-webhook (examples/swift-webhook)"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:emitter-plugin}/examples/swift-webhook",
+            "name": "Release swift-webhook (examples/swift-webhook)",
+            "target": "swift-webhook",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release swift-webhook (examples/swift-webhook)"
         }
     ]
 }
