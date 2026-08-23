@@ -6,3 +6,4 @@ These examples are a sample of using the backend for testing or to build additio
 * [Rust Webook](./rust-webhook/README.md) - minimal webook server in rust
 * [Typescript Webook](./typescript-webhook/README.md) - NestJS webook server using Typescript, NestJS and Fastify
 * [Swift Webhook](./swift-webhook/README.md) - Hummingbird webhook server that decodes the CloudEvent into its typed data model
+* [Swift NATS Consumer](./swift-nats-consumer/README.md) - nats.swift consumer with a Hummingbird `/status`/`/health` server and a swift-argument-parser CLI

@@ -52,6 +52,26 @@
             "target": "swift-webhook",
             "configuration": "release",
             "preLaunchTask": "swift: Build Release swift-webhook (examples/swift-webhook)"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:emitter-plugin}/examples/swift-nats-consumer",
+            "name": "Debug swift-nats-consumer (examples/swift-nats-consumer)",
+            "target": "swift-nats-consumer",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug swift-nats-consumer (examples/swift-nats-consumer)"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:emitter-plugin}/examples/swift-nats-consumer",
+            "name": "Release swift-nats-consumer (examples/swift-nats-consumer)",
+            "target": "swift-nats-consumer",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release swift-nats-consumer (examples/swift-nats-consumer)"
         }
     ]
 }
