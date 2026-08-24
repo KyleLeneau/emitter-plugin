@@ -34,6 +34,67 @@ swift run swift-nats-consumer \
 Run `swift run swift-nats-consumer --help` for the full flag reference. Requires Swift 5.10+
 (Xcode 16+ on macOS, or the Swift toolchain on Linux).
 
+## Running it in Docker
+
+The `Dockerfile` here is adapted from
+[Hummingbird's own example template](https://github.com/hummingbird-project/hummingbird-examples/blob/main/hello/Dockerfile):
+a `swift:6.3-noble` build stage produces a statically-linked release binary, staged into a
+slim `ubuntu:noble` runtime image that runs as an unprivileged user. This is what "hosted on a
+Linux server" looks like for this example — build once, ship the image, run it next to (or
+pointed at) your NATS server.
+
+```sh
+docker build -t swift-nats-consumer .
+```
+
+Built and verified against real containers (`nats:latest` + the built image on a shared Docker
+network, decoding a published event end to end) while writing this — the ~350MB build took two
+real fixes along the way, both to nats.swift's own Linux support rather than anything specific
+to this example, and both are patched (with comments explaining why) in the `Dockerfile`
+itself rather than left for you to hit:
+
+- `nkeys.swift` (a nats.swift dependency) needs libsodium 1.0.22+ for symbols Ubuntu's `apt`
+  package (stuck at 1.0.18) doesn't have — the Dockerfile builds libsodium from source instead.
+- nats.swift v0.4.0 references `URLSession`/`CharacterSet` APIs on Linux without importing
+  `FoundationNetworking` (fine on Darwin, where `Foundation` re-exports them; not fine on
+  Linux) — the Dockerfile patches the vendored source in the build stage and installs
+  `libcurl4` at runtime for it. Safe to drop both once nats.swift ships a fix upstream.
+
+`--nats-url` needs to resolve from *inside* the container, so `nats://localhost:4222` (the
+CLI's own default) is almost never right there — that's the container talking to itself.
+Point it at wherever NATS actually runs instead:
+
+```sh
+# NATS running as another container on a shared user-defined network
+docker network create nina
+docker run --rm -d --name nats --network nina nats:latest
+docker run --rm -p 8080:8080 --network nina \
+  swift-nats-consumer --nats-url nats://nats:4222
+
+# NATS running on the Docker host itself (e.g. alongside NINA on the same machine)
+docker run --rm -p 8080:8080 \
+  swift-nats-consumer --nats-url nats://host.docker.internal:4222
+```
+
+The image's default `CMD` already assumes the first case (`--nats-url nats://nats:4222`) —
+override it with your own flags as shown above for anything else. `docker-compose.yml` is the
+more usual way to wire this up long-term:
+
+```yaml
+services:
+  nats:
+    image: nats:latest
+    ports: ["4222:4222"]
+  consumer:
+    build: .
+    ports: ["8080:8080"]
+    command: ["--nats-url", "nats://nats:4222", "--subject", "nina.>"]
+    depends_on: [nats]
+```
+
+Then `curl http://localhost:8080/health` and `curl http://localhost:8080/status` from the
+host to check on it.
+
 ## Endpoints
 
 - **`GET /health`** — plain liveness check. Returns `200 ok` as long as the process is up,

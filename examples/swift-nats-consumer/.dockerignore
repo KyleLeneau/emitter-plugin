@@ -1,0 +1,9 @@
+.build
+.swiftpm
+.git
+.gitignore
+.DS_Store
+*.xcodeproj
+README.md
+Dockerfile
+.dockerignore
