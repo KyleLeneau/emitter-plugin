@@ -33,6 +33,7 @@
 * [x] not sure device info skipping and equality is working
 * [x] I need a new equality check pattern in handlers to avoid the duplicates (ugh)
 * [x] Update asyncapi docs to match the events and topics being sent
+* [x] swift nats example
 * [ ] implement kafka backend
 * [ ] re-look at image saved event and include more data
 * [ ] re-look at sequence handler data and if/how to get more
